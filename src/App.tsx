@@ -1,7 +1,7 @@
-import { Grid } from "@material-ui/core";
 import React from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 import styled from "styled-components";
+
 import AboutUs from "./components/aboutUs/AboutUs";
 import DailyMessage from "./components/dailyMessage/DailyMessage";
 import NavBar from "./components/nav/NavBar";

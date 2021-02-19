@@ -4,14 +4,20 @@ import styled from "styled-components";
 import { Grid, Paper, Typography } from "@material-ui/core";
 import { News } from "../../stores/News";
 
-const backgroundColor = "rgb(210, 210, 210)";
-const PaperStyled = styled(Paper)`
+const backgroundColor = "rgb(255, 255, 255)";
+const greyColor = "120";
+const backgroundColorHovered = `rgba(${greyColor}, ${greyColor}, ${greyColor})`;
+const PaperStyled = styled.div`
   padding: 10px;
   background-color: ${backgroundColor};
   cursor: pointer;
   position: relative;
   max-height: 20vh;
   overflow: hidden;
+  border-radius: 3px;
+  &:hover {
+    background-color: ${backgroundColorHovered};
+  }
 `;
 
 const ContentTypographyStyled = styled(Typography)`
@@ -24,14 +30,20 @@ const ReadMoreStyled = styled.div<{
   position: absolute;
   bottom: 0px;
   left: 0px;
-  background-color: ${backgroundColor};
-  box-shadow: 0px -6px 4px ${backgroundColor};
   width: 100%;
   height: 20px;
   padding: 3px 10px;
   transition: all 0.3s;
   ${(props) =>
-    props.open ? "transform: translateY(0%);" : "transform: translateY(100%);"}
+    props.open
+      ? `
+      transform: translateY(0%);
+      background-color: ${backgroundColorHovered};
+      box-shadow: 0px -6px 4px ${backgroundColorHovered};`
+      : `
+      transform: translateY(100%);
+      background-color: ${backgroundColor};
+      box-shadow: 0px -6px 4px ${backgroundColor};`}
 `;
 
 export interface SideBarNewsSummaryProps {

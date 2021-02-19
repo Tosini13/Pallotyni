@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { Grid, Typography } from "@material-ui/core";
+import { Divider, Grid, Typography } from "@material-ui/core";
 import { NewStoreContext } from "../../stores/News";
 import SideBarNewsSummary from "./SideBarNewsSummary";
 
@@ -13,13 +13,22 @@ const SideBarNews: React.FC<SideBarNewsProps> = () => {
     <Grid container direction="column" spacing={3}>
       <Grid item>
         <Typography variant="h5" align="center">
-          Newest Newsy
+          Latest News
         </Typography>
       </Grid>
       {newsStore.getAllNews().map((news) => (
-        <Grid item key={news.id}>
-          <SideBarNewsSummary news={news} />
-        </Grid>
+        <>
+          <Grid item key={news.id}>
+            <SideBarNewsSummary news={news} />
+          </Grid>
+          <Divider
+            style={{
+              backgroundColor: "rgba(0,0,0,0.3)",
+              width: "90%",
+              margin: "auto",
+            }}
+          />
+        </>
       ))}
     </Grid>
   );
