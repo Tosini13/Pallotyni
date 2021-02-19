@@ -45,6 +45,11 @@ export class NewsStore {
   }
 
   @action
+  getNews(id: Id) {
+    return this.news.find((news) => news.id === id);
+  }
+
+  @action
   createNews(newsData: TCreateNewsProps) {
     const newNews = new News({
       ...newsData,
