@@ -7,15 +7,36 @@ import DailyMessage from "./components/dailyMessage/DailyMessage";
 import NavBar from "./components/nav/NavBar";
 import SideBarNews from "./components/news/SideBarNews";
 
-const GridMainContainerStyled = styled(Grid)`
+const navHeight = "60px";
+
+const MainContainerStyled = styled.div`
   position: relative;
-  margin-top: 60px;
-  min-height: calc(100vh - 60px);
+  margin-top: ${navHeight};
+  min-height: calc(100vh - ${navHeight});
 `;
 
-const GridColumnsStyled = styled(Grid)`
+const GridColumnsStyled = styled.div`
   padding: 5px;
-  border: black solid 1px;
+`;
+
+const MainStyled = styled(GridColumnsStyled)`
+  margin: 0px auto;
+  width: 50vw;
+`;
+
+const SidebarStyled = styled(GridColumnsStyled)`
+  position: fixed;
+  margin-top: ${navHeight};
+  width: 23vw;
+  top: 0px;
+`;
+
+const LeftSidebarStyled = styled(SidebarStyled)`
+  left: 0px;
+`;
+
+const RightSidebarStyled = styled(SidebarStyled)`
+  right: 0px;
 `;
 
 function App() {
@@ -25,26 +46,26 @@ function App() {
         <NavBar />
         {/*-----------------------------*/}
         {/*DESKTOP VIEW*/}
-        <GridMainContainerStyled container>
+        <MainContainerStyled>
           {/* LEFT SIDEBAR*/}
-          <GridColumnsStyled item md={3}>
+          <LeftSidebarStyled>
             <Switch>
               <Route path="/" component={DailyMessage} />
             </Switch>
-          </GridColumnsStyled>
+          </LeftSidebarStyled>
           {/* MAIN */}
-          <GridColumnsStyled item md={6}>
+          <MainStyled>
             <Switch>
               <Route path="/" component={AboutUs} />
             </Switch>
-          </GridColumnsStyled>
+          </MainStyled>
           {/* RIGHT SIDEBAR*/}
-          <GridColumnsStyled item md={3}>
+          <RightSidebarStyled>
             <Switch>
               <Route path="/" component={SideBarNews} />
             </Switch>
-          </GridColumnsStyled>
-        </GridMainContainerStyled>
+          </RightSidebarStyled>
+        </MainContainerStyled>
         {/*-----------------------------*/}
       </div>
     </BrowserRouter>

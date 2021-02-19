@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StylesProvider } from "@material-ui/core/styles";
+import { NewStoreProvider } from "./stores/News";
 
 ReactDOM.render(
   <React.StrictMode>
     <StylesProvider injectFirst>
-      <App />
+      <NewStoreProvider>
+        <App />
+      </NewStoreProvider>
     </StylesProvider>
   </React.StrictMode>,
   document.getElementById("root")
