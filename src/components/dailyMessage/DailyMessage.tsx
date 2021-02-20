@@ -10,14 +10,21 @@ import {
 } from "@material-ui/core";
 
 import { ExpandMore } from "@material-ui/icons";
+import { mainTheme } from "../../style/config";
+import styled from "styled-components";
+import TodayServices from "./TodayServices";
+
+export const AccordionStyled = styled(Accordion)`
+  background-color: ${mainTheme.palette.secondary.main};
+`;
 
 export interface DailyMessageProps {}
 
 const DailyMessage: React.FC<DailyMessageProps> = () => {
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" spacing={1}>
       <Grid item>
-        <Accordion>
+        <AccordionStyled defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography>
               Today is {moment().format("dddd")} -{" "}
@@ -25,29 +32,23 @@ const DailyMessage: React.FC<DailyMessageProps> = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
-            </Typography>
+            <Grid container direction="column" spacing={1}>
+              <Grid item>
+                <Typography>Name day of James and Caroline</Typography>
+              </Grid>
+              <Grid item>
+                <Typography>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+                  eget.
+                </Typography>
+              </Grid>
+            </Grid>
           </AccordionDetails>
-        </Accordion>
+        </AccordionStyled>
       </Grid>
       <Grid item>
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography>Today's Services</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              <ul>
-                <li>10:00 - blah</li>
-                <li>12:00 - blah</li>
-                <li>18:30 - blah</li>
-              </ul>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
+        <TodayServices />
       </Grid>
     </Grid>
   );
