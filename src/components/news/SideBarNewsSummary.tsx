@@ -5,7 +5,7 @@ import { Grid, Paper, Typography } from "@material-ui/core";
 import { News } from "../../stores/News";
 
 const backgroundColor = "rgb(255, 255, 255)";
-const greyColor = "120";
+const greyColor = "150";
 const backgroundColorHovered = `rgba(${greyColor}, ${greyColor}, ${greyColor})`;
 const PaperStyled = styled.div`
   padding: 10px;
@@ -14,7 +14,7 @@ const PaperStyled = styled.div`
   position: relative;
   max-height: 20vh;
   overflow: hidden;
-  border-radius: 3px;
+  transition: all 0.3s;
   &:hover {
     background-color: ${backgroundColorHovered};
   }
@@ -54,7 +54,7 @@ const SideBarNewsSummary: React.FC<SideBarNewsSummaryProps> = ({ news }) => {
   const [readMore, setReadMore] = useState(false);
   return (
     <PaperStyled
-      onMouseEnter={() => setReadMore(true)}
+      onMouseOver={() => setReadMore(true)}
       onMouseLeave={() => setReadMore(false)}
     >
       <Typography variant="h6">{news.title}</Typography>

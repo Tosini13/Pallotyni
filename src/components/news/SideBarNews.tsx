@@ -15,7 +15,7 @@ const SideBarNews: React.FC<SideBarNewsProps> = () => {
 
   return (
     <>
-      <Grid container direction="column" spacing={3}>
+      <Grid container direction="column" spacing={1}>
         <Grid item>
           <Typography variant="h5" align="center">
             Latest News
@@ -33,16 +33,16 @@ const SideBarNews: React.FC<SideBarNewsProps> = () => {
                 margin: "auto",
               }}
             />
+            {selectedNews ? (
+              <SideBarNewsDetails
+                open={selectedNews === selectedNews}
+                id={selectedNews}
+                handleClose={() => setSelectedNews(undefined)}
+              />
+            ) : null}
           </>
         ))}
       </Grid>
-      {selectedNews ? (
-        <SideBarNewsDetails
-          open={selectedNews !== undefined}
-          id={selectedNews}
-          handleClose={() => setSelectedNews(undefined)}
-        />
-      ) : null}
     </>
   );
 };
