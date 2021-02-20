@@ -4,8 +4,11 @@ import styled from "styled-components";
 
 import AboutUs from "./components/aboutUs/AboutUs";
 import DailyMessage from "./components/dailyMessage/DailyMessage";
+import Gallery from "./components/gallery/Gallery";
 import NavBar from "./components/nav/NavBar";
 import SideBarNews from "./components/news/SideBarNews";
+import StellaMaris from "./components/stellaMaris/StellaMaris";
+import { RoutingPath } from "./models/Global";
 
 const navHeight = "60px";
 
@@ -50,19 +53,21 @@ function App() {
           {/* LEFT SIDEBAR*/}
           <LeftSidebarStyled>
             <Switch>
-              <Route path="/" component={DailyMessage} />
+              <Route path={RoutingPath.home} component={DailyMessage} />
             </Switch>
           </LeftSidebarStyled>
           {/* MAIN */}
           <MainStyled>
             <Switch>
-              <Route path="/" component={AboutUs} />
+              <Route path={RoutingPath.gallery} component={Gallery} />
+              <Route path={RoutingPath.stellaMaris} component={StellaMaris} />
+              <Route exact path={RoutingPath.home} component={AboutUs} />
             </Switch>
           </MainStyled>
           {/* RIGHT SIDEBAR*/}
           <RightSidebarStyled>
             <Switch>
-              <Route path="/" component={SideBarNews} />
+              <Route path={RoutingPath.home} component={SideBarNews} />
             </Switch>
           </RightSidebarStyled>
         </MainContainerStyled>

@@ -6,13 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import { StylesProvider, ThemeProvider } from "@material-ui/core/styles";
 import { NewStoreProvider } from "./stores/News";
 import { mainTheme } from "./style/config";
+import { PhotosStoreProvider } from "./stores/Gallery";
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={mainTheme}>
       <StylesProvider injectFirst>
         <NewStoreProvider>
-          <App />
+          <PhotosStoreProvider>
+            <App />
+          </PhotosStoreProvider>
         </NewStoreProvider>
       </StylesProvider>
     </ThemeProvider>
