@@ -1,7 +1,7 @@
 import moment from "moment";
 
 import { DateFormat } from "../models/Global";
-import { News } from "../stores/News";
+import { News } from "../stores/NewsStore";
 
 export const mockNews: News[] = [
   {

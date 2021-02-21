@@ -4,9 +4,9 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StylesProvider, ThemeProvider } from "@material-ui/core/styles";
-import { NewStoreProvider } from "./stores/News";
+import { NewStoreProvider } from "./stores/NewsStore";
 import { mainTheme } from "./style/config";
-import { PhotosStoreProvider } from "./stores/Gallery";
+import { PhotosStoreProvider } from "./stores/GalleryStore";
 
 ReactDOM.render(
   <React.StrictMode>

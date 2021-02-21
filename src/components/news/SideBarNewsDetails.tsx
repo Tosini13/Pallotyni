@@ -7,7 +7,7 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-import { NewStoreContext } from "../../stores/News";
+import { NewStoreContext } from "../../stores/NewsStore";
 import { Id } from "../../models/Global";
 import styled from "styled-components";
 

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import { Divider, Grid, Typography } from "@material-ui/core";
-import { NewStoreContext } from "../../stores/News";
+import { NewStoreContext } from "../../stores/NewsStore";
 import SideBarNewsSummary from "./SideBarNewsSummary";
 import SideBarNewsDetails from "./SideBarNewsDetails";
 import { Id } from "../../models/Global";

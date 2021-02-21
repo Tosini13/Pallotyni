@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { Grid, Paper, Typography } from "@material-ui/core";
-import { News } from "../../stores/News";
+import { News } from "../../stores/NewsStore";
 
 const backgroundColor = "rgb(255, 255, 255)";
 const greyColor = "150";
