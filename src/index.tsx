@@ -3,13 +3,22 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { StylesProvider } from "@material-ui/core/styles";
+import { StylesProvider, ThemeProvider } from "@material-ui/core/styles";
+import { NewStoreProvider } from "./stores/NewsStore";
+import { mainTheme } from "./style/config";
+import { PhotosStoreProvider } from "./stores/GalleryStore";
 
 ReactDOM.render(
   <React.StrictMode>
-    <StylesProvider injectFirst>
-      <App />
-    </StylesProvider>
+    <ThemeProvider theme={mainTheme}>
+      <StylesProvider injectFirst>
+        <NewStoreProvider>
+          <PhotosStoreProvider>
+            <App />
+          </PhotosStoreProvider>
+        </NewStoreProvider>
+      </StylesProvider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

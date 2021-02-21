@@ -1,21 +1,45 @@
-import { Grid } from "@material-ui/core";
 import React from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 import styled from "styled-components";
+
 import AboutUs from "./components/aboutUs/AboutUs";
 import DailyMessage from "./components/dailyMessage/DailyMessage";
+import Gallery from "./components/gallery/Gallery";
 import NavBar from "./components/nav/NavBar";
 import SideBarNews from "./components/news/SideBarNews";
+import StellaMaris from "./components/stellaMaris/StellaMaris";
+import { RoutingPath } from "./models/Global";
 
-const GridMainContainerStyled = styled(Grid)`
+const navHeight = "60px";
+
+const MainContainerStyled = styled.div`
   position: relative;
-  margin-top: 60px;
-  min-height: calc(100vh - 60px);
+  margin-top: ${navHeight};
+  min-height: calc(100vh - ${navHeight});
 `;
 
-const GridColumnsStyled = styled(Grid)`
+const GridColumnsStyled = styled.div`
   padding: 5px;
-  border: black solid 1px;
+`;
+
+const MainStyled = styled(GridColumnsStyled)`
+  margin: 0px auto;
+  width: 50vw;
+`;
+
+const SidebarStyled = styled(GridColumnsStyled)`
+  position: fixed;
+  margin-top: ${navHeight};
+  width: 23vw;
+  top: 0px;
+`;
+
+const LeftSidebarStyled = styled(SidebarStyled)`
+  left: 0px;
+`;
+
+const RightSidebarStyled = styled(SidebarStyled)`
+  right: 0px;
 `;
 
 function App() {
@@ -25,26 +49,28 @@ function App() {
         <NavBar />
         {/*-----------------------------*/}
         {/*DESKTOP VIEW*/}
-        <GridMainContainerStyled container>
+        <MainContainerStyled>
           {/* LEFT SIDEBAR*/}
-          <GridColumnsStyled item md={3}>
+          <LeftSidebarStyled>
             <Switch>
-              <Route path="/" component={DailyMessage} />
+              <Route path={RoutingPath.home} component={DailyMessage} />
             </Switch>
-          </GridColumnsStyled>
+          </LeftSidebarStyled>
           {/* MAIN */}
-          <GridColumnsStyled item md={6}>
+          <MainStyled>
             <Switch>
-              <Route path="/" component={AboutUs} />
+              <Route path={RoutingPath.gallery} component={Gallery} />
+              <Route path={RoutingPath.stellaMaris} component={StellaMaris} />
+              <Route exact path={RoutingPath.home} component={AboutUs} />
             </Switch>
-          </GridColumnsStyled>
+          </MainStyled>
           {/* RIGHT SIDEBAR*/}
-          <GridColumnsStyled item md={3}>
+          <RightSidebarStyled>
             <Switch>
-              <Route path="/" component={SideBarNews} />
+              <Route path={RoutingPath.home} component={SideBarNews} />
             </Switch>
-          </GridColumnsStyled>
-        </GridMainContainerStyled>
+          </RightSidebarStyled>
+        </MainContainerStyled>
         {/*-----------------------------*/}
       </div>
     </BrowserRouter>
