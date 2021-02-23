@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import moment from "moment";
 import styled from "styled-components";
 
 import {
@@ -6,10 +7,14 @@ import {
   AccordionSummary,
   List,
   ListItem,
+  Paper,
   Typography,
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import { AccordionStyled } from "./DailyMessage";
+import { ServiceStoreContext } from "../../stores/ServiceStore";
+import { Day } from "../../models/Global";
+import { mainTheme } from "../../style/config";
 
 const ServiceDescTypographyStyled = styled(Typography)`
   margin-left: 5px;
@@ -18,9 +23,25 @@ const ServiceDescTypographyStyled = styled(Typography)`
 const ServiceTimeTypographyStyled = styled(Typography)`
   color: rgba(0, 0, 0, 0.8);
 `;
+
+const PaperStyled = styled(Paper)`
+  background-color: ${mainTheme.palette.secondary.main};
+  padding: 10px;
+`;
+
 export interface TodayServicesProps {}
 
 const TodayServices: React.FC<TodayServicesProps> = () => {
+  const servicesStore = useContext(ServiceStoreContext);
+  const todayDay = moment().format("dddd").toUpperCase();
+  const todayServices = servicesStore.getServicesByDay(todayDay as Day);
+  if (!todayServices.length) {
+    return (
+      <PaperStyled>
+        <Typography>Today's no services</Typography>
+      </PaperStyled>
+    );
+  }
   return (
     <AccordionStyled defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMore />}>
@@ -28,13 +49,13 @@ const TodayServices: React.FC<TodayServicesProps> = () => {
       </AccordionSummary>
       <AccordionDetails>
         <List>
-          {services.map((service) => (
-            <ListItem>
+          {todayServices.map((service) => (
+            <ListItem key={service.id}>
               <ServiceTimeTypographyStyled>
                 {service.time}
               </ServiceTimeTypographyStyled>
               <ServiceDescTypographyStyled>
-                {service.description}
+                {service.title}
               </ServiceDescTypographyStyled>
             </ListItem>
           ))}

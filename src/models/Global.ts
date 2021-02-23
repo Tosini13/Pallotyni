@@ -9,3 +9,18 @@ export enum RoutingPath {
   gallery = "/gallery",
   news = "/news",
 }
+
+export enum Day {
+  mon = "MONDAY",
+  tue = "TUESDAY",
+  wed = "WEDNESDAY",
+  thu = "THURSDAY",
+  fri = "FRIDAY",
+  sat = "SATURDAY",
+  sun = "SUNDAY",
+}
+
+export type Repeatability = {
+  days: Day;
+  everyday: boolean;
+};

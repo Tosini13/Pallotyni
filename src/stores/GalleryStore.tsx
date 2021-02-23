@@ -39,8 +39,6 @@ export class PhotosStore {
 
   @action
   getPhotos() {
-    console.log(this.photos);
-
     return this.photos as Photograph[];
   }
 
@@ -55,7 +53,6 @@ export class PhotosStore {
         })
       );
     });
-    console.log(this.photos);
   }
 }
 

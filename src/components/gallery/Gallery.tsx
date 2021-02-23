@@ -32,7 +32,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
       <Typography variant="h6">Gallery</Typography>
       <Grid container spacing={1}>
         {store.getPhotos().map((photo) => (
-          <>
+          <React.Fragment key={photo.id}>
             <Grid
               item
               key={photo.id}
@@ -45,7 +45,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
               open={photo.id === selectedPhotoId}
               handleClose={() => setSelectedPhotoId(undefined)}
             />
-          </>
+          </React.Fragment>
         ))}
       </Grid>
     </>
