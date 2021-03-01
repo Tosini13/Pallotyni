@@ -1,7 +1,7 @@
 import React, { createContext } from "react";
 import { action, observable } from "mobx";
 import moment from "moment";
-import { Day } from "../models/Global";
+import { DATE_FORMAT, Day } from "../models/Global";
 
 type TConfession = {
   id: string;
@@ -115,6 +115,24 @@ export class ConfessionStore {
     );
     return selectedConfession.sort(this.sortByTime);
   }
+  @action
+  getConfessionsByDate({
+    fromDate,
+    toDate,
+  }: {
+    fromDate?: string;
+    toDate: string;
+  }) {
+    const selectedConfession = this.confessions.filter(
+      (confession) =>
+        confession.date &&
+        moment(confession.date).isSameOrAfter(moment(toDate)) &&
+        moment(confession.date).isSameOrBefore(
+          fromDate ? moment(fromDate) : moment()
+        )
+    );
+    return selectedConfession.sort(this.sortByTime);
+  }
 
   constructor() {
     this.addConfession({
@@ -141,6 +159,13 @@ export class ConfessionStore {
     this.addConfession({
       title: "Next Solo Confession",
       date: moment().add(3, "days").format(),
+      fromTime: "6:00",
+      toTime: "23:00",
+      priest: "ks. Robak",
+    });
+    this.addConfession({
+      title: "Today Solo Confession",
+      date: moment().format(),
       fromTime: "6:00",
       toTime: "23:00",
       priest: "ks. Robak",

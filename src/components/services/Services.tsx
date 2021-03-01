@@ -21,7 +21,9 @@ const Services: React.FC<ServicesProps> = observer(() => {
     E_SERVICE_TAB.SERVICES
   );
 
-  const servicesNextWeek = storeServices.getServicesNextWeek();
+  const servicesNextWeek = storeServices.getServicesByDate({
+    toDate: moment().add(7, "days").format(DATE_FORMAT),
+  });
 
   return (
     <>

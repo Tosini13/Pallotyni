@@ -2,7 +2,7 @@ import React from "react";
 import { action, observable } from "mobx";
 import moment from "moment";
 import { createContext } from "react";
-import { Day } from "../models/Global";
+import { DATE_FORMAT, Day } from "../models/Global";
 import { FormatListNumberedTwoTone } from "@material-ui/icons";
 
 type TService = {
@@ -93,11 +93,20 @@ export class ServiceStore {
   }
 
   @action
-  getServicesNextWeek() {
+  getServicesByDate({
+    fromDate,
+    toDate,
+  }: {
+    fromDate?: string;
+    toDate: string;
+  }) {
     const selectedServices = this.services.filter(
       (service) =>
         service.date &&
-        moment(service.date).isSameOrAfter(moment().add(7, "days"))
+        moment(service.date).isSameOrAfter(moment(toDate)) &&
+        moment(service.date).isSameOrBefore(
+          fromDate ? moment(fromDate) : moment()
+        )
     );
     return selectedServices.sort(this.sortByTime);
   }
@@ -126,6 +135,15 @@ export class ServiceStore {
       repeat: true,
       days: [Day.tue, Day.wed],
       title: "for married",
+      time: "18:00",
+      priest: "ks. Tadeusz",
+    });
+
+    this.createService({
+      id: moment().format() + this.services.length.toString(),
+      repeat: true,
+      date: moment().format(DATE_FORMAT),
+      title: "One service",
       time: "18:00",
       priest: "ks. Tadeusz",
     });

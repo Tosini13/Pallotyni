@@ -13,7 +13,7 @@ import {
 import { ExpandMore } from "@material-ui/icons";
 import { AccordionStyled } from "./DailyMessage";
 import { ServiceStoreContext } from "../../stores/ServiceStore";
-import { Day } from "../../models/Global";
+import { DATE_FORMAT, Day } from "../../models/Global";
 import { mainTheme } from "../../style/config";
 
 const ServiceDescTypographyStyled = styled(Typography)`
@@ -34,7 +34,14 @@ export interface TodayServicesProps {}
 const TodayServices: React.FC<TodayServicesProps> = () => {
   const servicesStore = useContext(ServiceStoreContext);
   const todayDay = moment().format("dddd").toUpperCase();
-  const todayServices = servicesStore.getServicesByDay(todayDay as Day);
+  const todayServices = [
+    ...servicesStore.getServicesByDay(todayDay as Day),
+    ...servicesStore.getServicesByDate({
+      toDate: moment().format(DATE_FORMAT),
+    }),
+  ];
+  todayServices.sort(servicesStore.sortByTime);
+
   if (!todayServices.length) {
     return (
       <PaperStyled>

@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import { AccordionStyled } from "./DailyMessage";
-import { Day } from "../../models/Global";
+import { DATE_FORMAT, Day } from "../../models/Global";
 import { mainTheme } from "../../style/config";
 import { ConfessionStoreContext } from "../../stores/ConfessionStore";
 
@@ -34,9 +34,13 @@ export interface TodayConfessionsProps {}
 const TodayConfessions: React.FC<TodayConfessionsProps> = () => {
   const confessionsStore = useContext(ConfessionStoreContext);
   const todayDay = moment().format("dddd").toUpperCase();
-  const todayConfessions = confessionsStore.getConfessionsByDay(
-    todayDay as Day
-  );
+  const todayConfessions = [
+    ...confessionsStore.getConfessionsByDay(todayDay as Day),
+    ...confessionsStore.getConfessionsByDate({
+      toDate: moment().format(DATE_FORMAT),
+    }),
+  ];
+  todayConfessions.sort(confessionsStore.sortByTime);
   if (!todayConfessions.length) {
     return (
       <PaperStyled>
