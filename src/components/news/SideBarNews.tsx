@@ -22,8 +22,8 @@ const SideBarNews: React.FC<SideBarNewsProps> = () => {
           </Typography>
         </Grid>
         {newsStore.getAllNews().map((news) => (
-          <>
-            <Grid item key={news.id} onClick={() => setSelectedNews(news.id)}>
+          <React.Fragment key={news.id}>
+            <Grid item onClick={() => setSelectedNews(news.id)}>
               <SideBarNewsSummary news={news} />
             </Grid>
             <Divider
@@ -40,7 +40,7 @@ const SideBarNews: React.FC<SideBarNewsProps> = () => {
                 handleClose={() => setSelectedNews(undefined)}
               />
             ) : null}
-          </>
+          </React.Fragment>
         ))}
       </Grid>
     </>

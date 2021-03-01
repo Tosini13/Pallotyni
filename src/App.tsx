@@ -7,6 +7,7 @@ import DailyMessage from "./components/dailyMessage/DailyMessage";
 import Gallery from "./components/gallery/Gallery";
 import NavBar from "./components/nav/NavBar";
 import SideBarNews from "./components/news/SideBarNews";
+import Services from "./components/services/Services";
 import StellaMaris from "./components/stellaMaris/StellaMaris";
 import { RoutingPath } from "./models/Global";
 
@@ -59,6 +60,7 @@ function App() {
           {/* MAIN */}
           <MainStyled>
             <Switch>
+              <Route path={RoutingPath.service} component={Services} />
               <Route path={RoutingPath.gallery} component={Gallery} />
               <Route path={RoutingPath.stellaMaris} component={StellaMaris} />
               <Route exact path={RoutingPath.home} component={AboutUs} />

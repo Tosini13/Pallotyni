@@ -13,6 +13,7 @@ import { ExpandMore } from "@material-ui/icons";
 import { mainTheme } from "../../style/config";
 import styled from "styled-components";
 import TodayServices from "./TodayServices";
+import TodayConfessions from "./TodayConfessions";
 
 export const AccordionStyled = styled(Accordion)`
   background-color: ${mainTheme.palette.secondary.main};
@@ -49,6 +50,9 @@ const DailyMessage: React.FC<DailyMessageProps> = () => {
       </Grid>
       <Grid item>
         <TodayServices />
+      </Grid>
+      <Grid item>
+        <TodayConfessions />
       </Grid>
     </Grid>
   );

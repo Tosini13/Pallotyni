@@ -7,19 +7,23 @@ import { StylesProvider, ThemeProvider } from "@material-ui/core/styles";
 import { NewStoreProvider } from "./stores/NewsStore";
 import { mainTheme } from "./style/config";
 import { PhotosStoreProvider } from "./stores/GalleryStore";
+import { ServiceStoreProvider } from "./stores/ServiceStore";
+import { ConfessionStoreProvider } from "./stores/ConfessionStore";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={mainTheme}>
-      <StylesProvider injectFirst>
-        <NewStoreProvider>
-          <PhotosStoreProvider>
-            <App />
-          </PhotosStoreProvider>
-        </NewStoreProvider>
-      </StylesProvider>
-    </ThemeProvider>
-  </React.StrictMode>,
+  <ThemeProvider theme={mainTheme}>
+    <StylesProvider injectFirst>
+      <NewStoreProvider>
+        <ServiceStoreProvider>
+          <ConfessionStoreProvider>
+            <PhotosStoreProvider>
+              <App />
+            </PhotosStoreProvider>
+          </ConfessionStoreProvider>
+        </ServiceStoreProvider>
+      </NewStoreProvider>
+    </StylesProvider>
+  </ThemeProvider>,
   document.getElementById("root")
 );
 
