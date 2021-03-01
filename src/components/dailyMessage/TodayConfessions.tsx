@@ -12,15 +12,15 @@ import {
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import { AccordionStyled } from "./DailyMessage";
-import { ServiceStoreContext } from "../../stores/ServiceStore";
 import { Day } from "../../models/Global";
 import { mainTheme } from "../../style/config";
+import { ConfessionStoreContext } from "../../stores/ConfessionStore";
 
-const ServiceDescTypographyStyled = styled(Typography)`
+const ConfessionDescTypographyStyled = styled(Typography)`
   margin-left: 5px;
 `;
 
-const ServiceTimeTypographyStyled = styled(Typography)`
+const ConfessionTimeTypographyStyled = styled(Typography)`
   color: rgba(0, 0, 0, 0.8);
 `;
 
@@ -29,34 +29,36 @@ const PaperStyled = styled(Paper)`
   padding: 10px;
 `;
 
-export interface TodayServicesProps {}
+export interface TodayConfessionsProps {}
 
-const TodayServices: React.FC<TodayServicesProps> = () => {
-  const servicesStore = useContext(ServiceStoreContext);
+const TodayConfessions: React.FC<TodayConfessionsProps> = () => {
+  const confessionsStore = useContext(ConfessionStoreContext);
   const todayDay = moment().format("dddd").toUpperCase();
-  const todayServices = servicesStore.getServicesByDay(todayDay as Day);
-  if (!todayServices.length) {
+  const todayConfessions = confessionsStore.getConfessionsByDay(
+    todayDay as Day
+  );
+  if (!todayConfessions.length) {
     return (
       <PaperStyled>
-        <Typography>Today's no services</Typography>
+        <Typography>Today's no Confessions</Typography>
       </PaperStyled>
     );
   }
   return (
     <AccordionStyled defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMore />}>
-        <Typography>Today's Services</Typography>
+        <Typography>Today's Confessions</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <List>
-          {todayServices.map((service) => (
-            <ListItem key={service.id}>
-              <ServiceTimeTypographyStyled>
-                {service.time}
-              </ServiceTimeTypographyStyled>
-              <ServiceDescTypographyStyled>
-                {service.title}
-              </ServiceDescTypographyStyled>
+          {todayConfessions.map((confession) => (
+            <ListItem key={confession.id}>
+              <ConfessionTimeTypographyStyled>
+                {confession.fromTime} - {confession.toTime}
+              </ConfessionTimeTypographyStyled>
+              <ConfessionDescTypographyStyled>
+                {confession.title}
+              </ConfessionDescTypographyStyled>
             </ListItem>
           ))}
         </List>
@@ -65,4 +67,4 @@ const TodayServices: React.FC<TodayServicesProps> = () => {
   );
 };
 
-export default TodayServices;
+export default TodayConfessions;

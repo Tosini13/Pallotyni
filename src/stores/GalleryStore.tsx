@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 
 import { action, observable } from "mobx";
-import { DateFormat, Id } from "../models/Global";
+import { DATE_TIME_FORMAT, Id } from "../models/Global";
 
 import { TPhotograph } from "../models/Photograph";
 import { mockGallery } from "../mockData/Gallery";
@@ -49,7 +49,7 @@ export class PhotosStore {
           id: moment().format() + this.photos.length,
           path: mockPhoto.path,
           description: mockPhoto.description,
-          createdAt: moment().format(DateFormat),
+          createdAt: moment().format(DATE_TIME_FORMAT),
         })
       );
     });

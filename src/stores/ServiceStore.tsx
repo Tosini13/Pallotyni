@@ -11,7 +11,7 @@ type TService = {
   time: string;
   days?: Day[];
   date?: string;
-  leader: string;
+  priest: string;
 };
 
 export class Service {
@@ -27,13 +27,13 @@ export class Service {
   @observable
   date?: string;
   @observable
-  leader: string;
+  priest: string;
 
-  constructor({ id, title, time, days, date, leader }: TService) {
+  constructor({ id, title, time, days, date, priest }: TService) {
     this.id = id;
     this.title = title;
     this.time = time;
-    this.leader = leader;
+    this.priest = priest;
     this.days = days;
     this.date = date;
   }
@@ -92,32 +92,42 @@ export class ServiceStore {
     return selectedServices.sort(this.sortByTime);
   }
 
+  @action
+  getServicesNextWeek() {
+    const selectedServices = this.services.filter(
+      (service) =>
+        service.date &&
+        moment(service.date).isSameOrAfter(moment().add(7, "days"))
+    );
+    return selectedServices.sort(this.sortByTime);
+  }
+
   constructor() {
     this.createService({
-      id: this.services.length.toString(),
+      id: moment().format() + this.services.length.toString(),
       repeat: true,
       days: [Day.tue, Day.sun],
       title: "for students",
       time: "20:00",
-      leader: "ks. Marcin",
+      priest: "ks. Marcin",
     });
 
     this.createService({
-      id: this.services.length.toString(),
+      id: moment().format() + this.services.length.toString(),
       repeat: true,
       days: [Day.mon, Day.tue, Day.thu, Day.fri],
       title: "for grandmas",
       time: "14:00",
-      leader: "ks. Tadeusz",
+      priest: "ks. Tadeusz",
     });
 
     this.createService({
-      id: this.services.length.toString(),
+      id: moment().format() + this.services.length.toString(),
       repeat: true,
       days: [Day.tue, Day.wed],
       title: "for married",
       time: "18:00",
-      leader: "ks. Tadeusz",
+      priest: "ks. Tadeusz",
     });
   }
 }

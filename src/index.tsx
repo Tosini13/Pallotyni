@@ -8,15 +8,18 @@ import { NewStoreProvider } from "./stores/NewsStore";
 import { mainTheme } from "./style/config";
 import { PhotosStoreProvider } from "./stores/GalleryStore";
 import { ServiceStoreProvider } from "./stores/ServiceStore";
+import { ConfessionStoreProvider } from "./stores/ConfessionStore";
 
 ReactDOM.render(
   <ThemeProvider theme={mainTheme}>
     <StylesProvider injectFirst>
       <NewStoreProvider>
         <ServiceStoreProvider>
-          <PhotosStoreProvider>
-            <App />
-          </PhotosStoreProvider>
+          <ConfessionStoreProvider>
+            <PhotosStoreProvider>
+              <App />
+            </PhotosStoreProvider>
+          </ConfessionStoreProvider>
         </ServiceStoreProvider>
       </NewStoreProvider>
     </StylesProvider>

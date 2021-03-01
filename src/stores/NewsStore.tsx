@@ -3,7 +3,7 @@ import moment from "moment";
 
 import { action, observable } from "mobx";
 import { TNews } from "../models/News";
-import { DateFormat, Id } from "../models/Global";
+import { DATE_TIME_FORMAT, Id } from "../models/Global";
 import { mockNews } from "../mockData/News";
 
 type TNewsProps = Omit<TNews, "date"> & {
@@ -27,7 +27,7 @@ export class News {
     this.id = id;
     this.title = title;
     this.content = content;
-    this.date = date ?? moment().format(DateFormat);
+    this.date = date ?? moment().format(DATE_TIME_FORMAT);
   }
 }
 
