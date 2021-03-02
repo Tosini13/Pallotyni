@@ -9,6 +9,7 @@ import { mainTheme } from "./style/config";
 import { PhotosStoreProvider } from "./stores/GalleryStore";
 import { ServiceStoreProvider } from "./stores/ServiceStore";
 import { ConfessionStoreProvider } from "./stores/ConfessionStore";
+import { ParagraphStoreProvider } from "./stores/AboutUsStore";
 
 ReactDOM.render(
   <ThemeProvider theme={mainTheme}>
@@ -17,7 +18,9 @@ ReactDOM.render(
         <ServiceStoreProvider>
           <ConfessionStoreProvider>
             <PhotosStoreProvider>
-              <App />
+              <ParagraphStoreProvider>
+                <App />
+              </ParagraphStoreProvider>
             </PhotosStoreProvider>
           </ConfessionStoreProvider>
         </ServiceStoreProvider>
