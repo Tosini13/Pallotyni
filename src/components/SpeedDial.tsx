@@ -13,16 +13,20 @@ const SpeedDialStyled = styled(SpeedDial)`
   right: 10px;
   top: 10px;
   transition: all 0.3s;
-  button:hover {
-    background-color: ${mainTheme.palette.secondary.dark};
-    path {
-      fill: ${mainTheme.palette.primary.main};
+  button {
+    background-color: ${mainTheme.palette.secondary.main};
+    color: ${mainTheme.palette.primary.main};
+    &:hover {
+      background-color: ${mainTheme.palette.secondary.main};
+      path {
+        fill: ${mainTheme.palette.primary.main};
+      }
     }
   }
 `;
 
 const SpeedDialActionStyled = styled(SpeedDialAction)`
-  background-color: ${mainTheme.palette.secondary.dark};
+  background-color: ${mainTheme.palette.secondary.main};
 `;
 
 const AddStyled = styled(AddIcon)<{ blocked?: string }>`

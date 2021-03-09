@@ -18,8 +18,15 @@ import {
 } from "../../stores/AboutUsStore";
 import { mainTheme } from "../../style/config";
 
+const DialogStyled = styled(Dialog)`
+  .MuiDialog-paper {
+    width: 99vw;
+  }
+`;
+
 const TextFieldStyled = styled(TextField)`
   color: ${mainTheme.palette.text.primary};
+  width: 100%;
   label {
     color: ${mainTheme.palette.text.primary};
   }
@@ -40,10 +47,16 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
   const { register, handleSubmit, reset } = useForm<TParagraphCreate>();
 
   const clearForm = () => {
+    console.log("clear");
     reset({
       title: "",
       content: "",
     });
+  };
+
+  const handleCloseForm = () => {
+    handleClose();
+    clearForm();
   };
 
   const onSubmit = (data: TParagraphCreate) => {
@@ -52,8 +65,7 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
     } else {
       pStore.createParagraph(data);
     }
-    clearForm();
-    handleClose();
+    handleCloseForm();
   };
 
   useEffect(() => {
@@ -61,13 +73,7 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
   }, [reset, selectedParagraph]);
 
   return (
-    <Dialog
-      open={open}
-      onClose={() => {
-        clearForm();
-        handleClose();
-      }}
-    >
+    <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>
           {selectedParagraph ? "Edit" : "Create"} Paragraph
@@ -75,10 +81,16 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
         <DialogContent>
           <Grid container direction="column">
             <Grid item>
-              <TextFieldStyled inputRef={register} name="title" label="title" />
+              <TextFieldStyled
+                inputRef={register}
+                name="title"
+                label="title"
+                color="secondary"
+              />
             </Grid>
             <Grid item>
               <TextFieldStyled
+                color="secondary"
                 multiline
                 inputRef={register}
                 name="content"
@@ -88,13 +100,19 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button type="submit">
+          <Button
+            onClick={handleCloseForm}
+            color="secondary"
+            variant="contained"
+          >
+            Cancel
+          </Button>
+          <Button type="submit" color="secondary" variant="contained">
             {selectedParagraph ? "Update" : "Create"}
           </Button>
-          <Button onClick={handleClose}>Cancel</Button>
         </DialogActions>
       </form>
-    </Dialog>
+    </DialogStyled>
   );
 };
 

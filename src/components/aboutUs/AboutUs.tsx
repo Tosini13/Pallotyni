@@ -9,6 +9,7 @@ import ParagraphForm from "./ParagraphForm";
 import SpeedDialComponent from "../SpeedDial";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
+import { parseStyledBoolean } from "../../helpers/BooleanParser";
 
 const HoverStyled = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -39,7 +40,7 @@ const EditButtonStyled = styled.div`
   align-items: center;
 `;
 
-const GridEditStyled = styled(Grid)<{ edition: boolean }>`
+const GridEditStyled = styled(Grid)<{ edition?: string }>`
   position: relative;
   overflow: hidden;
   transition: all 0.3s;
@@ -75,11 +76,20 @@ const AboutUs: React.FC<AboutUsProps> = () => {
         <Grid item>
           <Typography variant="h4">About us</Typography>
         </Grid>
+        <SpeedDialComponent
+          actions={actions}
+          blocked={Boolean(edition || openForm)}
+          unBlock={() => {
+            setEdition(false);
+            setOpenForm(false);
+            setSelectedParagraph(undefined);
+          }}
+        />
         {storeParagraph.getParagraph().map((paragraph) => (
           <GridEditStyled
             item
             key={paragraph.id}
-            edition={edition}
+            edition={parseStyledBoolean(edition)}
             onClick={() => (edition ? setSelectedParagraph(paragraph) : null)}
           >
             {paragraph.title ? (
@@ -95,11 +105,6 @@ const AboutUs: React.FC<AboutUsProps> = () => {
             ) : null}
           </GridEditStyled>
         ))}
-        <SpeedDialComponent
-          actions={actions}
-          blocked={false}
-          unBlock={() => {}}
-        />
       </Grid>
       <ParagraphForm
         open={Boolean(openForm || selectedParagraph)}

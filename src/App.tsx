@@ -20,7 +20,8 @@ const MainContainerStyled = styled.div`
 `;
 
 const GridColumnsStyled = styled.div`
-  padding: 5px;
+  padding: 1.5px;
+  box-sizing: border-box;
 `;
 
 const MainStyled = styled(GridColumnsStyled)`
