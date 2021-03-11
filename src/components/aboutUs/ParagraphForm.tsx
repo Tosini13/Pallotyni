@@ -10,7 +10,7 @@ import {
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { Id } from "../../models/Global";
+import { ButtonError, ButtonSuccess } from "../../componentsReusable/buttons";
 import {
   ParagraphStoreContext,
   TParagraph,
@@ -47,7 +47,6 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
   const { register, handleSubmit, reset } = useForm<TParagraphCreate>();
 
   const clearForm = () => {
-    console.log("clear");
     reset({
       title: "",
       content: "",
@@ -79,7 +78,7 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
           {selectedParagraph ? "Edit" : "Create"} Paragraph
         </DialogTitle>
         <DialogContent>
-          <Grid container direction="column">
+          <Grid container direction="column" spacing={2}>
             <Grid item>
               <TextFieldStyled
                 inputRef={register}
@@ -100,16 +99,10 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={handleCloseForm}
-            color="secondary"
-            variant="contained"
-          >
-            Cancel
-          </Button>
-          <Button type="submit" color="secondary" variant="contained">
+          <ButtonSuccess type="submit">
             {selectedParagraph ? "Update" : "Create"}
-          </Button>
+          </ButtonSuccess>
+          <ButtonError onClick={handleCloseForm}>Cancel</ButtonError>
         </DialogActions>
       </form>
     </DialogStyled>

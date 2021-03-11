@@ -54,6 +54,13 @@ export class ParagraphStore {
     );
   }
 
+  @action
+  removeParagraph(p: TParagraph) {
+    this.paragraphs = this.paragraphs.filter(
+      (paragraph) => paragraph.id !== p.id
+    );
+  }
+
   constructor() {
     this.createParagraph({
       title: "We are here",

@@ -3,13 +3,19 @@ import { useContext, useState } from "react";
 import { IconButton, Grid, Typography } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
+import DeleteIcon from "@material-ui/icons/Delete";
 
-import { ParagraphStoreContext, TParagraph } from "../../stores/AboutUsStore";
+import {
+  Paragraph,
+  ParagraphStoreContext,
+  TParagraph,
+} from "../../stores/AboutUsStore";
 import ParagraphForm from "./ParagraphForm";
 import SpeedDialComponent from "../SpeedDial";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
+import { observer } from "mobx-react";
 
 const HoverStyled = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -24,7 +30,7 @@ const HoverStyled = styled.div`
     opacity: 1;
   }
 `;
-const EditButtonStyled = styled.div`
+const ActionButtonStyled = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -40,8 +46,9 @@ const EditButtonStyled = styled.div`
   align-items: center;
 `;
 
-const GridEditStyled = styled(Grid)<{ edition?: string }>`
+const GridActionStyled = styled(Grid)<{ edition?: string }>`
   position: relative;
+  width: 100%;
   overflow: hidden;
   transition: all 0.3s;
   ${(props) =>
@@ -59,17 +66,36 @@ const GridEditStyled = styled(Grid)<{ edition?: string }>`
 
 export interface AboutUsProps {}
 
-const AboutUs: React.FC<AboutUsProps> = () => {
+const AboutUs: React.FC<AboutUsProps> = observer(() => {
   const storeParagraph = useContext(ParagraphStoreContext);
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [edition, setEdition] = useState<boolean>(false);
+  const [removal, setRemoval] = useState<boolean>(false);
   const [selectedParagraph, setSelectedParagraph] = useState<
     TParagraph | undefined
   >();
-  const actions = [
+  const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
     { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
+    { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
   ];
+
+  const handleClearActionsSD = () => {
+    setRemoval(false);
+    setEdition(false);
+    setOpenForm(false);
+    setSelectedParagraph(undefined);
+  };
+
+  const handleAction = (p: Paragraph) => {
+    if (removal) {
+      storeParagraph.removeParagraph(p);
+    }
+    if (edition) {
+      setSelectedParagraph(p);
+    }
+  };
+
   return (
     <>
       <Grid container spacing={3} style={{ position: "relative" }}>
@@ -77,20 +103,16 @@ const AboutUs: React.FC<AboutUsProps> = () => {
           <Typography variant="h4">About us</Typography>
         </Grid>
         <SpeedDialComponent
-          actions={actions}
-          blocked={Boolean(edition || openForm)}
-          unBlock={() => {
-            setEdition(false);
-            setOpenForm(false);
-            setSelectedParagraph(undefined);
-          }}
+          actions={actionsSD}
+          blocked={Boolean(edition || removal || openForm)}
+          unBlock={handleClearActionsSD}
         />
         {storeParagraph.getParagraph().map((paragraph) => (
-          <GridEditStyled
+          <GridActionStyled
             item
             key={paragraph.id}
-            edition={parseStyledBoolean(edition)}
-            onClick={() => (edition ? setSelectedParagraph(paragraph) : null)}
+            edition={parseStyledBoolean(edition || removal)}
+            onClick={() => handleAction(paragraph)}
           >
             {paragraph.title ? (
               <Typography variant="h5">{paragraph.title}</Typography>
@@ -98,25 +120,28 @@ const AboutUs: React.FC<AboutUsProps> = () => {
             <Typography>{paragraph.content}</Typography>
             {edition ? (
               <HoverStyled>
-                <EditButtonStyled>
+                <ActionButtonStyled>
                   <EditIcon fontSize="large" />
-                </EditButtonStyled>
+                </ActionButtonStyled>
               </HoverStyled>
             ) : null}
-          </GridEditStyled>
+            {removal ? (
+              <HoverStyled>
+                <ActionButtonStyled>
+                  <DeleteIcon fontSize="large" />
+                </ActionButtonStyled>
+              </HoverStyled>
+            ) : null}
+          </GridActionStyled>
         ))}
       </Grid>
       <ParagraphForm
         open={Boolean(openForm || selectedParagraph)}
         selectedParagraph={selectedParagraph}
-        handleClose={() => {
-          setOpenForm(false);
-          setSelectedParagraph(undefined);
-          setEdition(false);
-        }}
+        handleClose={handleClearActionsSD}
       />
     </>
   );
-};
+});
 
 export default AboutUs;
