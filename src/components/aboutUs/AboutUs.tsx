@@ -66,6 +66,12 @@ const GridActionStyled = styled(Grid)<{ edition?: string }>`
       : ""}
 `;
 
+const SpeedDialContainer = styled.div`
+  position: fixed;
+  right: 25%;
+  z-index: 1110;
+`;
+
 export interface AboutUsProps {}
 
 const AboutUs: React.FC<AboutUsProps> = observer(() => {
@@ -101,11 +107,13 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
         <Grid item>
           <Typography variant="h4">About us</Typography>
         </Grid>
-        <SpeedDialComponent
-          actions={actionsSD}
-          blocked={Boolean(edition || removal || openForm)}
-          unBlock={handleClearActionsSD}
-        />
+        <SpeedDialContainer>
+          <SpeedDialComponent
+            actions={actionsSD}
+            blocked={Boolean(edition || removal || openForm)}
+            unBlock={handleClearActionsSD}
+          />
+        </SpeedDialContainer>
         {storeParagraph.getParagraph().map((paragraph) => (
           <GridActionStyled
             item
