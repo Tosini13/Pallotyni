@@ -11,6 +11,7 @@ import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { ButtonSuccess, ButtonError } from "../../componentsReusable/Buttons";
+import TextFieldC, { TextFieldStyled } from "../../componentsReusable/Forms";
 import {
   ParagraphStoreContext,
   TParagraph,
@@ -21,14 +22,6 @@ import { mainTheme } from "../../style/config";
 const DialogStyled = styled(Dialog)`
   .MuiDialog-paper {
     width: 99vw;
-  }
-`;
-
-const TextFieldStyled = styled(TextField)`
-  color: ${mainTheme.palette.text.primary};
-  width: 100%;
-  label {
-    color: ${mainTheme.palette.text.primary};
   }
 `;
 
@@ -82,7 +75,7 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
         <DialogContent>
           <Grid container direction="column" spacing={2}>
             <Grid item>
-              <TextFieldStyled
+              <TextFieldC
                 inputRef={register}
                 name="title"
                 label="title"
@@ -90,8 +83,7 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
               />
             </Grid>
             <Grid item>
-              <TextFieldStyled
-                color="secondary"
+              <TextFieldC
                 multiline
                 inputRef={register}
                 name="content"

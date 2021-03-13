@@ -66,6 +66,12 @@ const GridActionStyled = styled(Grid)<{ edition?: string }>`
       : ""}
 `;
 
+const SpeedDialContainer = styled.div`
+  position: fixed;
+  right: 25%;
+  z-index: 1110;
+`;
+
 export interface AboutUsProps {}
 
 const AboutUs: React.FC<AboutUsProps> = observer(() => {
@@ -89,23 +95,31 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
     setSelectedParagraph(undefined);
   };
 
+  const handleAction = (p: TParagraph) => {
+    if (edition || removal) {
+      setSelectedParagraph(p);
+    }
+  };
+
   return (
     <>
       <Grid container spacing={3} style={{ position: "relative" }}>
         <Grid item>
           <Typography variant="h4">About us</Typography>
         </Grid>
-        <SpeedDialComponent
-          actions={actionsSD}
-          blocked={Boolean(edition || removal || openForm)}
-          unBlock={handleClearActionsSD}
-        />
+        <SpeedDialContainer>
+          <SpeedDialComponent
+            actions={actionsSD}
+            blocked={Boolean(edition || removal || openForm)}
+            unBlock={handleClearActionsSD}
+          />
+        </SpeedDialContainer>
         {storeParagraph.getParagraph().map((paragraph) => (
           <GridActionStyled
             item
             key={paragraph.id}
             edition={parseStyledBoolean(edition || removal)}
-            onClick={() => setSelectedParagraph(paragraph)}
+            onClick={() => handleAction(paragraph)}
           >
             {paragraph.title ? (
               <Typography variant="h5">{paragraph.title}</Typography>

@@ -9,9 +9,14 @@ import NavBar from "./components/nav/NavBar";
 import SideBarNews from "./components/news/SideBarNews";
 import Services from "./components/services/Services";
 import StellaMaris from "./components/stellaMaris/StellaMaris";
+import { ScrollBarStyled } from "./componentsReusable/ScrollBar";
 import { RoutingPath } from "./models/Global";
 
 const navHeight = "60px";
+
+const GlobalStyle = styled.div`
+  ${ScrollBarStyled}
+`;
 
 const MainContainerStyled = styled.div`
   position: relative;
@@ -47,7 +52,7 @@ const RightSidebarStyled = styled(SidebarStyled)`
 function App() {
   return (
     <BrowserRouter>
-      <div>
+      <GlobalStyle>
         <NavBar />
         {/*-----------------------------*/}
         {/*DESKTOP VIEW*/}
@@ -75,7 +80,7 @@ function App() {
           </RightSidebarStyled>
         </MainContainerStyled>
         {/*-----------------------------*/}
-      </div>
+      </GlobalStyle>
     </BrowserRouter>
   );
 }
