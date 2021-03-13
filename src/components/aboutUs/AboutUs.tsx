@@ -16,6 +16,8 @@ import styled from "styled-components";
 import { mainTheme } from "../../style/config";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import { observer } from "mobx-react";
+import QuestionDialog from "../../componentsReusable/Dialogs";
+import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 
 const HoverStyled = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -87,15 +89,6 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
     setSelectedParagraph(undefined);
   };
 
-  const handleAction = (p: Paragraph) => {
-    if (removal) {
-      storeParagraph.removeParagraph(p);
-    }
-    if (edition) {
-      setSelectedParagraph(p);
-    }
-  };
-
   return (
     <>
       <Grid container spacing={3} style={{ position: "relative" }}>
@@ -112,7 +105,7 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
             item
             key={paragraph.id}
             edition={parseStyledBoolean(edition || removal)}
-            onClick={() => handleAction(paragraph)}
+            onClick={() => setSelectedParagraph(paragraph)}
           >
             {paragraph.title ? (
               <Typography variant="h5">{paragraph.title}</Typography>
@@ -136,10 +129,28 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
         ))}
       </Grid>
       <ParagraphForm
-        open={Boolean(openForm || selectedParagraph)}
-        selectedParagraph={selectedParagraph}
+        open={Boolean((openForm || selectedParagraph) && !removal)}
+        selectedParagraph={openForm ? selectedParagraph : undefined}
         handleClose={handleClearActionsSD}
       />
+      <QuestionDialog
+        open={Boolean(selectedParagraph && removal)}
+        handleClose={handleClearActionsSD}
+        title="Do you want to delete?"
+        content="Do you want to delete?"
+      >
+        <ButtonSuccess
+          onClick={() => {
+            if (selectedParagraph) {
+              storeParagraph.removeParagraph(selectedParagraph);
+              handleClearActionsSD();
+            }
+          }}
+        >
+          Yes
+        </ButtonSuccess>
+        <ButtonError onClick={handleClearActionsSD}>No</ButtonError>
+      </QuestionDialog>
     </>
   );
 });

@@ -10,7 +10,7 @@ import {
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { ButtonError, ButtonSuccess } from "../../componentsReusable/buttons";
+import { ButtonSuccess, ButtonError } from "../../componentsReusable/Buttons";
 import {
   ParagraphStoreContext,
   TParagraph,
@@ -43,6 +43,8 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
   handleClose,
   selectedParagraph,
 }) => {
+  console.log(selectedParagraph);
+
   const pStore = useContext(ParagraphStoreContext);
   const { register, handleSubmit, reset } = useForm<TParagraphCreate>();
 
