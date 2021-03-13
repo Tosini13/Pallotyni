@@ -89,6 +89,12 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
     setSelectedParagraph(undefined);
   };
 
+  const handleAction = (p: TParagraph) => {
+    if (edition || removal) {
+      setSelectedParagraph(p);
+    }
+  };
+
   return (
     <>
       <Grid container spacing={3} style={{ position: "relative" }}>
@@ -105,7 +111,7 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
             item
             key={paragraph.id}
             edition={parseStyledBoolean(edition || removal)}
-            onClick={() => setSelectedParagraph(paragraph)}
+            onClick={() => handleAction(paragraph)}
           >
             {paragraph.title ? (
               <Typography variant="h5">{paragraph.title}</Typography>
