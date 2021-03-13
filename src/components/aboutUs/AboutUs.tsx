@@ -1,15 +1,11 @@
 import { useContext, useState } from "react";
 
-import { IconButton, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import {
-  Paragraph,
-  ParagraphStoreContext,
-  TParagraph,
-} from "../../stores/AboutUsStore";
+import { ParagraphStoreContext, TParagraph } from "../../stores/AboutUsStore";
 import ParagraphForm from "./ParagraphForm";
 import SpeedDialComponent from "../SpeedDial";
 import styled from "styled-components";

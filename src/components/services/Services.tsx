@@ -1,10 +1,25 @@
 import React, { useContext, useState } from "react";
 import moment from "moment";
 import { observer } from "mobx-react";
+import styled from "styled-components";
+
+import EditIcon from "@material-ui/icons/Edit";
+import AddIcon from "@material-ui/icons/Add";
+import DeleteIcon from "@material-ui/icons/Delete";
+
 import { DATE_FORMAT, Day } from "../../models/Global";
-import { ServiceStoreContext } from "../../stores/ServiceStore";
+import { Service, ServiceStoreContext } from "../../stores/ServiceStore";
 import { ConfessionStoreContext } from "../../stores/ConfessionStore";
 import ServiceMenu from "./ServiceMenu";
+import SpeedDialComponent from "../SpeedDial";
+import ServicesView from "./ServicesView";
+import ConfessionsView from "./ConfessionsView";
+
+const SpeedDialContainer = styled.div`
+  position: fixed;
+  right: 25%;
+  z-index: 1110;
+`;
 
 export enum E_SERVICE_TAB {
   "SERVICES" = "SERVICES",
@@ -14,71 +29,49 @@ export enum E_SERVICE_TAB {
 export interface ServicesProps {}
 
 const Services: React.FC<ServicesProps> = observer(() => {
-  const storeServices = useContext(ServiceStoreContext);
-  const storeConfession = useContext(ConfessionStoreContext);
+  const [openForm, setOpenForm] = useState<boolean>(false);
+  const [edition, setEdition] = useState<boolean>(false);
+  const [removal, setRemoval] = useState<boolean>(false);
+  const [selectedService, setSelectedService] = useState<Service | undefined>();
 
   const [currentTab, setCurrentTab] = useState<E_SERVICE_TAB>(
     E_SERVICE_TAB.SERVICES
   );
 
-  const servicesNextWeek = storeServices.getServicesByDate({
-    toDate: moment().add(7, "days").format(DATE_FORMAT),
-  });
+  const handleClearActionsSD = () => {
+    setRemoval(false);
+    setEdition(false);
+    setOpenForm(false);
+    setSelectedService(undefined);
+  };
+
+  const actionsSD = [
+    { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
+    { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
+    { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
+  ];
 
   return (
     <>
+      <SpeedDialContainer>
+        <SpeedDialComponent
+          actions={actionsSD}
+          blocked={Boolean(edition || removal || openForm)}
+          unBlock={handleClearActionsSD}
+        />
+      </SpeedDialContainer>
       <ServiceMenu setCurrentTab={setCurrentTab} />
       {currentTab === E_SERVICE_TAB.SERVICES ? (
-        <div>
-          <div>
-            {Object.values(Day).map((day) => (
-              <div key={day}>
-                <h5>{day}</h5>
-                {storeServices.getServicesByDay(day).map((service) => (
-                  <p key={service.id}>
-                    {service.time} - {service.title}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </div>
-          {servicesNextWeek ? (
-            <>
-              <p>Next week</p>
-              {servicesNextWeek.map((service) => (
-                <p>
-                  {moment(service.date).format(DATE_FORMAT)}
-                  {service.time} - {service.title}
-                </p>
-              ))}
-            </>
-          ) : null}
-        </div>
+        <ServicesView
+          openForm={openForm}
+          edition={edition}
+          removal={removal}
+          selectedService={selectedService}
+          selectService={setSelectedService}
+          handleClearActionsSD={handleClearActionsSD}
+        />
       ) : null}
-      {currentTab === E_SERVICE_TAB.CONFESSIONS ? (
-        <div>
-          <div>
-            {Object.values(Day).map((day) => (
-              <div key={day}>
-                <h5>{day}</h5>
-                {storeConfession.getConfessionsByDay(day).map((confession) => (
-                  <p key={confession.id}>
-                    {confession.fromTime} - {confession.toTime} :{" "}
-                    {confession.title}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </div>
-          <p>Next week</p>
-          {storeConfession.getConfessionsNextWeek().map((confession) => (
-            <p>
-              {moment(confession.date).format(DATE_FORMAT)}{" "}
-              {confession.fromTime} - {confession.toTime}: {confession.title}
-            </p>
-          ))}
-        </div>
-      ) : null}
+      {currentTab === E_SERVICE_TAB.CONFESSIONS ? <ConfessionsView /> : null}
     </>
   );
 });

@@ -1,29 +1,19 @@
+import { useContext, useEffect } from "react";
 import {
-  Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
-  TextField,
 } from "@material-ui/core";
-import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import { ButtonSuccess, ButtonError } from "../../componentsReusable/Buttons";
-import TextFieldC, { TextFieldStyled } from "../../componentsReusable/Forms";
+import { DialogStyled } from "../../componentsReusable/Dialogs";
+import TextFieldC from "../../componentsReusable/Forms";
 import {
   ParagraphStoreContext,
   TParagraph,
   TParagraphCreate,
 } from "../../stores/AboutUsStore";
-import { mainTheme } from "../../style/config";
-
-const DialogStyled = styled(Dialog)`
-  .MuiDialog-paper {
-    width: 99vw;
-  }
-`;
 
 export interface ParagraphFormProps {
   open: boolean;
@@ -36,8 +26,6 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
   handleClose,
   selectedParagraph,
 }) => {
-  console.log(selectedParagraph);
-
   const pStore = useContext(ParagraphStoreContext);
   const { register, handleSubmit, reset } = useForm<TParagraphCreate>();
 
