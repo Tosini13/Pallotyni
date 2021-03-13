@@ -3,7 +3,7 @@ import { Id } from "../models/Global";
 import { mockParagraphs } from "../mockData/aboutUs";
 import { createContext } from "react";
 
-type TParagraph = {
+export type TParagraph = {
   id: Id;
   title?: string;
   content: string;
@@ -26,7 +26,7 @@ export class Paragraph {
   }
 }
 
-type TParagraphCreate = Omit<TParagraph, "id">;
+export type TParagraphCreate = Omit<TParagraph, "id">;
 
 export class ParagraphStore {
   @observable
@@ -45,6 +45,20 @@ export class ParagraphStore {
         id: `${new Date()}${this.paragraphs.length}`,
       }),
     ];
+  }
+
+  @action
+  updateParagraph(p: TParagraph) {
+    this.paragraphs = this.paragraphs.map((paragraph) =>
+      paragraph.id === p.id ? p : paragraph
+    );
+  }
+
+  @action
+  removeParagraph(p: TParagraph) {
+    this.paragraphs = this.paragraphs.filter(
+      (paragraph) => paragraph.id !== p.id
+    );
   }
 
   constructor() {
