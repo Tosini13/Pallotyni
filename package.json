@@ -63,13 +63,9 @@
   },
   "config": {
     "pre-git": {
-      "pre-commit": [],
       "pre-push": [
         "npm run cy:e2e"
-      ],
-      "post-commit": [],
-      "post-checkout": [],
-      "post-merge": []
+      ]
     }
   }
 }
