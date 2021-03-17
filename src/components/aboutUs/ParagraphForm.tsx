@@ -36,8 +36,6 @@ const ParagraphForm: React.FC<ParagraphFormProps> = ({
   handleClose,
   selectedParagraph,
 }) => {
-  console.log(selectedParagraph);
-
   const pStore = useContext(ParagraphStoreContext);
   const { register, handleSubmit, reset } = useForm<TParagraphCreate>();
 
