@@ -49,7 +49,9 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
   const sStore = useContext(ServiceStoreContext);
   const { register, handleSubmit, reset } = useForm<TServiceForm>();
   const [repeat, setRepeat] = useState<boolean>(true);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    new Date() ?? format(new Date(), DATE_FORMAT)
+  );
   const [selectedDays, setSelectedDays] = useState<Day[]>(
     selectedService?.days ?? []
   );
@@ -112,7 +114,9 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
   useEffect(() => {
     reset(selectedService);
     setSelectedDays(selectedService?.days ?? []);
-    setSelectedDate(new Date(selectedService?.date ?? ""));
+    setSelectedDate(
+      selectedService?.date ? new Date(selectedService?.date) : new Date()
+    );
     setRepeat(Boolean(selectedService?.days?.length));
   }, [reset, selectedService]);
   console.log(selectedDate);

@@ -40,7 +40,7 @@ const DayPicker: React.FC<DayPickerProps> = ({ selected, handleSelect }) => {
   console.log(selected);
 
   return (
-    <Paper style={{ overflow: "hidden", margin: "12px 0px" }}>
+    <Paper style={{ overflow: "hidden", margin: "23px 0px" }}>
       <DaysContainerStyled
         container
         justify="space-between"
