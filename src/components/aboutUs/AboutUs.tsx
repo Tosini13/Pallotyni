@@ -92,11 +92,15 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
   };
 
   const handleAction = (p: TParagraph) => {
+    console.log("handleAction", p);
+
     if (edition || removal) {
       setSelectedParagraph(p);
+      setOpenForm(true);
     }
   };
 
+  console.log("aboutUs", selectedParagraph, openForm);
   return (
     <>
       <Grid container spacing={3} style={{ position: "relative" }}>
