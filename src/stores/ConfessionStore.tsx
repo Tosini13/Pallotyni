@@ -49,7 +49,7 @@ export class Confession {
   }
 }
 
-type TCreateConfession = Omit<TConfession, "id">;
+export type TCreateConfession = Omit<TConfession, "id">;
 
 export class ConfessionStore {
   @observable
@@ -62,6 +62,7 @@ export class ConfessionStore {
 
   @action
   addConfession(confession: TCreateConfession) {
+    console.log(confession);
     this.confessions = [
       ...this.confessions,
       new Confession({
@@ -69,6 +70,19 @@ export class ConfessionStore {
         id: moment().format() + this.confessions.length,
       }),
     ];
+    console.log(this.confessions);
+  }
+
+  @action
+  updateService(service: TConfession) {
+    this.confessions = this.confessions.map((s) =>
+      s.id === service.id ? service : s
+    );
+  }
+
+  @action
+  removeConfession(confession: Confession) {
+    this.confessions = this.confessions.filter((c) => c.id !== confession.id);
   }
 
   sortByTime(confessionA: Confession, confessionB: Confession) {

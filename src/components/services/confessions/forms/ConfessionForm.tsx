@@ -1,85 +1,87 @@
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { format } from "date-fns";
+
 import {
   DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
 } from "@material-ui/core";
+
+import { DialogStyled } from "../../../../componentsReusable/Dialogs";
+import TextFieldC from "../../../../componentsReusable/Forms";
+import { DATE_FORMAT, Day } from "../../../../models/Global";
+import {
+  Confession,
+  ConfessionStoreContext,
+  TCreateConfession,
+} from "../../../../stores/ConfessionStore";
+import DatePickerSwitch from "../../forms/DatePickerSwitch";
 import {
   ButtonError,
   ButtonSuccess,
-} from "../../../componentsReusable/Buttons";
-import { DialogStyled } from "../../../componentsReusable/Dialogs";
-import TextFieldC from "../../../componentsReusable/Forms";
-import {
-  Service,
-  ServiceStoreContext,
-  TServiceCreate,
-} from "../../../stores/ServiceStore";
-import { DATE_FORMAT, Day } from "../../../models/Global";
-import { format } from "date-fns";
-import DatePickerSwitch from "./DatePickerSwitch";
+} from "../../../../componentsReusable/Buttons";
 
-type TServiceForm = TServiceCreate;
+type TConfessionForm = TCreateConfession;
 
-export interface ServiceFormProps {
+export interface ConfessionFormProps {
   open: boolean;
-  selectedService?: Service;
+  selectedConfession?: Confession;
   handleClose: () => void;
 }
 
-const ServiceForm: React.FC<ServiceFormProps> = ({
+const ConfessionForm: React.FC<ConfessionFormProps> = ({
   open,
+  selectedConfession,
   handleClose,
-  selectedService,
 }) => {
-  const sStore = useContext(ServiceStoreContext);
-  const { register, handleSubmit, reset } = useForm<TServiceForm>();
+  const sConfession = useContext(ConfessionStoreContext);
+  const { register, handleSubmit, reset } = useForm<TConfessionForm>();
 
   const [repeat, setRepeat] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     new Date() ?? format(new Date(), DATE_FORMAT)
   );
   const [selectedDays, setSelectedDays] = useState<Day[]>(
-    selectedService?.days ?? []
+    selectedConfession?.days ?? []
   );
 
   const clearForm = () => {
     reset({
       title: "",
-      time: "12:00",
+      fromTime: "12:00",
+      toTime: "12:30",
       priest: "",
     });
   };
+
   const handleCloseForm = () => {
-    handleClose();
     clearForm();
+    handleClose();
   };
 
-  const onSubmit = (data: TServiceForm) => {
+  const onSubmit = (data: TConfessionForm) => {
     console.log(data);
-    if (repeat && !selectedDays.length) {
-      console.log("select Days!");
-    }
-    console.log(selectedService);
-    if (selectedService) {
-      sStore.updateService({
+    if (selectedConfession) {
+      sConfession.updateService({
         title: data.title,
         priest: data.priest,
-        time: data.time,
+        fromTime: data.fromTime,
+        toTime: data.toTime,
         days: repeat ? selectedDays : undefined,
         date:
           !repeat && selectedDate
             ? format(selectedDate, DATE_FORMAT)
             : undefined,
-        id: selectedService.id,
+        id: selectedConfession.id,
       });
     } else {
-      sStore.createService({
+      sConfession.addConfession({
         title: data.title,
         priest: data.priest,
-        time: data.time,
+        fromTime: data.fromTime,
+        toTime: data.toTime,
         days: repeat ? selectedDays : undefined,
         date:
           !repeat && selectedDate
@@ -91,18 +93,20 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
   };
 
   useEffect(() => {
-    reset(selectedService);
-    setSelectedDays(selectedService?.days ?? []);
+    reset(selectedConfession);
+    setSelectedDays(selectedConfession?.days ?? []);
     setSelectedDate(
-      selectedService?.date ? new Date(selectedService?.date) : new Date()
+      selectedConfession?.date ? new Date(selectedConfession?.date) : new Date()
     );
-    setRepeat(Boolean(selectedService?.days?.length));
-  }, [reset, selectedService]);
+    setRepeat(Boolean(selectedConfession?.days?.length));
+  }, [reset, selectedConfession]);
 
   return (
     <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>{selectedService ? "Edit" : "Create"} Service</DialogTitle>
+        <DialogTitle>
+          {selectedConfession ? "Edit" : "Create"} Service
+        </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} alignItems="center">
             <Grid item md={6}>
@@ -134,7 +138,7 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
             <Grid item md={3}>
               <TextFieldC
                 required
-                label="Time"
+                label="From time"
                 type="time"
                 defaultValue={"12:00"}
                 InputLabelProps={{
@@ -144,14 +148,30 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
                   step: 60,
                 }}
                 inputRef={register}
-                name="time"
+                name="fromTime"
+              />
+            </Grid>
+            <Grid item md={3}>
+              <TextFieldC
+                required
+                label="To time"
+                type="time"
+                defaultValue={"12:00"}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  step: 60,
+                }}
+                inputRef={register}
+                name="toTime"
               />
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
           <ButtonSuccess type="submit">
-            {selectedService ? "Update" : "Create"}
+            {selectedConfession ? "Update" : "Create"}
           </ButtonSuccess>
           <ButtonError onClick={handleCloseForm}>Cancel</ButtonError>
         </DialogActions>
@@ -160,4 +180,4 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
   );
 };
 
-export default ServiceForm;
+export default ConfessionForm;

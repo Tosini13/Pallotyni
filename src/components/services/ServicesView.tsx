@@ -12,7 +12,9 @@ import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 
 const DayContainerStyled = styled.div<{ serviceSelectable?: string }>``;
 
-const ServiceContainerStyled = styled(Typography)<{ selectable?: string }>`
+export const TypographySelectableStyled = styled(Typography)<{
+  selectable?: string;
+}>`
   padding: 3px;
   transition: all 0.3s;
   width: fit-content;
@@ -69,13 +71,13 @@ const ServicesView: React.FC<ServicesViewProps> = ({
             >
               <h5>{day}</h5>
               {storeServices.getServicesByDay(day).map((service) => (
-                <ServiceContainerStyled
+                <TypographySelectableStyled
                   key={service.id}
                   selectable={parseStyledBoolean(edition || removal)}
                   onClick={() => handleSelectService(service)}
                 >
                   {service.time} - {service.title}
-                </ServiceContainerStyled>
+                </TypographySelectableStyled>
               ))}
             </DayContainerStyled>
           ))}
@@ -84,14 +86,14 @@ const ServicesView: React.FC<ServicesViewProps> = ({
           <>
             <p>Next week</p>
             {servicesNextWeek.map((service) => (
-              <ServiceContainerStyled
+              <TypographySelectableStyled
                 key={service.id}
                 selectable={parseStyledBoolean(edition || removal)}
                 onClick={() => handleSelectService(service)}
               >
                 {moment(service.date).format(DATE_FORMAT)}
                 {service.time} - {service.title}
-              </ServiceContainerStyled>
+              </TypographySelectableStyled>
             ))}
           </>
         ) : null}

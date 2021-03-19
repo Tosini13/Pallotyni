@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import { observer } from "mobx-react";
 import styled from "styled-components";
@@ -9,11 +9,14 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import { DATE_FORMAT, Day } from "../../models/Global";
 import { Service, ServiceStoreContext } from "../../stores/ServiceStore";
-import { ConfessionStoreContext } from "../../stores/ConfessionStore";
+import {
+  Confession,
+  ConfessionStoreContext,
+} from "../../stores/ConfessionStore";
 import ServiceMenu from "./ServiceMenu";
 import SpeedDialComponent from "../SpeedDial";
 import ServicesView from "./ServicesView";
-import ConfessionsView from "./ConfessionsView";
+import ConfessionsView from "./confessions/ConfessionsView";
 
 const SpeedDialContainer = styled.div`
   position: fixed;
@@ -33,6 +36,9 @@ const Services: React.FC<ServicesProps> = observer(() => {
   const [edition, setEdition] = useState<boolean>(false);
   const [removal, setRemoval] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<Service | undefined>();
+  const [selectedConfession, setSelectedConfession] = useState<
+    Confession | undefined
+  >();
 
   const [currentTab, setCurrentTab] = useState<E_SERVICE_TAB>(
     E_SERVICE_TAB.SERVICES
@@ -43,6 +49,7 @@ const Services: React.FC<ServicesProps> = observer(() => {
     setEdition(false);
     setOpenForm(false);
     setSelectedService(undefined);
+    setSelectedConfession(undefined);
   };
 
   const actionsSD = [
@@ -50,6 +57,10 @@ const Services: React.FC<ServicesProps> = observer(() => {
     { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
     { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
   ];
+
+  useEffect(() => {
+    handleClearActionsSD();
+  }, [currentTab]);
 
   return (
     <>
@@ -71,7 +82,16 @@ const Services: React.FC<ServicesProps> = observer(() => {
           handleClearActionsSD={handleClearActionsSD}
         />
       ) : null}
-      {currentTab === E_SERVICE_TAB.CONFESSIONS ? <ConfessionsView /> : null}
+      {currentTab === E_SERVICE_TAB.CONFESSIONS ? (
+        <ConfessionsView
+          openForm={openForm}
+          edition={edition}
+          removal={removal}
+          selectedConfession={selectedConfession}
+          setSelectedConfession={setSelectedConfession}
+          handleClearActionsSD={handleClearActionsSD}
+        />
+      ) : null}
     </>
   );
 });

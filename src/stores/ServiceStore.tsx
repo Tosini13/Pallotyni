@@ -59,12 +59,9 @@ export class ServiceStore {
 
   @action
   updateService(service: TService) {
-    console.log("--------------------------------------");
-    console.log(service);
     this.services = this.services.map((s) =>
       s.id === service.id ? service : s
     );
-    console.log(this.services);
   }
 
   @action
