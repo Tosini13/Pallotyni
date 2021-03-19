@@ -105,7 +105,7 @@ const ConfessionForm: React.FC<ConfessionFormProps> = ({
     <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>
-          {selectedConfession ? "Edit" : "Create"} Service
+          {selectedConfession ? "Edit" : "Create"} Confession
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} alignItems="center">
