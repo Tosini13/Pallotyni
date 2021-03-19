@@ -39,23 +39,34 @@ export class Service {
   }
 }
 
-type TCreateService = TService & {
-  repeat: boolean;
-};
+export type TServiceCreate = Omit<TService, "id">;
 
 export class ServiceStore {
   @observable
   private services: Service[] = [];
 
   @action
-  createService({ repeat, ...service }: TCreateService) {
-    if (repeat && !service.days?.length) {
-      console.log("wrong repeatance");
-    }
-    if (!repeat && moment(service.date).isValid()) {
-      console.log("wrong date");
-    }
-    this.services = [new Service(service), ...this.services];
+  createService(service: TServiceCreate) {
+    console.log(service);
+    this.services = [
+      new Service({
+        ...service,
+        id: moment().format() + this.services.length.toString(),
+      }),
+      ...this.services,
+    ];
+  }
+
+  @action
+  updateService(service: TService) {
+    this.services = this.services.map((s) =>
+      s.id === service.id ? service : s
+    );
+  }
+
+  @action
+  removeService(service: TService) {
+    this.services = this.services.filter((s) => s.id !== service.id);
   }
 
   @action
@@ -113,8 +124,6 @@ export class ServiceStore {
 
   constructor() {
     this.createService({
-      id: moment().format() + this.services.length.toString(),
-      repeat: true,
       days: [Day.tue, Day.sun],
       title: "for students",
       time: "20:00",
@@ -122,8 +131,6 @@ export class ServiceStore {
     });
 
     this.createService({
-      id: moment().format() + this.services.length.toString(),
-      repeat: true,
       days: [Day.mon, Day.tue, Day.thu, Day.fri],
       title: "for grandmas",
       time: "14:00",
@@ -131,8 +138,6 @@ export class ServiceStore {
     });
 
     this.createService({
-      id: moment().format() + this.services.length.toString(),
-      repeat: true,
       days: [Day.tue, Day.wed],
       title: "for married",
       time: "18:00",
@@ -140,8 +145,6 @@ export class ServiceStore {
     });
 
     this.createService({
-      id: moment().format() + this.services.length.toString(),
-      repeat: true,
       date: moment().format(DATE_FORMAT),
       title: "One service",
       time: "18:00",
