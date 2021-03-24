@@ -12,15 +12,12 @@ const SpeedDialStyled = styled(SpeedDial)`
   position: absolute;
   right: 10px;
   top: 10px;
-  transition: all 0.3s;
+  transition: all 0.15s;
   button {
     background-color: ${mainTheme.palette.secondary.main};
     color: ${mainTheme.palette.primary.main};
     &:hover {
       background-color: ${mainTheme.palette.secondary.main};
-      path {
-        fill: ${mainTheme.palette.primary.main};
-      }
     }
   }
 `;
@@ -29,11 +26,16 @@ const SpeedDialActionStyled = styled(SpeedDialAction)`
   background-color: ${mainTheme.palette.secondary.main};
 `;
 
-const AddStyled = styled(AddIcon)<{ blocked?: string }>`
-  transition-property: transform;
-  transition-duration: 0.3s;
+const AddStyled = styled(AddIcon)<{
+  blocked?: string;
+  blockedAndHover?: string;
+}>`
+  transition: all 0.3s;
   ${(props) =>
-    props.blocked ? `transform: rotate(45deg)` : `transform: rotate(0deg)`}
+    props.blockedAndHover
+      ? `transform: rotate(45deg);`
+      : `transform: rotate(0deg);`}
+  ${(props) => (props.blocked ? `fill: ${mainTheme.palette.error.dark}` : ``)}
 `;
 
 type SpeedDialComponentProps = {
@@ -70,7 +72,12 @@ const SpeedDialComponent: React.FC<SpeedDialComponentProps> = ({
   return (
     <SpeedDialStyled
       ariaLabel="SpeedDial example"
-      icon={<AddStyled blocked={parseStyledBoolean(open || blocked)} />}
+      icon={
+        <AddStyled
+          blocked={parseStyledBoolean(blocked)}
+          blockedAndHover={parseStyledBoolean(open || blocked)}
+        />
+      }
       onClose={handleClose}
       onOpen={handleOpen}
       open={open}

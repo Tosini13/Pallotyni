@@ -38,6 +38,11 @@ export class PhotosStore {
   }
 
   @action
+  removePhoto(photograph: Photograph) {
+    this.photos = this.photos.filter((p) => p.id !== photograph.id);
+  }
+
+  @action
   getPhotos() {
     return this.photos as Photograph[];
   }

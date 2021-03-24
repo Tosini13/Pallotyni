@@ -14,6 +14,7 @@ import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import { observer } from "mobx-react";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
+import { SpeedDialContainer } from "../../style/SpeedDial";
 
 const HoverStyled = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -60,12 +61,6 @@ const GridActionStyled = styled(Grid)<{ edition?: string }>`
         cursor: pointer;
       }`
       : ""}
-`;
-
-const SpeedDialContainer = styled.div`
-  position: fixed;
-  right: 25%;
-  z-index: 1110;
 `;
 
 export interface AboutUsProps {}
