@@ -28,11 +28,11 @@ const SpeedDialActionStyled = styled(SpeedDialAction)`
 
 const AddStyled = styled(AddIcon)<{
   blocked?: string;
-  blockedAndHover?: string;
+  hoverblocked?: string;
 }>`
   transition: all 0.3s;
   ${(props) =>
-    props.blockedAndHover
+    props.hoverblocked
       ? `transform: rotate(45deg);`
       : `transform: rotate(0deg);`}
   ${(props) => (props.blocked ? `fill: ${mainTheme.palette.error.dark}` : ``)}
@@ -75,7 +75,7 @@ const SpeedDialComponent: React.FC<SpeedDialComponentProps> = ({
       icon={
         <AddStyled
           blocked={parseStyledBoolean(blocked)}
-          blockedAndHover={parseStyledBoolean(open || blocked)}
+          hoverblocked={parseStyledBoolean(open || blocked)}
         />
       }
       onClose={handleClose}

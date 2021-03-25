@@ -4,7 +4,7 @@ import moment from "moment";
 import { action, observable } from "mobx";
 import { DATE_TIME_FORMAT, Id } from "../models/Global";
 
-import { TPhotograph } from "../models/Photograph";
+import { TCreatePhotograph, TPhotograph } from "../models/Photograph";
 import { mockGallery } from "../mockData/Gallery";
 
 export class Photograph {
@@ -33,8 +33,17 @@ export class PhotosStore {
   photos: Photograph[] = [];
 
   @action
-  createPhoto(photo: Photograph) {
-    this.photos = [photo, ...this.photos];
+  createPhoto({ createdAt, description, path }: TCreatePhotograph) {
+    console.dir({ createdAt, description, path });
+    this.photos = [
+      new Photograph({
+        id: moment().format() + this.photos.length,
+        path,
+        description,
+        createdAt,
+      }),
+      ...this.photos,
+    ];
   }
 
   @action
@@ -49,14 +58,11 @@ export class PhotosStore {
 
   constructor() {
     mockGallery.forEach((mockPhoto) => {
-      this.createPhoto(
-        new Photograph({
-          id: moment().format() + this.photos.length,
-          path: mockPhoto.path,
-          description: mockPhoto.description,
-          createdAt: moment().format(DATE_TIME_FORMAT),
-        })
-      );
+      this.createPhoto({
+        path: mockPhoto.path,
+        description: mockPhoto.description,
+        createdAt: moment().format(DATE_TIME_FORMAT),
+      });
     });
   }
 }
