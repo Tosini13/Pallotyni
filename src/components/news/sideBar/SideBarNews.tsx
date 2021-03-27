@@ -1,14 +1,15 @@
 import React, { useContext, useState } from "react";
 
 import { Divider, Grid, Typography } from "@material-ui/core";
-import { NewStoreContext } from "../../stores/NewsStore";
+import { NewStoreContext } from "../../../stores/NewsStore";
 import SideBarNewsSummary from "./SideBarNewsSummary";
 import SideBarNewsDetails from "./SideBarNewsDetails";
-import { Id } from "../../models/Global";
+import { Id } from "../../../models/Global";
+import { observer } from "mobx-react";
 
 export interface SideBarNewsProps {}
 
-const SideBarNews: React.FC<SideBarNewsProps> = () => {
+const SideBarNews: React.FC<SideBarNewsProps> = observer(() => {
   const newsStore = useContext(NewStoreContext);
 
   const [selectedNews, setSelectedNews] = useState<undefined | Id>(undefined);
@@ -21,7 +22,7 @@ const SideBarNews: React.FC<SideBarNewsProps> = () => {
             Latest News
           </Typography>
         </Grid>
-        {newsStore.getAllNews().map((news) => (
+        {newsStore.getLatestNews().map((news) => (
           <React.Fragment key={news.id}>
             <Grid item onClick={() => setSelectedNews(news.id)}>
               <SideBarNewsSummary news={news} />
@@ -45,6 +46,6 @@ const SideBarNews: React.FC<SideBarNewsProps> = () => {
       </Grid>
     </>
   );
-};
+});
 
 export default SideBarNews;

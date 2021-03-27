@@ -80,9 +80,11 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
   };
 
   const handleAction = (p: Photograph) => {
-    setSelectedPhoto(p);
-    if (edition || removal) {
+    if (edition) {
+      setSelectedPhoto(p);
       setOpenForm(true);
+    } else if (removal) {
+      setSelectedPhoto(p);
     }
   };
 

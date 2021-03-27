@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import { useContext, useState } from "react";
 
 import { Grid, Typography } from "@material-ui/core";
@@ -5,74 +6,29 @@ import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { ParagraphStoreContext, TParagraph } from "../../stores/AboutUsStore";
-import ParagraphForm from "./ParagraphForm";
 import SpeedDialComponent from "../SpeedDial";
-import styled from "styled-components";
-import { mainTheme } from "../../style/config";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
-import { observer } from "mobx-react";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import { SpeedDialContainer } from "../../style/SpeedDial";
+import { NewStoreContext } from "../../stores/NewsStore";
+import {
+  GridActionStyled,
+  HoverStyled,
+  ActionButtonStyled,
+} from "../aboutUs/AboutUs";
+import { TNews } from "../../models/News";
+import NewsSummary from "./NewsSummary";
+import NewsForm from "./NewsForm";
 
-export const HoverStyled = styled.div`
-  background-color: rgba(0, 0, 0, 0.4);
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: all 0.3s;
-  &:hover {
-    opacity: 1;
-  }
-`;
-export const ActionButtonStyled = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 10px;
-  background-color: rgba(100, 100, 100, 0.8);
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.24);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+export interface NewsProps {}
 
-export const GridActionStyled = styled(Grid)<{ edition?: string }>`
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  transition: all 0.3s;
-  ${(props) =>
-    props.edition
-      ? `
-      margin-bottom: 5px;
-      border-radius: 3px;
-      background-color: ${mainTheme.palette.secondary.dark};
-      box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-      &:hover{
-        cursor: pointer;
-      }`
-      : ""}
-`;
-
-export interface AboutUsProps {}
-
-const AboutUs: React.FC<AboutUsProps> = observer(() => {
-  const storeParagraph = useContext(ParagraphStoreContext);
+const News: React.FC<NewsProps> = observer(() => {
+  const newsStore = useContext(NewStoreContext);
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [edition, setEdition] = useState<boolean>(false);
   const [removal, setRemoval] = useState<boolean>(false);
-  const [selectedParagraph, setSelectedParagraph] = useState<
-    TParagraph | undefined
-  >();
+  const [selectedNews, setSelectedNews] = useState<TNews | undefined>();
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
     { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
@@ -83,15 +39,15 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
     setRemoval(false);
     setEdition(false);
     setOpenForm(false);
-    setSelectedParagraph(undefined);
+    setSelectedNews(undefined);
   };
 
-  const handleAction = (p: TParagraph) => {
+  const handleAction = (n: TNews) => {
     if (edition) {
-      setSelectedParagraph(p);
+      setSelectedNews(n);
       setOpenForm(true);
     } else if (removal) {
-      setSelectedParagraph(p);
+      setSelectedNews(n);
     }
   };
 
@@ -99,7 +55,7 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
     <>
       <Grid container spacing={3} style={{ position: "relative" }}>
         <Grid item>
-          <Typography variant="h4">About us</Typography>
+          <Typography variant="h4">News</Typography>
         </Grid>
         <SpeedDialContainer>
           <SpeedDialComponent
@@ -108,17 +64,14 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
             unBlock={handleClearActionsSD}
           />
         </SpeedDialContainer>
-        {storeParagraph.getParagraph().map((paragraph) => (
+        {newsStore.getAllNews().map((news) => (
           <GridActionStyled
             item
-            key={paragraph.id}
+            key={news.id}
             edition={parseStyledBoolean(edition || removal)}
-            onClick={() => handleAction(paragraph)}
+            onClick={() => handleAction(news)}
           >
-            {paragraph.title ? (
-              <Typography variant="h5">{paragraph.title}</Typography>
-            ) : null}
-            <Typography>{paragraph.content}</Typography>
+            <NewsSummary news={news} />
             {edition ? (
               <HoverStyled>
                 <ActionButtonStyled>
@@ -136,21 +89,21 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
           </GridActionStyled>
         ))}
       </Grid>
-      <ParagraphForm
-        open={Boolean((openForm || selectedParagraph) && !removal)}
-        selectedParagraph={openForm ? selectedParagraph : undefined}
+      <NewsForm
+        open={Boolean((openForm || selectedNews) && !removal)}
+        selectedNews={openForm ? selectedNews : undefined}
         handleClose={handleClearActionsSD}
       />
       <QuestionDialog
-        open={Boolean(selectedParagraph && removal)}
+        open={Boolean(selectedNews && removal)}
         handleClose={handleClearActionsSD}
         title="Do you want to delete?"
         content="Do you want to delete?"
       >
         <ButtonSuccess
           onClick={() => {
-            if (selectedParagraph) {
-              storeParagraph.removeParagraph(selectedParagraph);
+            if (selectedNews) {
+              newsStore.deleteNews(selectedNews);
               handleClearActionsSD();
             }
           }}
@@ -163,4 +116,4 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
   );
 });
 
-export default AboutUs;
+export default News;
