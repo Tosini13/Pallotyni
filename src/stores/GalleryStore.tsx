@@ -34,7 +34,6 @@ export class PhotosStore {
 
   @action
   createPhoto({ createdAt, description, path }: TCreatePhotograph) {
-    console.dir({ createdAt, description, path });
     this.photos = [
       new Photograph({
         id: moment().format() + this.photos.length,
@@ -47,8 +46,21 @@ export class PhotosStore {
   }
 
   @action
+  updatePhoto({ id, createdAt, description, path }: TPhotograph) {
+    const photo = new Photograph({
+      id,
+      path,
+      description,
+      createdAt,
+    });
+    this.photos = this.photos.map((p) => (p.id === photo.id ? photo : p));
+    // TODO: delete old image file
+  }
+
+  @action
   removePhoto(photograph: Photograph) {
     this.photos = this.photos.filter((p) => p.id !== photograph.id);
+    // TODO: delete old image file
   }
 
   @action

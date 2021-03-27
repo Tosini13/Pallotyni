@@ -79,6 +79,13 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
     setSelectedPhoto(undefined);
   };
 
+  const handleAction = (p: Photograph) => {
+    setSelectedPhoto(p);
+    if (edition || removal) {
+      setOpenForm(true);
+    }
+  };
+
   return (
     <>
       <Typography variant="h6">Gallery</Typography>
@@ -95,7 +102,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
             <Grid
               item
               key={photo.id}
-              onClick={() => setSelectedPhoto(photo)}
+              onClick={() => handleAction(photo)}
               style={{ position: "relative", overflow: "hidden" }}
             >
               <PhotoSummary photo={photo} edition={edition} removal={removal} />
@@ -111,7 +118,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
       <PhotoForm
         image={image}
         setImage={setImage}
-        open={Boolean((openForm || selectedPhoto) && !removal)}
+        open={Boolean(openForm && !removal)}
         selectedPhotograph={openForm ? selectedPhoto : undefined}
         handleClose={handleClearActionsSD}
       />

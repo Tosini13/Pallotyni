@@ -14,17 +14,24 @@ import {
   Grid,
 } from "@material-ui/core";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TCreatePhotograph } from "../../models/Photograph";
 import TextFieldC from "../../componentsReusable/Forms";
 import { DATE_TIME_FORMAT } from "../../models/Global";
+import { parseStyledBoolean } from "../../helpers/BooleanParser";
 
-const ButtonRemoveLogoStyled = styled.div`
+const AddAPhotoIconStyled = styled(AddAPhotoIcon)<{ error?: string }>`
+  transition: all 0.2s;
+  ${(props) => (props.error ? `color: ${mainTheme.palette.error.main};` : ``)}
+`;
+
+const ButtonRemoveLogoStyled = styled.div<{ error?: string }>`
   height: 20px;
   width: 20px;
   border-radius: 50%;
   background-color: ${mainTheme.palette.primary.main};
+  cursor: pointer;
   position: absolute;
   right: 0;
   top: 0;
@@ -87,6 +94,10 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
 }) => {
   const photoStore = useContext(PhotosStoreContext);
   const { register, handleSubmit, reset } = useForm<TPhotographForm>();
+  const [imageError, setImageError] = useState(false);
+  const [imgUrl, setImageUrl] = useState<string | undefined>(
+    selectedPhotograph?.path
+  );
 
   const handleChangeImage = async (e: any) => {
     const image = e.target.files[0];
@@ -98,24 +109,38 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
     try {
       const compressedFile = await imageCompression(image, options);
       setImage(compressedFile);
+      setImageError(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   const onSubmit = (data: TPhotographForm) => {
-    const imageUrl = getUrl();
-    console.log(imageUrl);
-    photoStore.createPhoto({
-      description: data.description,
-      createdAt: moment().format(DATE_TIME_FORMAT),
-      path: imageUrl ?? "",
-    });
-    handleCloseForm();
+    if (!image) {
+      setImageError(true);
+    } else if (selectedPhotograph) {
+      const imageUrl = getUrl();
+      photoStore.updatePhoto({
+        id: selectedPhotograph.id,
+        description: data.description,
+        createdAt: moment().format(DATE_TIME_FORMAT),
+        path: imageUrl ?? selectedPhotograph.path,
+      });
+      handleCloseForm();
+    } else {
+      const imageUrl = getUrl();
+      photoStore.createPhoto({
+        description: data.description,
+        createdAt: moment().format(DATE_TIME_FORMAT),
+        path: imageUrl ?? "",
+      });
+      handleCloseForm();
+    }
   };
 
   const onRemoveImage = () => {
     setImage(null);
+    setImageUrl(undefined);
   };
 
   const getUrl = () => {
@@ -127,10 +152,12 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   };
 
   const clearForm = () => {
+    setImageError(false);
     reset({
       description: "",
     });
     setImage(undefined);
+    setImageUrl(undefined);
   };
 
   const handleCloseForm = () => {
@@ -138,7 +165,21 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
     clearForm();
   };
 
-  const imgUrl = getUrl();
+  useEffect(() => {
+    if (image) {
+      setImageUrl(getUrl());
+    }
+  }, [image, setImageUrl]);
+
+  useEffect(() => {
+    if (selectedPhotograph) {
+      setImageUrl(selectedPhotograph?.path);
+      reset({
+        description: selectedPhotograph.description,
+      });
+    }
+  }, [selectedPhotograph, reset, setImageUrl]);
+
   return (
     <Dialog open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -157,7 +198,11 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
                 />
                 <label htmlFor="file">
                   <LogoStyled src={imgUrl}>
-                    {imgUrl ? null : <AddAPhotoIcon />}
+                    {imgUrl ? null : (
+                      <AddAPhotoIconStyled
+                        error={parseStyledBoolean(imageError)}
+                      />
+                    )}
                   </LogoStyled>
                 </label>
                 {imgUrl ? (
