@@ -1,7 +1,7 @@
 export type Id = string;
 
-export const DATE_TIME_FORMAT = "yyyy/MMM/d HH:mm";
-export const DATE_FORMAT = "yyyy/MMM/d";
+export const DATE_TIME_FORMAT = "yyyy/MMM/DD HH:mm";
+export const DATE_FORMAT = "yyyy/MMM/DD";
 export const TIME_FORMAT = "HH:mm";
 
 export enum RoutingPath {

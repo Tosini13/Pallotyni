@@ -17,6 +17,7 @@ import ServiceMenu from "./ServiceMenu";
 import SpeedDialComponent from "../SpeedDial";
 import ServicesView from "./ServicesView";
 import ConfessionsView from "./confessions/ConfessionsView";
+import { format } from "date-fns";
 
 const SpeedDialContainer = styled.div`
   position: fixed;

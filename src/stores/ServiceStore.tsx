@@ -2,7 +2,7 @@ import React from "react";
 import { action, observable } from "mobx";
 import moment from "moment";
 import { createContext } from "react";
-import { DATE_FORMAT, Day } from "../models/Global";
+import { DATE_FORMAT, DATE_TIME_FORMAT, Day } from "../models/Global";
 import { FormatListNumberedTwoTone } from "@material-ui/icons";
 
 type TService = {
@@ -104,6 +104,11 @@ export class ServiceStore {
   }
 
   @action
+  getSingleService() {
+    return this.services.filter((service) => service.date);
+  }
+
+  @action
   getServicesByDate({
     fromDate,
     toDate,
@@ -111,15 +116,17 @@ export class ServiceStore {
     fromDate?: string;
     toDate: string;
   }) {
-    const selectedServices = this.services.filter(
-      (service) =>
-        service.date &&
-        moment(service.date).isSameOrAfter(moment(toDate)) &&
-        moment(service.date).isSameOrBefore(
-          fromDate ? moment(fromDate) : moment()
-        )
-    );
-    return selectedServices.sort(this.sortByTime);
+    // const selectedServices = this.services.filter((service) => {
+    //   return (
+    //     service.date &&
+    //     moment(service.date).isSameOrAfter(
+    //       fromDate ? moment(fromDate) : moment().format(DATE_FORMAT)
+    //     ) &&
+    //     moment(service.date).isSameOrBefore(moment(toDate))
+    //   );
+    // });
+    // return selectedServices.sort(this.sortByTime);
+    return this.services; // TODO: filter with date-fns
   }
 
   constructor() {
@@ -149,6 +156,13 @@ export class ServiceStore {
       title: "One service",
       time: "18:00",
       priest: "ks. Tadeusz",
+    });
+
+    this.createService({
+      date: moment().add(2, "days").format(DATE_FORMAT),
+      title: "Another service",
+      time: "13:00",
+      priest: "ks. Tadek",
     });
   }
 }

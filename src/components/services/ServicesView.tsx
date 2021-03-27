@@ -47,12 +47,8 @@ const ServicesView: React.FC<ServicesViewProps> = ({
   selectService,
   handleClearActionsSD,
 }) => {
-  console.log(selectedService);
-
   const storeServices = useContext(ServiceStoreContext);
-  const servicesNextWeek = storeServices.getServicesByDate({
-    toDate: moment().add(7, "days").format(DATE_FORMAT),
-  });
+  const singleServices = storeServices.getSingleService();
 
   const handleSelectService = (service: Service) => {
     if (edition || removal) {
@@ -82,10 +78,10 @@ const ServicesView: React.FC<ServicesViewProps> = ({
             </DayContainerStyled>
           ))}
         </div>
-        {servicesNextWeek ? (
+        {singleServices ? (
           <>
             <p>Next week</p>
-            {servicesNextWeek.map((service) => (
+            {singleServices.map((service) => (
               <TypographySelectableStyled
                 key={service.id}
                 selectable={parseStyledBoolean(edition || removal)}

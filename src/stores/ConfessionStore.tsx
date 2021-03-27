@@ -62,7 +62,6 @@ export class ConfessionStore {
 
   @action
   addConfession(confession: TCreateConfession) {
-    console.log(confession);
     this.confessions = [
       ...this.confessions,
       new Confession({
@@ -70,7 +69,6 @@ export class ConfessionStore {
         id: moment().format() + this.confessions.length,
       }),
     ];
-    console.log(this.confessions);
   }
 
   @action
