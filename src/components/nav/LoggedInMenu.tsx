@@ -26,9 +26,6 @@ const LoggedInMenu: React.FC<LoggedInMenuProps> = () => {
         <LinkStyled to={RoutingPath.home}>Home</LinkStyled>
       </Grid>
       <Grid item>
-        <LinkStyled to={RoutingPath.stellaMaris}>Stella Maris</LinkStyled>
-      </Grid>
-      <Grid item>
         <LinkStyled to={RoutingPath.service}>Service</LinkStyled>
       </Grid>
       <Grid item>

@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import moment from "moment";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 
@@ -7,12 +6,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { DATE_FORMAT, Day } from "../../models/Global";
-import { Service, ServiceStoreContext } from "../../stores/ServiceStore";
-import {
-  Confession,
-  ConfessionStoreContext,
-} from "../../stores/ConfessionStore";
+import { Service } from "../../stores/ServiceStore";
+import { Confession } from "../../stores/ConfessionStore";
 import ServiceMenu from "./ServiceMenu";
 import SpeedDialComponent from "../SpeedDial";
 import ServicesView from "./ServicesView";

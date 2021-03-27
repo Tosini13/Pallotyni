@@ -1,8 +1,10 @@
 import React from "react";
 import { action, observable } from "mobx";
-import moment from "moment";
+import { format, isBefore, isSameMinute } from "date-fns";
+import { add } from "date-fns/esm";
+
 import { createContext } from "react";
-import { DATE_FORMAT, Day } from "../models/Global";
+import { DATE_FORMAT, DATE_TIME_FORMAT, Day } from "../models/Global";
 import { FormatListNumberedTwoTone } from "@material-ui/icons";
 
 type TService = {
@@ -47,11 +49,10 @@ export class ServiceStore {
 
   @action
   createService(service: TServiceCreate) {
-    console.log(service);
     this.services = [
       new Service({
         ...service,
-        id: moment().format() + this.services.length.toString(),
+        id: format(new Date(), DATE_FORMAT) + this.services.length.toString(),
       }),
       ...this.services,
     ];
@@ -75,14 +76,18 @@ export class ServiceStore {
   }
 
   sortByTime(serviceA: Service, serviceB: Service) {
-    const getMomentDate = (time: string) => {
-      const todayDate = moment().format("YYYY-MM-DD");
-      return moment(todayDate + " " + time);
-    };
-    if (getMomentDate(serviceA.time).isBefore(getMomentDate(serviceB.time))) {
+    if (
+      isBefore(
+        new Date(serviceA.date + " " + serviceA.time),
+        new Date(serviceB.date + " " + serviceB.time)
+      )
+    ) {
       return -1;
     } else if (
-      getMomentDate(serviceA.time).isSame(getMomentDate(serviceB.time))
+      isSameMinute(
+        new Date(serviceA.date + " " + serviceA.time),
+        new Date(serviceB.date + " " + serviceB.time)
+      )
     ) {
       // TODO: sort by string
       if (serviceA.title > serviceB.title) {
@@ -104,6 +109,16 @@ export class ServiceStore {
   }
 
   @action
+  getSingleService() {
+    console.log(
+      this.services.filter((service) => service.date).sort(this.sortByTime)
+    );
+    return this.services
+      .filter((service) => service.date)
+      .sort(this.sortByTime);
+  }
+
+  @action
   getServicesByDate({
     fromDate,
     toDate,
@@ -111,15 +126,7 @@ export class ServiceStore {
     fromDate?: string;
     toDate: string;
   }) {
-    const selectedServices = this.services.filter(
-      (service) =>
-        service.date &&
-        moment(service.date).isSameOrAfter(moment(toDate)) &&
-        moment(service.date).isSameOrBefore(
-          fromDate ? moment(fromDate) : moment()
-        )
-    );
-    return selectedServices.sort(this.sortByTime);
+    return this.services; // TODO: filter with date-fns
   }
 
   constructor() {
@@ -145,10 +152,17 @@ export class ServiceStore {
     });
 
     this.createService({
-      date: moment().format(DATE_FORMAT),
+      date: format(new Date(), DATE_FORMAT),
       title: "One service",
       time: "18:00",
       priest: "ks. Tadeusz",
+    });
+
+    this.createService({
+      date: format(add(new Date(), { days: 2 }), DATE_FORMAT),
+      title: "Another service",
+      time: "13:00",
+      priest: "ks. Tadek",
     });
   }
 }

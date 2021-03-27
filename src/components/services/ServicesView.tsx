@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import moment from "moment";
 import { DATE_FORMAT, Day } from "../../models/Global";
 import { ServiceStoreContext, Service } from "../../stores/ServiceStore";
 import styled from "styled-components";
@@ -9,6 +8,7 @@ import { Typography } from "@material-ui/core";
 import ServiceForm from "./forms/ServiceForm";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
+import { format } from "date-fns";
 
 const DayContainerStyled = styled.div<{ serviceSelectable?: string }>``;
 
@@ -47,12 +47,8 @@ const ServicesView: React.FC<ServicesViewProps> = ({
   selectService,
   handleClearActionsSD,
 }) => {
-  console.log(selectedService);
-
   const storeServices = useContext(ServiceStoreContext);
-  const servicesNextWeek = storeServices.getServicesByDate({
-    toDate: moment().add(7, "days").format(DATE_FORMAT),
-  });
+  const singleServices = storeServices.getSingleService();
 
   const handleSelectService = (service: Service) => {
     if (edition || removal) {
@@ -82,16 +78,16 @@ const ServicesView: React.FC<ServicesViewProps> = ({
             </DayContainerStyled>
           ))}
         </div>
-        {servicesNextWeek ? (
+        {singleServices ? (
           <>
             <p>Next week</p>
-            {servicesNextWeek.map((service) => (
+            {singleServices.map((service) => (
               <TypographySelectableStyled
                 key={service.id}
                 selectable={parseStyledBoolean(edition || removal)}
                 onClick={() => handleSelectService(service)}
               >
-                {moment(service.date).format(DATE_FORMAT)}
+                {format(new Date(service.date ?? ""), DATE_FORMAT)}
                 {service.time} - {service.title}
               </TypographySelectableStyled>
             ))}

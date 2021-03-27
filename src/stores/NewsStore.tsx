@@ -1,9 +1,9 @@
 import React from "react";
-import moment from "moment";
+import { format } from "date-fns";
 
 import { action, observable } from "mobx";
 import { TNews, TNewsCreate } from "../models/News";
-import { DATE_TIME_FORMAT, Id } from "../models/Global";
+import { DATE_FORMAT, DATE_TIME_FORMAT, Id } from "../models/Global";
 import { mockNews } from "../mockData/News";
 
 type TNewsProps = Omit<TNews, "createdAt"> & {
@@ -27,7 +27,7 @@ export class News {
     this.id = id;
     this.title = title;
     this.content = content;
-    this.createdAt = createdAt ?? moment().format(DATE_TIME_FORMAT);
+    this.createdAt = createdAt ?? format(new Date(), DATE_TIME_FORMAT);
   }
 }
 
@@ -54,8 +54,8 @@ export class NewsStore {
   createNews(newsData: TNewsCreate) {
     const newNews = new News({
       ...newsData,
-      id: moment().format() + this.news.length,
-      createdAt: moment().format(DATE_TIME_FORMAT),
+      id: format(new Date(), DATE_FORMAT) + this.news.length,
+      createdAt: format(new Date(), DATE_TIME_FORMAT),
     });
     this.news = [newNews, ...this.news];
   }
@@ -64,7 +64,7 @@ export class NewsStore {
   updateNews(newsData: TNews) {
     const news = new News({
       ...newsData,
-      createdAt: moment().format(DATE_TIME_FORMAT),
+      createdAt: format(new Date(), DATE_TIME_FORMAT),
     });
     this.news = this.news.map((n) => (n.id === news.id ? news : n));
   }
