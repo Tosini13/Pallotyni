@@ -1,17 +1,37 @@
+import moment from "moment";
 import imageCompression from "browser-image-compression";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import ClearIcon from "@material-ui/icons/Clear";
 
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
-import { Photograph } from "../../stores/GalleryStore";
-import { Dialog } from "@material-ui/core";
+import { Photograph, PhotosStoreContext } from "../../stores/GalleryStore";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+} from "@material-ui/core";
+import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
+import { useContext, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { TCreatePhotograph } from "../../models/Photograph";
+import TextFieldC from "../../componentsReusable/Forms";
+import { DATE_TIME_FORMAT } from "../../models/Global";
+import { parseStyledBoolean } from "../../helpers/BooleanParser";
 
-const ButtonRemoveLogoStyled = styled.div`
+const AddAPhotoIconStyled = styled(AddAPhotoIcon)<{ error?: string }>`
+  transition: all 0.2s;
+  ${(props) => (props.error ? `color: ${mainTheme.palette.error.main};` : ``)}
+`;
+
+const ButtonRemoveLogoStyled = styled.div<{ error?: string }>`
   height: 20px;
   width: 20px;
   border-radius: 50%;
   background-color: ${mainTheme.palette.primary.main};
+  cursor: pointer;
   position: absolute;
   right: 0;
   top: 0;
@@ -35,8 +55,9 @@ const LogoContainerStyled = styled.div`
 const LogoStyled = styled.div<{
   src?: string;
 }>`
-  height: 60px;
-  width: 60px;
+  height: 200px;
+  width: auto;
+  min-width: 200px;
   background-size: cover;
   background-size: contain;
   background-repeat: no-repeat;
@@ -54,6 +75,8 @@ const TournamentCreateLogoTextFieldStyled = styled.input`
   display: none;
 `;
 
+type TPhotographForm = Omit<TCreatePhotograph, "path" | "createdAt">;
+
 export interface PhotoFormProps {
   image: any;
   setImage: (image: any) => void;
@@ -69,6 +92,13 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   handleClose,
   selectedPhotograph,
 }) => {
+  const photoStore = useContext(PhotosStoreContext);
+  const { register, handleSubmit, reset } = useForm<TPhotographForm>();
+  const [imageError, setImageError] = useState(false);
+  const [imgUrl, setImageUrl] = useState<string | undefined>(
+    selectedPhotograph?.path
+  );
+
   const handleChangeImage = async (e: any) => {
     const image = e.target.files[0];
     const options = {
@@ -79,13 +109,38 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
     try {
       const compressedFile = await imageCompression(image, options);
       setImage(compressedFile);
+      setImageError(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const onSubmit = (data: TPhotographForm) => {
+    if (!image) {
+      setImageError(true);
+    } else if (selectedPhotograph) {
+      const imageUrl = getUrl();
+      photoStore.updatePhoto({
+        id: selectedPhotograph.id,
+        description: data.description,
+        createdAt: moment().format(DATE_TIME_FORMAT),
+        path: imageUrl ?? selectedPhotograph.path,
+      });
+      handleCloseForm();
+    } else {
+      const imageUrl = getUrl();
+      photoStore.createPhoto({
+        description: data.description,
+        createdAt: moment().format(DATE_TIME_FORMAT),
+        path: imageUrl ?? "",
+      });
+      handleCloseForm();
+    }
+  };
+
   const onRemoveImage = () => {
     setImage(null);
+    setImageUrl(undefined);
   };
 
   const getUrl = () => {
@@ -96,27 +151,84 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
     }
   };
 
-  const imgUrl = getUrl();
+  const clearForm = () => {
+    setImageError(false);
+    reset({
+      description: "",
+    });
+    setImage(undefined);
+    setImageUrl(undefined);
+  };
+
+  const handleCloseForm = () => {
+    handleClose();
+    clearForm();
+  };
+
+  useEffect(() => {
+    if (image) {
+      setImageUrl(getUrl());
+    }
+  }, [image, setImageUrl]);
+
+  useEffect(() => {
+    if (selectedPhotograph) {
+      setImageUrl(selectedPhotograph?.path);
+      reset({
+        description: selectedPhotograph.description,
+      });
+    }
+  }, [selectedPhotograph, reset, setImageUrl]);
+
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <LogoContainerStyled>
-        <TournamentCreateLogoTextFieldStyled
-          type="file"
-          name="file"
-          id="file"
-          onChange={handleChangeImage}
-        />
-        <label htmlFor="file">
-          <LogoStyled src={imgUrl}>
-            {imgUrl ? null : <AddAPhotoIcon />}
-          </LogoStyled>
-        </label>
-        {imgUrl ? (
-          <ButtonRemoveLogoStyled onClick={onRemoveImage}>
-            <ClearIcon fontSize="small" />
-          </ButtonRemoveLogoStyled>
-        ) : null}
-      </LogoContainerStyled>
+    <Dialog open={open} onClose={handleCloseForm}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogTitle>
+          {selectedPhotograph ? "Edit" : "Create"} Photograph
+        </DialogTitle>
+        <DialogContent>
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <LogoContainerStyled>
+                <TournamentCreateLogoTextFieldStyled
+                  type="file"
+                  name="file"
+                  id="file"
+                  onChange={handleChangeImage}
+                />
+                <label htmlFor="file">
+                  <LogoStyled src={imgUrl}>
+                    {imgUrl ? null : (
+                      <AddAPhotoIconStyled
+                        error={parseStyledBoolean(imageError)}
+                      />
+                    )}
+                  </LogoStyled>
+                </label>
+                {imgUrl ? (
+                  <ButtonRemoveLogoStyled onClick={onRemoveImage}>
+                    <ClearIcon fontSize="small" />
+                  </ButtonRemoveLogoStyled>
+                ) : null}
+              </LogoContainerStyled>
+            </Grid>
+            <Grid item>
+              <TextFieldC
+                inputRef={register}
+                name="description"
+                label="description"
+                color="secondary"
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <ButtonSuccess type="submit">
+            {selectedPhotograph ? "Update" : "Create"}
+          </ButtonSuccess>
+          <ButtonError onClick={handleCloseForm}>Cancel</ButtonError>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

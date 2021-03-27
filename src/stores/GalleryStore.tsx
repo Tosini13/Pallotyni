@@ -4,7 +4,7 @@ import moment from "moment";
 import { action, observable } from "mobx";
 import { DATE_TIME_FORMAT, Id } from "../models/Global";
 
-import { TPhotograph } from "../models/Photograph";
+import { TCreatePhotograph, TPhotograph } from "../models/Photograph";
 import { mockGallery } from "../mockData/Gallery";
 
 export class Photograph {
@@ -33,13 +33,34 @@ export class PhotosStore {
   photos: Photograph[] = [];
 
   @action
-  createPhoto(photo: Photograph) {
-    this.photos = [photo, ...this.photos];
+  createPhoto({ createdAt, description, path }: TCreatePhotograph) {
+    this.photos = [
+      new Photograph({
+        id: moment().format() + this.photos.length,
+        path,
+        description,
+        createdAt,
+      }),
+      ...this.photos,
+    ];
+  }
+
+  @action
+  updatePhoto({ id, createdAt, description, path }: TPhotograph) {
+    const photo = new Photograph({
+      id,
+      path,
+      description,
+      createdAt,
+    });
+    this.photos = this.photos.map((p) => (p.id === photo.id ? photo : p));
+    // TODO: delete old image file
   }
 
   @action
   removePhoto(photograph: Photograph) {
     this.photos = this.photos.filter((p) => p.id !== photograph.id);
+    // TODO: delete old image file
   }
 
   @action
@@ -49,14 +70,11 @@ export class PhotosStore {
 
   constructor() {
     mockGallery.forEach((mockPhoto) => {
-      this.createPhoto(
-        new Photograph({
-          id: moment().format() + this.photos.length,
-          path: mockPhoto.path,
-          description: mockPhoto.description,
-          createdAt: moment().format(DATE_TIME_FORMAT),
-        })
-      );
+      this.createPhoto({
+        path: mockPhoto.path,
+        description: mockPhoto.description,
+        createdAt: moment().format(DATE_TIME_FORMAT),
+      });
     });
   }
 }

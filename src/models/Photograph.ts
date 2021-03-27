@@ -6,3 +6,5 @@ export type TPhotograph = {
   path: string;
   description: string;
 };
+
+export type TCreatePhotograph = Omit<TPhotograph, "id">;
