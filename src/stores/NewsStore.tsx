@@ -2,12 +2,12 @@ import React from "react";
 import moment from "moment";
 
 import { action, observable } from "mobx";
-import { TNews } from "../models/News";
+import { TNews, TNewsCreate } from "../models/News";
 import { DATE_TIME_FORMAT, Id } from "../models/Global";
 import { mockNews } from "../mockData/News";
 
-type TNewsProps = Omit<TNews, "date"> & {
-  date?: string;
+type TNewsProps = Omit<TNews, "createdAt"> & {
+  createdAt?: string;
 };
 
 export class News {
@@ -21,19 +21,15 @@ export class News {
   content: string;
 
   @observable
-  date: string;
+  createdAt: string;
 
-  constructor({ id, title, content, date }: TNewsProps) {
+  constructor({ id, title, content, createdAt }: TNewsProps) {
     this.id = id;
     this.title = title;
     this.content = content;
-    this.date = date ?? moment().format(DATE_TIME_FORMAT);
+    this.createdAt = createdAt ?? moment().format(DATE_TIME_FORMAT);
   }
 }
-
-type TCreateNewsProps = Omit<TNews, "date" | "id"> & {
-  date?: string;
-};
 
 export class NewsStore {
   @observable
@@ -45,22 +41,37 @@ export class NewsStore {
   }
 
   @action
+  getLatestNews() {
+    return this.news.slice(0, 3);
+  }
+
+  @action
   getNews(id: Id) {
     return this.news.find((news) => news.id === id);
   }
 
   @action
-  createNews(newsData: TCreateNewsProps) {
+  createNews(newsData: TNewsCreate) {
     const newNews = new News({
       ...newsData,
       id: moment().format() + this.news.length,
+      createdAt: moment().format(DATE_TIME_FORMAT),
     });
     this.news = [newNews, ...this.news];
   }
 
   @action
-  deleteNews(id: Id) {
-    this.news = this.news.filter((news) => news.id !== id);
+  updateNews(newsData: TNews) {
+    const news = new News({
+      ...newsData,
+      createdAt: moment().format(DATE_TIME_FORMAT),
+    });
+    this.news = this.news.map((n) => (n.id === news.id ? news : n));
+  }
+
+  @action
+  deleteNews(news: News) {
+    this.news = this.news.filter((n) => n.id !== news.id);
   }
 
   constructor() {
