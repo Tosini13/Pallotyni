@@ -1,5 +1,5 @@
 import React from "react";
-import moment from "moment";
+import { format } from "date-fns";
 
 import {
   Accordion,
@@ -14,6 +14,7 @@ import { mainTheme } from "../../style/config";
 import styled from "styled-components";
 import TodayServices from "./TodayServices";
 import TodayConfessions from "./TodayConfessions";
+import { DATE_FORMAT } from "../../models/Global";
 
 export const AccordionStyled = styled(Accordion)`
   background-color: ${mainTheme.palette.secondary.main};
@@ -28,8 +29,8 @@ const DailyMessage: React.FC<DailyMessageProps> = () => {
         <AccordionStyled defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography>
-              Today is {moment().format("dddd")} -{" "}
-              {moment().format("DD.MM.YYYY")}
+              Today is {format(new Date(), "EEEE")} -{" "}
+              {format(new Date(), DATE_FORMAT)}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>

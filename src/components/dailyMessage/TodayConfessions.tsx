@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import moment from "moment";
 import styled from "styled-components";
+import { format } from "date-fns";
 
 import {
   AccordionDetails,
@@ -33,11 +33,11 @@ export interface TodayConfessionsProps {}
 
 const TodayConfessions: React.FC<TodayConfessionsProps> = () => {
   const confessionsStore = useContext(ConfessionStoreContext);
-  const todayDay = moment().format("dddd").toUpperCase();
+  const todayDay = format(new Date(), "EEEE").toUpperCase();
   const todayConfessions = [
     ...confessionsStore.getConfessionsByDay(todayDay as Day),
     ...confessionsStore.getConfessionsByDate({
-      toDate: moment().format(DATE_FORMAT),
+      toDate: format(new Date(), DATE_FORMAT),
     }),
   ];
   todayConfessions.sort(confessionsStore.sortByTime);

@@ -1,4 +1,4 @@
-import moment from "moment";
+import { format } from "date-fns";
 import imageCompression from "browser-image-compression";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -123,7 +123,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
       photoStore.updatePhoto({
         id: selectedPhotograph.id,
         description: data.description,
-        createdAt: moment().format(DATE_TIME_FORMAT),
+        createdAt: format(new Date(), DATE_TIME_FORMAT),
         path: imageUrl ?? selectedPhotograph.path,
       });
       handleCloseForm();
@@ -131,7 +131,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
       const imageUrl = getUrl();
       photoStore.createPhoto({
         description: data.description,
-        createdAt: moment().format(DATE_TIME_FORMAT),
+        createdAt: format(new Date(), DATE_TIME_FORMAT),
         path: imageUrl ?? "",
       });
       handleCloseForm();

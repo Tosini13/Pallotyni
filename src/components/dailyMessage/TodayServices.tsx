@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import moment from "moment";
+import { format } from "date-fns";
 import styled from "styled-components";
 
 import {
@@ -33,11 +33,11 @@ export interface TodayServicesProps {}
 
 const TodayServices: React.FC<TodayServicesProps> = () => {
   const servicesStore = useContext(ServiceStoreContext);
-  const todayDay = moment().format("dddd").toUpperCase();
+  const todayDay = format(new Date(), "EEEE").toUpperCase();
   const todayServices = [
     ...servicesStore.getServicesByDay(todayDay as Day),
     ...servicesStore.getServicesByDate({
-      toDate: moment().format(DATE_FORMAT),
+      toDate: format(new Date(), DATE_FORMAT),
     }),
   ];
   todayServices.sort(servicesStore.sortByTime);

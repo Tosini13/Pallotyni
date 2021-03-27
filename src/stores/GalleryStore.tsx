@@ -1,8 +1,8 @@
 import React from "react";
-import moment from "moment";
+import { format } from "date-fns";
 
 import { action, observable } from "mobx";
-import { DATE_TIME_FORMAT, Id } from "../models/Global";
+import { DATE_FORMAT, DATE_TIME_FORMAT, Id } from "../models/Global";
 
 import { TCreatePhotograph, TPhotograph } from "../models/Photograph";
 import { mockGallery } from "../mockData/Gallery";
@@ -36,7 +36,7 @@ export class PhotosStore {
   createPhoto({ createdAt, description, path }: TCreatePhotograph) {
     this.photos = [
       new Photograph({
-        id: moment().format() + this.photos.length,
+        id: format(new Date(), DATE_FORMAT) + this.photos.length,
         path,
         description,
         createdAt,
@@ -73,7 +73,7 @@ export class PhotosStore {
       this.createPhoto({
         path: mockPhoto.path,
         description: mockPhoto.description,
-        createdAt: moment().format(DATE_TIME_FORMAT),
+        createdAt: format(new Date(), DATE_TIME_FORMAT),
       });
     });
   }

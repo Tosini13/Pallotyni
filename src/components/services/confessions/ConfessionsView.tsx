@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import moment from "moment";
+import { format } from "date-fns";
 import { DATE_FORMAT, Day } from "../../../models/Global";
 import {
   Confession,
@@ -64,8 +64,8 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = ({
             selectable={parseStyledBoolean(edition || removal)}
             onClick={() => handleSelectConfession(confession)}
           >
-            {moment(confession.date).format(DATE_FORMAT)} {confession.fromTime}{" "}
-            - {confession.toTime}: {confession.title}
+            {format(new Date(confession.date ?? ""), DATE_FORMAT)}{" "}
+            {confession.fromTime} - {confession.toTime}: {confession.title}
           </TypographySelectableStyled>
         ))}
       </div>

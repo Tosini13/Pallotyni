@@ -1,7 +1,11 @@
 import React, { createContext } from "react";
 import { action, observable } from "mobx";
-import moment from "moment";
 import { DATE_FORMAT, Day } from "../models/Global";
+import { format } from "date-fns";
+const add = require("date-fns/add");
+const isAfter = require("date-fns/isAfter");
+const isBefore = require("date-fns/isBefore");
+const isSameMinute = require("date-fns/isSameMinute");
 
 type TConfession = {
   id: string;
@@ -66,7 +70,7 @@ export class ConfessionStore {
       ...this.confessions,
       new Confession({
         ...confession,
-        id: moment().format() + this.confessions.length,
+        id: format(new Date(), DATE_FORMAT) + this.confessions.length,
       }),
     ];
   }
@@ -84,19 +88,17 @@ export class ConfessionStore {
   }
 
   sortByTime(confessionA: Confession, confessionB: Confession) {
-    const getMomentDate = (time: string) => {
-      const todayDate = moment().format("YYYY-MM-DD");
-      return moment(todayDate + " " + time);
-    };
     if (
-      getMomentDate(confessionA.fromTime).isBefore(
-        getMomentDate(confessionB.fromTime)
+      isBefore(
+        new Date(confessionA.date + " " + confessionA.fromTime),
+        new Date(confessionB.date + " " + confessionB.fromTime)
       )
     ) {
       return -1;
     } else if (
-      getMomentDate(confessionA.fromTime).isSame(
-        getMomentDate(confessionB.fromTime)
+      isSameMinute(
+        new Date(confessionA.date + " " + confessionA.fromTime),
+        new Date(confessionB.date + " " + confessionB.fromTime)
       )
     ) {
       // TODO: sort by string
@@ -123,7 +125,7 @@ export class ConfessionStore {
     const selectedConfession = this.confessions.filter(
       (confession) =>
         confession.date &&
-        moment(confession.date).isSameOrAfter(moment().add(7, "days"))
+        isAfter(new Date(confession.date), add(new Date(), { days: 7 }))
     );
     return selectedConfession.sort(this.sortByTime);
   }
@@ -138,10 +140,8 @@ export class ConfessionStore {
     const selectedConfession = this.confessions.filter(
       (confession) =>
         confession.date &&
-        moment(confession.date).isSameOrAfter(moment(toDate)) &&
-        moment(confession.date).isSameOrBefore(
-          fromDate ? moment(fromDate) : moment()
-        )
+        isAfter(new Date(confession.date), new Date(toDate)) &&
+        isBefore(new Date(confession.date), new Date(fromDate ?? ""))
     );
     return selectedConfession.sort(this.sortByTime);
   }
@@ -163,21 +163,21 @@ export class ConfessionStore {
     });
     this.addConfession({
       title: "Lent Confession",
-      date: moment().add(10, "days").format(),
+      date: format(add(new Date(), { days: 10 }), DATE_FORMAT),
       fromTime: "6:00",
       toTime: "23:00",
       priest: "ks. Robak",
     });
     this.addConfession({
       title: "Next Solo Confession",
-      date: moment().add(3, "days").format(),
+      date: format(add(new Date(), { days: 3 }), DATE_FORMAT),
       fromTime: "6:00",
       toTime: "23:00",
       priest: "ks. Robak",
     });
     this.addConfession({
       title: "Today Solo Confession",
-      date: moment().format(),
+      date: format(new Date(), DATE_FORMAT),
       fromTime: "6:00",
       toTime: "23:00",
       priest: "ks. Robak",

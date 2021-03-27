@@ -1,7 +1,9 @@
+import { pl } from "date-fns/locale";
+
 export type Id = string;
 
-export const DATE_TIME_FORMAT = "yyyy/MMM/DD HH:mm";
-export const DATE_FORMAT = "yyyy/MMM/DD";
+export const DATE_TIME_FORMAT = "yyyy.MMM.dd HH:mm"; // "DD.MM.YYYY"
+export const DATE_FORMAT = "yyyy.MMM.dd";
 export const TIME_FORMAT = "HH:mm";
 
 export enum RoutingPath {
