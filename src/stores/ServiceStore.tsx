@@ -4,17 +4,8 @@ import { format, isBefore, isSameMinute } from "date-fns";
 import { add } from "date-fns/esm";
 
 import { createContext } from "react";
-import { DATE_FORMAT, DATE_TIME_FORMAT, Day } from "../models/Global";
-import { FormatListNumberedTwoTone } from "@material-ui/icons";
-
-type TService = {
-  id: string;
-  title: string;
-  time: string;
-  days?: Day[];
-  date?: string;
-  priest: string;
-};
+import { DATE_FORMAT, Day } from "../models/Global";
+import { TService, TServiceCreate } from "../models/Service";
 
 export class Service {
   // if date is undefined days are defined and otherwise
@@ -40,8 +31,6 @@ export class Service {
     this.date = date;
   }
 }
-
-export type TServiceCreate = Omit<TService, "id">;
 
 export class ServiceStore {
   @observable
@@ -110,9 +99,6 @@ export class ServiceStore {
 
   @action
   getSingleService() {
-    console.log(
-      this.services.filter((service) => service.date).sort(this.sortByTime)
-    );
     return this.services
       .filter((service) => service.date)
       .sort(this.sortByTime);

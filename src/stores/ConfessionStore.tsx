@@ -2,20 +2,17 @@ import React, { createContext } from "react";
 import { action, observable } from "mobx";
 import { DATE_FORMAT, Day } from "../models/Global";
 import { format } from "date-fns";
+import axios from "axios";
+import { CONFESSIONS_API_URL } from "../models/const";
+import {
+  TConfession,
+  TConfessionMongo,
+  TCreateConfession,
+} from "../models/Confession";
 const add = require("date-fns/add");
 const isAfter = require("date-fns/isAfter");
 const isBefore = require("date-fns/isBefore");
 const isSameMinute = require("date-fns/isSameMinute");
-
-type TConfession = {
-  id: string;
-  title: string;
-  date?: string;
-  days?: Day[];
-  fromTime: string;
-  toTime: string;
-  priest: string;
-};
 
 export class Confession {
   // if date is undefined days are defined and otherwise
@@ -53,11 +50,28 @@ export class Confession {
   }
 }
 
-export type TCreateConfession = Omit<TConfession, "id">;
-
 export class ConfessionStore {
   @observable
   private confessions: Confession[] = [];
+
+  @action
+  async fetch() {
+    const data = await axios.get(CONFESSIONS_API_URL);
+    const confessions = data.data as TConfessionMongo[];
+    if (!confessions) return false;
+    this.confessions = [];
+    confessions.forEach((confession) => {
+      this.addConfession({
+        ...confession,
+        id: confession._id,
+        days: confession.days?.length ? confession.days : undefined,
+        date: confession.date
+          ? format(new Date(confession.date), DATE_FORMAT)
+          : undefined,
+      });
+    });
+    console.log(this.confessions);
+  }
 
   @action
   getConfessions() {
@@ -65,7 +79,12 @@ export class ConfessionStore {
   }
 
   @action
-  addConfession(confession: TCreateConfession) {
+  addConfession(confession: TConfession) {
+    this.confessions = [...this.confessions, new Confession(confession)];
+  }
+
+  @action
+  createConfession(confession: TCreateConfession) {
     this.confessions = [
       ...this.confessions,
       new Confession({
@@ -125,7 +144,8 @@ export class ConfessionStore {
     const selectedConfession = this.confessions.filter(
       (confession) =>
         confession.date &&
-        isAfter(new Date(confession.date), add(new Date(), { days: 7 }))
+        isBefore(new Date(confession.date), add(new Date(), { days: 7 })) &&
+        isAfter(new Date(confession.date), new Date())
     );
     return selectedConfession.sort(this.sortByTime);
   }
@@ -147,35 +167,35 @@ export class ConfessionStore {
   }
 
   constructor() {
-    this.addConfession({
+    this.createConfession({
       title: "Late Confession",
       fromTime: "15:00",
       toTime: "17:00",
       priest: "ks. Marcin",
       days: [Day.mon, Day.wed, Day.fri],
     });
-    this.addConfession({
+    this.createConfession({
       title: "Normal Confession",
       fromTime: "13:00",
       toTime: "15:00",
       priest: "ks. Marcin",
       days: [Day.mon, Day.wed, Day.fri, Day.sat],
     });
-    this.addConfession({
+    this.createConfession({
       title: "Lent Confession",
       date: format(add(new Date(), { days: 10 }), DATE_FORMAT),
       fromTime: "6:00",
       toTime: "23:00",
       priest: "ks. Robak",
     });
-    this.addConfession({
+    this.createConfession({
       title: "Next Solo Confession",
       date: format(add(new Date(), { days: 3 }), DATE_FORMAT),
       fromTime: "6:00",
       toTime: "23:00",
       priest: "ks. Robak",
     });
-    this.addConfession({
+    this.createConfession({
       title: "Today Solo Confession",
       date: format(new Date(), DATE_FORMAT),
       fromTime: "6:00",

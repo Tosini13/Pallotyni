@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { format } from "date-fns";
 import { DATE_FORMAT, Day } from "../../../models/Global";
 import {
@@ -37,6 +37,11 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = ({
       setSelectedConfession(confession);
     }
   };
+
+  useEffect(() => {
+    storeConfession.fetch();
+  }, []);
+
   return (
     <>
       <div>

@@ -15,13 +15,13 @@ import { DATE_FORMAT, Day } from "../../../../models/Global";
 import {
   Confession,
   ConfessionStoreContext,
-  TCreateConfession,
 } from "../../../../stores/ConfessionStore";
 import DatePickerSwitch from "../../forms/DatePickerSwitch";
 import {
   ButtonError,
   ButtonSuccess,
 } from "../../../../componentsReusable/Buttons";
+import { TCreateConfession } from "../../../../models/Confession";
 
 type TConfessionForm = TCreateConfession;
 
@@ -77,7 +77,7 @@ const ConfessionForm: React.FC<ConfessionFormProps> = ({
         id: selectedConfession.id,
       });
     } else {
-      sConfession.addConfession({
+      sConfession.createConfession({
         title: data.title,
         priest: data.priest,
         fromTime: data.fromTime,
