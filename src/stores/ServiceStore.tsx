@@ -1,9 +1,9 @@
 import React from "react";
 import { action, computed, makeObservable, observable } from "mobx";
-import { isBefore, isSameMinute } from "date-fns";
+import { format, isBefore, isSameMinute } from "date-fns";
 
 import { createContext } from "react";
-import { Day } from "../models/Global";
+import { DATE_FORMAT, Day } from "../models/Global";
 import { TService, TServiceCreate } from "../models/Service";
 import { SERVICES_API_URL } from "../models/const";
 import axios from "axios";
@@ -114,6 +114,16 @@ export class ServiceStore {
     return selectedServices.sort(this.sortByTime);
   }
 
+  get getTodayServices(): Service[] {
+    const todayDay = format(new Date(), "EEEE").toUpperCase();
+    return [
+      ...this.getServicesByDay(todayDay as Day),
+      ...this.getServicesByDate({
+        toDate: format(new Date(), DATE_FORMAT),
+      }),
+    ];
+  }
+
   get getSingleService() {
     return this.services
       .filter((service) => service.date)
@@ -127,7 +137,7 @@ export class ServiceStore {
     fromDate?: string;
     toDate: string;
   }) {
-    return this.services; // TODO: filter with date-fns
+    return []; // TODO: filter with date-fns
   }
 
   constructor() {
@@ -138,9 +148,10 @@ export class ServiceStore {
       updateService: action,
       removeService: action,
       sortByTime: action,
-      getServicesByDay: action,
       getServicesByDate: action,
+      getServicesByDay: action,
       getSingleService: computed,
+      getTodayServices: computed,
     });
   }
 }

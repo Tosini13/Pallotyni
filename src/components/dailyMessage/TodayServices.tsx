@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { format } from "date-fns";
 import styled from "styled-components";
 
@@ -15,6 +15,7 @@ import { AccordionStyled } from "./DailyMessage";
 import { ServiceStoreContext } from "../../stores/ServiceStore";
 import { DATE_FORMAT, Day } from "../../models/Global";
 import { mainTheme } from "../../style/config";
+import { observer } from "mobx-react";
 
 const ServiceDescTypographyStyled = styled(Typography)`
   margin-left: 5px;
@@ -31,15 +32,13 @@ const PaperStyled = styled(Paper)`
 
 export interface TodayServicesProps {}
 
-const TodayServices: React.FC<TodayServicesProps> = () => {
+const TodayServices: React.FC<TodayServicesProps> = observer(() => {
   const servicesStore = useContext(ServiceStoreContext);
+
   const todayDay = format(new Date(), "EEEE").toUpperCase();
-  const todayServices = [
-    ...servicesStore.getServicesByDay(todayDay as Day),
-    ...servicesStore.getServicesByDate({
-      toDate: format(new Date(), DATE_FORMAT),
-    }),
-  ];
+  console.log("TodayServices - todayDay", todayDay);
+  const todayServices = servicesStore.getTodayServices;
+  console.log("TodayServices - todayServices", todayServices);
   todayServices.sort(servicesStore.sortByTime);
 
   if (!todayServices.length) {
@@ -70,6 +69,6 @@ const TodayServices: React.FC<TodayServicesProps> = () => {
       </AccordionDetails>
     </AccordionStyled>
   );
-};
+});
 
 export default TodayServices;
