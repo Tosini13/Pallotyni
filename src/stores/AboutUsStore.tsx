@@ -1,13 +1,16 @@
-import { action, observable } from "mobx";
+import { createContext } from "react";
+import { action, observable, makeObservable } from "mobx";
+import axios from "axios";
+
 import { Id } from "../models/Global";
 import { mockParagraphs } from "../mockData/aboutUs";
-import { createContext } from "react";
-
-export type TParagraph = {
-  id: Id;
-  title?: string;
-  content: string;
-};
+import { PARAGRAPH_API_URL } from "../models/const";
+import {
+  TParagraph,
+  TParagraphCreate,
+  TParagraphMongo,
+  TParagraphBodyMongo,
+} from "../models/Paragraph";
 
 export class Paragraph {
   @observable
@@ -26,58 +29,85 @@ export class Paragraph {
   }
 }
 
-export type TParagraphCreate = Omit<TParagraph, "id">;
-
 export class ParagraphStore {
-  @observable
-  private paragraphs: Paragraph[] = [];
+  paragraphs: Paragraph[] = [];
 
   getParagraph() {
     return this.paragraphs;
   }
 
-  @action
-  createParagraph(p: TParagraphCreate) {
-    this.paragraphs = [
-      ...this.paragraphs,
-      new Paragraph({
-        ...p,
-        id: `${new Date()}${this.paragraphs.length}`,
-      }),
-    ];
-  }
-
-  @action
-  updateParagraph(p: TParagraph) {
-    this.paragraphs = this.paragraphs.map((paragraph) =>
-      paragraph.id === p.id ? p : paragraph
+  async fetch() {
+    const data = await axios.get(PARAGRAPH_API_URL);
+    const paragraphs: TParagraphMongo[] = data.data;
+    if (!paragraphs) return false;
+    this.paragraphs = paragraphs.map(
+      (p) =>
+        new Paragraph({
+          ...p,
+          id: p._id,
+        })
     );
   }
 
-  @action
-  removeParagraph(p: TParagraph) {
-    this.paragraphs = this.paragraphs.filter(
-      (paragraph) => paragraph.id !== p.id
-    );
+  async createParagraph(p: TParagraphCreate) {
+    const body: TParagraphBodyMongo = {
+      title: p.title,
+      content: p.content,
+    };
+    const data = await axios.post(PARAGRAPH_API_URL, body);
+    const paragraph: TParagraphMongo = data.data;
+    if (paragraph) {
+      this.paragraphs = [
+        ...this.paragraphs,
+        new Paragraph({
+          ...paragraph,
+          id: paragraph._id,
+        }),
+      ];
+    } else {
+      console.log("Error Message");
+    }
+  }
+
+  async updateParagraph(p: TParagraph) {
+    const body: TParagraphBodyMongo = {
+      title: p.title,
+      content: p.content,
+    };
+    const data = await axios.put(`${PARAGRAPH_API_URL}/${p.id}`, body);
+    const paragraphData: TParagraphMongo = data.data;
+    if (paragraphData) {
+      const paragraph = new Paragraph({
+        ...paragraphData,
+        id: paragraphData._id,
+      });
+      this.paragraphs = this.paragraphs.map((item) =>
+        item.id === paragraph.id ? paragraph : item
+      );
+    } else {
+      console.log("Error Message");
+    }
+  }
+
+  async removeParagraph(p: TParagraph) {
+    const data = await axios.delete(`${PARAGRAPH_API_URL}/${p.id}`);
+    const paragraphData: TParagraphMongo = data.data;
+    if (paragraphData) {
+      this.paragraphs = this.paragraphs.filter(
+        (paragraph) => paragraph.id !== paragraphData._id
+      );
+    } else {
+      console.log("Error Message");
+    }
   }
 
   constructor() {
-    this.createParagraph({
-      title: "We are here",
-      content: mockParagraphs[0],
-    });
-
-    this.createParagraph({
-      content: mockParagraphs[1],
-    });
-
-    this.createParagraph({
-      content: mockParagraphs[2],
-    });
-
-    this.createParagraph({
-      title: "Last Paragraph",
-      content: mockParagraphs[3],
+    makeObservable(this, {
+      paragraphs: observable,
+      fetch: action,
+      createParagraph: action,
+      updateParagraph: action,
+      removeParagraph: action,
     });
   }
 }
