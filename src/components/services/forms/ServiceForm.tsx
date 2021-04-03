@@ -58,6 +58,7 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
     if (repeat && !selectedDays.length) {
       console.log("select Days!");
     }
+    console.log("submit", selectedService);
     if (selectedService) {
       sStore.updateService({
         title: data.title,

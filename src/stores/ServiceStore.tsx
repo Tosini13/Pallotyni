@@ -1,11 +1,12 @@
 import React from "react";
-import { action, observable } from "mobx";
-import { format, isBefore, isSameMinute } from "date-fns";
-import { add } from "date-fns/esm";
+import { action, computed, makeObservable, observable } from "mobx";
+import { isBefore, isSameMinute } from "date-fns";
 
 import { createContext } from "react";
-import { DATE_FORMAT, Day } from "../models/Global";
+import { Day } from "../models/Global";
 import { TService, TServiceCreate } from "../models/Service";
+import { SERVICES_API_URL } from "../models/const";
+import axios from "axios";
 
 export class Service {
   // if date is undefined days are defined and otherwise
@@ -33,33 +34,50 @@ export class Service {
 }
 
 export class ServiceStore {
-  @observable
-  private services: Service[] = [];
+  services: Service[] = [];
 
-  @action
-  createService(service: TServiceCreate) {
-    this.services = [
-      new Service({
-        ...service,
-        id: format(new Date(), DATE_FORMAT) + this.services.length.toString(),
-      }),
-      ...this.services,
-    ];
+  async fetch() {
+    const data = await axios.get(SERVICES_API_URL);
+    const services = data.data as TService[];
+    if (services) {
+      this.services = services.map((service) => new Service(service));
+    } else {
+      console.log("error!");
+    }
   }
 
-  @action
-  updateService(service: TService) {
-    this.services = this.services.map((s) =>
-      s.id === service.id ? service : s
-    );
+  async createService(service: TServiceCreate) {
+    const data = await axios.post(SERVICES_API_URL, service);
+    const serviceData = data.data as TService;
+    if (serviceData) {
+      this.services = [...this.services, new Service(serviceData)];
+    } else {
+      console.log("error!");
+    }
   }
 
-  @action
-  removeService(service: TService) {
-    this.services = this.services.filter((s) => s.id !== service.id);
+  async updateService(service: TService) {
+    const data = await axios.put(`${SERVICES_API_URL}/${service.id}`, service);
+    const serviceData = data.data as TService;
+    if (serviceData) {
+      this.services = this.services.map((s) =>
+        s.id === service.id ? new Service(serviceData) : s
+      );
+    } else {
+      console.log("error!");
+    }
   }
 
-  @action
+  async removeService(service: TService) {
+    const data = await axios.delete(`${SERVICES_API_URL}/${service.id}`);
+    const serviceData = data.data as TService;
+    if (serviceData) {
+      this.services = this.services.filter((s) => s.id !== service.id);
+    } else {
+      console.log("error!");
+    }
+  }
+
   getServices() {
     return this.services;
   }
@@ -89,7 +107,6 @@ export class ServiceStore {
     }
   }
 
-  @action
   getServicesByDay(day: Day) {
     const selectedServices = this.services.filter((service) =>
       service.days?.includes(day)
@@ -97,14 +114,12 @@ export class ServiceStore {
     return selectedServices.sort(this.sortByTime);
   }
 
-  @action
-  getSingleService() {
+  get getSingleService() {
     return this.services
       .filter((service) => service.date)
       .sort(this.sortByTime);
   }
 
-  @action
   getServicesByDate({
     fromDate,
     toDate,
@@ -116,39 +131,16 @@ export class ServiceStore {
   }
 
   constructor() {
-    this.createService({
-      days: [Day.tue, Day.sun],
-      title: "for students",
-      time: "20:00",
-      priest: "ks. Marcin",
-    });
-
-    this.createService({
-      days: [Day.mon, Day.tue, Day.thu, Day.fri],
-      title: "for grandmas",
-      time: "14:00",
-      priest: "ks. Tadeusz",
-    });
-
-    this.createService({
-      days: [Day.tue, Day.wed],
-      title: "for married",
-      time: "18:00",
-      priest: "ks. Tadeusz",
-    });
-
-    this.createService({
-      date: format(new Date(), DATE_FORMAT),
-      title: "One service",
-      time: "18:00",
-      priest: "ks. Tadeusz",
-    });
-
-    this.createService({
-      date: format(add(new Date(), { days: 2 }), DATE_FORMAT),
-      title: "Another service",
-      time: "13:00",
-      priest: "ks. Tadek",
+    makeObservable(this, {
+      services: observable,
+      fetch: action,
+      createService: action,
+      updateService: action,
+      removeService: action,
+      sortByTime: action,
+      getServicesByDay: action,
+      getServicesByDate: action,
+      getSingleService: computed,
     });
   }
 }
