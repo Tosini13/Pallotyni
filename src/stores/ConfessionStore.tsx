@@ -179,6 +179,7 @@ export class ConfessionStore {
       getConfessionsByDay: action,
       getConfessionsNextWeek: computed,
     });
+    this.fetch();
   }
 }
 

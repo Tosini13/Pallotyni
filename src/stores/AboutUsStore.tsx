@@ -109,6 +109,7 @@ export class ParagraphStore {
       updateParagraph: action,
       removeParagraph: action,
     });
+    this.fetch();
   }
 }
 

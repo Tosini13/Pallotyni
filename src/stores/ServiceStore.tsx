@@ -153,6 +153,7 @@ export class ServiceStore {
       getSingleService: computed,
       getTodayServices: computed,
     });
+    this.fetch();
   }
 }
 

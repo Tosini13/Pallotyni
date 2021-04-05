@@ -100,6 +100,7 @@ export class NewsStore {
       updateNews: action,
       deleteNews: action,
     });
+    this.fetch();
   }
 }
 
