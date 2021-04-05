@@ -10,6 +10,7 @@ import {
 import { Photograph } from "../../stores/GalleryStore";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
+import { GALLERY_PATH } from "../../models/const";
 
 const DialogStyled = styled(Dialog)`
   .MuiDialog-paper {
@@ -33,7 +34,7 @@ const PhotoDetails: React.FC<PhotoDetailsProps> = ({
     <DialogStyled open={open} onClose={handleClose}>
       <div style={{ position: "relative" }}>
         <img
-          src={photo.path}
+          src={`${GALLERY_PATH}/${photo.path}`}
           style={{ maxHeight: "400px", maxWidth: "360px" }}
         />
         <DialogContent>

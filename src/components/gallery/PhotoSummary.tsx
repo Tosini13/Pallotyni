@@ -6,6 +6,7 @@ import EditIcon from "@material-ui/icons/Edit";
 
 import { Photograph } from "../../stores/GalleryStore";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
+import { GALLERY_PATH } from "../../models/const";
 
 const ImgStyled = styled.img<{ action?: string; hovered?: string }>`
   height: 150px;
@@ -64,7 +65,7 @@ const PhotoSummary: React.FC<PhotoSummaryProps> = ({
         onMouseLeave={() => setMouseOverPhoto(false)}
       >
         <ImgStyled
-          src={photo.path}
+          src={`${GALLERY_PATH}/${photo.path}`}
           alt={photo.path}
           action={parseStyledBoolean(edition || removal)}
           hovered={parseStyledBoolean((edition || removal) && mouseOverPhoto)}

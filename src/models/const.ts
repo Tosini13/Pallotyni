@@ -1,5 +1,9 @@
-const API_URL = "http://localhost:3013/api";
+const SERVER_URL = "http://localhost:3013";
+const API_URL = `${SERVER_URL}/api`;
 export const PARAGRAPH_API_URL = `${API_URL}/paragraphs`;
 export const SERVICES_API_URL = `${API_URL}/services`;
 export const CONFESSIONS_API_URL = `${API_URL}/confessions`;
 export const NEWS_API_URL = `${API_URL}/news`;
+export const IMAGES_API_URL = `${API_URL}/images`;
+export const PHOTOGRAPHS_API_URL = `${API_URL}/photographs`;
+export const GALLERY_PATH = `${SERVER_URL}/gallery`;

@@ -1,11 +1,18 @@
 import React from "react";
 import { format } from "date-fns";
 
-import { action, observable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 import { DATE_FORMAT, DATE_TIME_FORMAT, Id } from "../models/Global";
 
-import { TCreatePhotograph, TPhotograph } from "../models/Photograph";
+import {
+  TCreatePhotograph,
+  TCreatePhotographAndImage,
+  TPhotograph,
+  TUpdatePhotographAndImage,
+} from "../models/Photograph";
 import { mockGallery } from "../mockData/Gallery";
+import axios from "axios";
+import { IMAGES_API_URL, PHOTOGRAPHS_API_URL } from "../models/const";
 
 export class Photograph {
   @observable
@@ -32,35 +39,101 @@ export class PhotosStore {
   @observable
   photos: Photograph[] = [];
 
-  @action
-  createPhoto({ createdAt, description, path }: TCreatePhotograph) {
-    this.photos = [
-      new Photograph({
-        id: format(new Date(), DATE_FORMAT) + this.photos.length,
-        path,
-        description,
-        createdAt,
-      }),
-      ...this.photos,
-    ];
+  async fetch() {
+    const data = await axios.get(PHOTOGRAPHS_API_URL);
+    const photographs = data.data as TPhotograph[];
+    if (photographs) {
+      this.photos = photographs.map((photograph) => new Photograph(photograph));
+    } else {
+      console.log("error");
+    }
   }
 
-  @action
-  updatePhoto({ id, createdAt, description, path }: TPhotograph) {
-    const photo = new Photograph({
-      id,
-      path,
-      description,
-      createdAt,
+  async createPhoto({ description, imageFile }: TCreatePhotographAndImage) {
+    let formData = new FormData();
+    formData.append("img", imageFile);
+    const imageData = await axios.post(IMAGES_API_URL, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
     });
-    this.photos = this.photos.map((p) => (p.id === photo.id ? photo : p));
-    // TODO: delete old image file
+    const path = imageData.data as string;
+    console.log(path);
+    if (path) {
+      const photograph: TCreatePhotograph = {
+        description,
+        path: path,
+      };
+      const data = await axios.post(PHOTOGRAPHS_API_URL, photograph);
+      const photographData = data.data as TPhotograph;
+      console.log(photographData);
+      if (photographData) {
+        this.photos = [new Photograph(photographData), ...this.photos];
+      } else {
+        console.log("error photo");
+      }
+    } else {
+      console.log("error image");
+    }
   }
 
   @action
-  removePhoto(photograph: Photograph) {
-    this.photos = this.photos.filter((p) => p.id !== photograph.id);
+  async updatePhoto({
+    id,
+    description,
+    path,
+    imageFile,
+  }: TUpdatePhotographAndImage) {
+    console.log(id, description, path, imageFile);
+    let formData = new FormData();
+    formData.append("img", imageFile);
+    const imageData = await axios.put(`${IMAGES_API_URL}/${path}`, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    const newPath = imageData.data as string;
+    console.log(newPath);
+    if (newPath) {
+      const photograph: TCreatePhotograph = {
+        description,
+        path: newPath,
+      };
+      const data = await axios.put(`${PHOTOGRAPHS_API_URL}/${id}`, photograph);
+      const photographData = data.data as TPhotograph;
+      console.log(photographData);
+      if (photographData) {
+        const photo = new Photograph(photographData);
+        this.photos = this.photos.map((p) => (p.id === photo.id ? photo : p));
+      } else {
+        console.log("error photo");
+      }
+    } else {
+      console.log("error image");
+    }
     // TODO: delete old image file
+  }
+
+  async removePhoto(photograph: Photograph) {
+    const imageData = await axios.delete(
+      `${IMAGES_API_URL}/${photograph.path}`
+    );
+    const path = imageData.data as string;
+    console.log(path);
+    if (path) {
+      const data = await axios.delete(
+        `${PHOTOGRAPHS_API_URL}/${photograph.id}`
+      );
+      const photographData = data.data as TPhotograph;
+      console.log(photographData);
+      if (photographData) {
+        this.photos = this.photos.filter((p) => p.id !== photographData.id);
+      } else {
+        console.log("error photo");
+      }
+    } else {
+      console.log("error image");
+    }
   }
 
   @action
@@ -69,13 +142,14 @@ export class PhotosStore {
   }
 
   constructor() {
-    mockGallery.forEach((mockPhoto) => {
-      this.createPhoto({
-        path: mockPhoto.path,
-        description: mockPhoto.description,
-        createdAt: format(new Date(), DATE_TIME_FORMAT),
-      });
+    makeObservable(this, {
+      photos: observable,
+      fetch: action,
+      createPhoto: action,
+      updatePhoto: action,
+      removePhoto: action,
     });
+    this.fetch();
   }
 }
 
