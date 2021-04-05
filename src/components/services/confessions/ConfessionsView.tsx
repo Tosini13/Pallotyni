@@ -13,6 +13,7 @@ import {
   ButtonSuccess,
 } from "../../../componentsReusable/Buttons";
 import ConfessionForm from "./forms/ConfessionForm";
+import { observer } from "mobx-react";
 
 export interface ConfessionsViewProps {
   openForm: boolean;
@@ -23,82 +24,84 @@ export interface ConfessionsViewProps {
   handleClearActionsSD: () => void;
 }
 
-const ConfessionsView: React.FC<ConfessionsViewProps> = ({
-  openForm,
-  edition,
-  removal,
-  selectedConfession,
-  setSelectedConfession,
-  handleClearActionsSD,
-}) => {
-  const storeConfession = useContext(ConfessionStoreContext);
-  const handleSelectConfession = (confession: Confession) => {
-    if (edition || removal) {
-      setSelectedConfession(confession);
-    }
-  };
+const ConfessionsView: React.FC<ConfessionsViewProps> = observer(
+  ({
+    openForm,
+    edition,
+    removal,
+    selectedConfession,
+    setSelectedConfession,
+    handleClearActionsSD,
+  }) => {
+    const storeConfession = useContext(ConfessionStoreContext);
+    const handleSelectConfession = (confession: Confession) => {
+      if (edition || removal) {
+        setSelectedConfession(confession);
+      }
+    };
 
-  useEffect(() => {
-    storeConfession.fetch();
-  }, []);
+    useEffect(() => {
+      storeConfession.fetch();
+    }, []);
 
-  return (
-    <>
-      <div>
+    return (
+      <>
         <div>
-          {Object.values(Day).map((day) => (
-            <div key={day}>
-              <h5>{day}</h5>
-              {storeConfession.getConfessionsByDay(day).map((confession) => (
-                <TypographySelectableStyled
-                  key={confession.id}
-                  selectable={parseStyledBoolean(edition || removal)}
-                  onClick={() => handleSelectConfession(confession)}
-                >
-                  {confession.fromTime} - {confession.toTime} :{" "}
-                  {confession.title}
-                </TypographySelectableStyled>
-              ))}
-            </div>
+          <div>
+            {Object.values(Day).map((day) => (
+              <div key={day}>
+                <h5>{day}</h5>
+                {storeConfession.getConfessionsByDay(day).map((confession) => (
+                  <TypographySelectableStyled
+                    key={confession.id}
+                    selectable={parseStyledBoolean(edition || removal)}
+                    onClick={() => handleSelectConfession(confession)}
+                  >
+                    {confession.fromTime} - {confession.toTime} :{" "}
+                    {confession.title}
+                  </TypographySelectableStyled>
+                ))}
+              </div>
+            ))}
+          </div>
+          <p>Next week</p>
+          {storeConfession.getConfessionsNextWeek.map((confession) => (
+            <TypographySelectableStyled
+              key={confession.id}
+              selectable={parseStyledBoolean(edition || removal)}
+              onClick={() => handleSelectConfession(confession)}
+            >
+              {format(new Date(confession.date ?? ""), DATE_FORMAT)}{" "}
+              {confession.fromTime} - {confession.toTime}: {confession.title}
+            </TypographySelectableStyled>
           ))}
         </div>
-        <p>Next week</p>
-        {storeConfession.getConfessionsNextWeek().map((confession) => (
-          <TypographySelectableStyled
-            key={confession.id}
-            selectable={parseStyledBoolean(edition || removal)}
-            onClick={() => handleSelectConfession(confession)}
-          >
-            {format(new Date(confession.date ?? ""), DATE_FORMAT)}{" "}
-            {confession.fromTime} - {confession.toTime}: {confession.title}
-          </TypographySelectableStyled>
-        ))}
-      </div>
-      <ConfessionForm
-        open={Boolean((openForm || selectedConfession) && !removal)}
-        selectedConfession={removal ? undefined : selectedConfession}
-        handleClose={handleClearActionsSD}
-      />
-      <QuestionDialog
-        open={Boolean(selectedConfession && removal)}
-        handleClose={handleClearActionsSD}
-        title="Do you want to delete?"
-        content="Do you want to delete?"
-      >
-        <ButtonSuccess
-          onClick={() => {
-            if (selectedConfession) {
-              storeConfession.removeConfession(selectedConfession);
-              handleClearActionsSD();
-            }
-          }}
+        <ConfessionForm
+          open={Boolean((openForm || selectedConfession) && !removal)}
+          selectedConfession={removal ? undefined : selectedConfession}
+          handleClose={handleClearActionsSD}
+        />
+        <QuestionDialog
+          open={Boolean(selectedConfession && removal)}
+          handleClose={handleClearActionsSD}
+          title="Do you want to delete?"
+          content="Do you want to delete?"
         >
-          Yes
-        </ButtonSuccess>
-        <ButtonError onClick={handleClearActionsSD}>No</ButtonError>
-      </QuestionDialog>
-    </>
-  );
-};
+          <ButtonSuccess
+            onClick={() => {
+              if (selectedConfession) {
+                storeConfession.removeConfession(selectedConfession);
+                handleClearActionsSD();
+              }
+            }}
+          >
+            Yes
+          </ButtonSuccess>
+          <ButtonError onClick={handleClearActionsSD}>No</ButtonError>
+        </QuestionDialog>
+      </>
+    );
+  }
+);
 
 export default ConfessionsView;
