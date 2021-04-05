@@ -11,8 +11,3 @@ export type TConfession = {
 };
 
 export type TCreateConfession = Omit<TConfession, "id">;
-
-export type TConfessionMongo = Omit<TConfession, "id" | "days"> & {
-  _id: string;
-  days: Day[];
-};

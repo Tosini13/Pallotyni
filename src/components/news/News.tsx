@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Grid, Typography } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -29,6 +29,11 @@ const News: React.FC<NewsProps> = observer(() => {
   const [edition, setEdition] = useState<boolean>(false);
   const [removal, setRemoval] = useState<boolean>(false);
   const [selectedNews, setSelectedNews] = useState<TNews | undefined>();
+
+  useEffect(() => {
+    newsStore.fetch();
+  }, []);
+
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
     { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },

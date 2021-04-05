@@ -9,11 +9,8 @@ import { useForm } from "react-hook-form";
 import { ButtonSuccess, ButtonError } from "../../componentsReusable/Buttons";
 import { DialogStyled } from "../../componentsReusable/Dialogs";
 import TextFieldC from "../../componentsReusable/Forms";
-import {
-  ParagraphStoreContext,
-  TParagraph,
-  TParagraphCreate,
-} from "../../stores/AboutUsStore";
+import { ParagraphStoreContext } from "../../stores/AboutUsStore";
+import { TParagraph, TParagraphCreate } from "../../models/Paragraph";
 
 export interface ParagraphFormProps {
   open: boolean;

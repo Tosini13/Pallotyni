@@ -64,7 +64,7 @@ const ConfessionForm: React.FC<ConfessionFormProps> = ({
   const onSubmit = (data: TConfessionForm) => {
     console.log(data);
     if (selectedConfession) {
-      sConfession.updateService({
+      sConfession.updateConfession({
         title: data.title,
         priest: data.priest,
         fromTime: data.fromTime,

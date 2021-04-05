@@ -1,20 +1,21 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { observer } from "mobx-react";
 
 import { Grid, Typography } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { ParagraphStoreContext, TParagraph } from "../../stores/AboutUsStore";
+import { ParagraphStoreContext } from "../../stores/AboutUsStore";
 import ParagraphForm from "./ParagraphForm";
 import SpeedDialComponent from "../SpeedDial";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
-import { observer } from "mobx-react";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import { SpeedDialContainer } from "../../style/SpeedDial";
+import { TParagraph } from "../../models/Paragraph";
 
 export const HoverStyled = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -73,6 +74,11 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
   const [selectedParagraph, setSelectedParagraph] = useState<
     TParagraph | undefined
   >();
+
+  useEffect(() => {
+    storeParagraph.fetch();
+  }, []);
+
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
     { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
