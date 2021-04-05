@@ -16,7 +16,10 @@ import {
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { TCreatePhotograph } from "../../models/Photograph";
+import {
+  TCreatePhotograph,
+  TCreatePhotographAndImage,
+} from "../../models/Photograph";
 import TextFieldC from "../../componentsReusable/Forms";
 import { DATE_TIME_FORMAT } from "../../models/Global";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
@@ -75,7 +78,10 @@ const TournamentCreateLogoTextFieldStyled = styled.input`
   display: none;
 `;
 
-type TPhotographForm = Omit<TCreatePhotograph, "path" | "createdAt">;
+type TPhotographForm = Omit<
+  TCreatePhotographAndImage,
+  "imageFile" | "createdAt"
+>;
 
 export interface PhotoFormProps {
   image: any;
@@ -100,14 +106,14 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   );
 
   const handleChangeImage = async (e: any) => {
-    const image = e.target.files[0];
+    const imageFile = e.target.files[0];
     const options = {
-      maxSizeMB: 0.1,
-      maxWidthOrHeight: 500,
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1000,
       useWebWorker: true,
     };
     try {
-      const compressedFile = await imageCompression(image, options);
+      const compressedFile = await imageCompression(imageFile, options);
       setImage(compressedFile);
       setImageError(false);
     } catch (error) {
@@ -119,20 +125,17 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
     if (!image) {
       setImageError(true);
     } else if (selectedPhotograph) {
-      const imageUrl = getUrl();
       photoStore.updatePhoto({
         id: selectedPhotograph.id,
+        path: selectedPhotograph.path,
         description: data.description,
-        createdAt: format(new Date(), DATE_TIME_FORMAT),
-        path: imageUrl ?? selectedPhotograph.path,
+        imageFile: image,
       });
       handleCloseForm();
     } else {
-      const imageUrl = getUrl();
       photoStore.createPhoto({
         description: data.description,
-        createdAt: format(new Date(), DATE_TIME_FORMAT),
-        path: imageUrl ?? "",
+        imageFile: image,
       });
       handleCloseForm();
     }
