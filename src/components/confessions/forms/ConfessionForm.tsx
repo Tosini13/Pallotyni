@@ -9,19 +9,19 @@ import {
   Grid,
 } from "@material-ui/core";
 
-import { DialogStyled } from "../../../../componentsReusable/Dialogs";
-import TextFieldC from "../../../../componentsReusable/Forms";
-import { DATE_FORMAT, Day } from "../../../../models/Global";
+import { DialogStyled } from "../../../componentsReusable/Dialogs";
+import TextFieldC from "../../../componentsReusable/Forms";
+import { DATE_FORMAT, Day } from "../../../models/Global";
 import {
   Confession,
   ConfessionStoreContext,
-} from "../../../../stores/ConfessionStore";
-import DatePickerSwitch from "../../forms/DatePickerSwitch";
+} from "../../../stores/ConfessionStore";
+import DatePickerSwitch from "../../services/forms/DatePickerSwitch";
 import {
   ButtonError,
   ButtonSuccess,
-} from "../../../../componentsReusable/Buttons";
-import { TCreateConfession } from "../../../../models/Confession";
+} from "../../../componentsReusable/Buttons";
+import { TCreateConfession } from "../../../models/Confession";
 
 type TConfessionForm = TCreateConfession;
 

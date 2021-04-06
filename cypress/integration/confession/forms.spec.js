@@ -1,7 +1,6 @@
 describe('Service forms', () => {
     beforeEach(() => {
-        cy.visit('localhost:3000/service')
-        cy.get('div[role="tablist"] button:nth-child(2)').click();
+        cy.visit('localhost:3000/confessions')
     })
 
     it('should to have button and open create service form', () => {
