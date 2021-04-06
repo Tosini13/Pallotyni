@@ -8,8 +8,8 @@ export const mainTheme = createMuiTheme({
       dark: "#262626",
     },
     secondary: {
-      main: "#969696",
-      light: "rgba(0,0,0,0.2)",
+      main: "#DDD",
+      light: "#FFF",
       dark: "#969696",
     },
     error: {
@@ -35,6 +35,9 @@ export const mainTheme = createMuiTheme({
 });
 
 export const styledColors = {
+  nav: {
+    background: "rgba(0,0,0,0.5)",
+  },
   icons: {
     tournament: "#7E6714",
     live: "#FF3B2E",

@@ -13,16 +13,22 @@ import ServicesView from "./components/services/ServicesView";
 import StellaMaris from "./components/stellaMaris/StellaMaris";
 import { ScrollBarStyled } from "./componentsReusable/ScrollBar";
 import { RoutingPath } from "./models/Global";
+import background from "./resources/images/background_church.jpg";
 
 const navHeight = "60px";
 
 const GlobalStyle = styled.div`
   ${ScrollBarStyled}
+  background-image: url(${background});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 `;
 
 const MainContainerStyled = styled.div`
   position: relative;
-  margin-top: ${navHeight};
+  padding-top: ${navHeight};
   min-height: calc(100vh - ${navHeight});
 `;
 
