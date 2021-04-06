@@ -3,25 +3,32 @@ import { Route, BrowserRouter, Switch } from "react-router-dom";
 import styled from "styled-components";
 
 import AboutUs from "./components/aboutUs/AboutUs";
+import ConfessionsView from "./components/confessions/ConfessionsView";
 import DailyMessage from "./components/dailyMessage/DailyMessage";
 import Gallery from "./components/gallery/Gallery";
 import NavBar from "./components/nav/NavBar";
 import News from "./components/news/News";
 import SideBarNews from "./components/news/sideBar/SideBarNews";
-import Services from "./components/services/Services";
+import ServicesView from "./components/services/ServicesView";
 import StellaMaris from "./components/stellaMaris/StellaMaris";
 import { ScrollBarStyled } from "./componentsReusable/ScrollBar";
 import { RoutingPath } from "./models/Global";
+import background from "./resources/images/background_church.jpg";
 
 const navHeight = "60px";
 
 const GlobalStyle = styled.div`
   ${ScrollBarStyled}
+  background-image: url(${background});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 `;
 
 const MainContainerStyled = styled.div`
   position: relative;
-  margin-top: ${navHeight};
+  padding-top: ${navHeight};
   min-height: calc(100vh - ${navHeight});
 `;
 
@@ -67,7 +74,11 @@ function App() {
           {/* MAIN */}
           <MainStyled>
             <Switch>
-              <Route path={RoutingPath.service} component={Services} />
+              <Route path={RoutingPath.service} component={ServicesView} />
+              <Route
+                path={RoutingPath.confessions}
+                component={ConfessionsView}
+              />
               <Route path={RoutingPath.gallery} component={Gallery} />
               <Route path={RoutingPath.stellaMaris} component={StellaMaris} />
               <Route exact path={RoutingPath.news} component={News} />

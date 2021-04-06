@@ -3,13 +3,13 @@ import { createMuiTheme } from "@material-ui/core/styles";
 export const mainTheme = createMuiTheme({
   palette: {
     primary: {
-      main: "#fff",
+      main: "#222",
       light: "#423E3E",
       dark: "#262626",
     },
     secondary: {
-      main: "#969696",
-      light: "rgba(0,0,0,0.2)",
+      main: "#DDD",
+      light: "#FFF",
       dark: "#969696",
     },
     error: {
@@ -29,12 +29,15 @@ export const mainTheme = createMuiTheme({
     },
     text: {
       primary: "#000",
-      secondary: "#fff",
+      secondary: "#000",
     },
   },
 });
 
 export const styledColors = {
+  nav: {
+    background: "rgba(0,0,0,0.5)",
+  },
   icons: {
     tournament: "#7E6714",
     live: "#FF3B2E",

@@ -1,6 +1,6 @@
 describe('Service forms', () => {
     beforeEach(() => {
-        cy.visit('localhost:3000/service')
+        cy.visit('localhost:3000/services')
     })
 
     it('should to have button and open create service form', () => {

@@ -9,7 +9,8 @@ export const TIME_FORMAT = "HH:mm";
 export enum RoutingPath {
   home = "/",
   stellaMaris = "/stella-maris",
-  service = "/service",
+  service = "/services",
+  confessions = "/confessions",
   gallery = "/gallery",
   news = "/news",
 }
