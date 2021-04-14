@@ -29,11 +29,13 @@ const GlobalStyle = styled.div`
 
 const MainContainerStyled = styled.div`
   position: relative;
-  padding-top: ${navHeight};
-  min-height: calc(100vh - ${navHeight});
-  background: rgba(0,0,0,0.67);
+  min-height: 100vh;
+  /* 
+padding-top: ${navHeight};
+min-height: calc(100vh - ${navHeight});
+*/
+  background: rgba(0, 0, 0, 0.67);
   box-shadow: inset 0px 1412px 250px #6b624c;
-}
 `;
 
 const GridColumnsStyled = styled.div`
