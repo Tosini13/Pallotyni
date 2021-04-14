@@ -22,7 +22,7 @@ const SideBarNews: React.FC<SideBarNewsProps> = observer(() => {
             Latest News
           </Typography>
         </Grid>
-        {newsStore.getLatestNews().map((news) => (
+        {newsStore.getLatestNews(3).map((news) => (
           <React.Fragment key={news.id}>
             <Grid item onClick={() => setSelectedNews(news.id)}>
               <SideBarNewsSummary news={news} />

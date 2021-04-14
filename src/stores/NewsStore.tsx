@@ -52,8 +52,8 @@ export class NewsStore {
   }
 
   @action
-  getLatestNews() {
-    return this.news.slice(0, 3);
+  getLatestNews(quantity: number) {
+    return this.news.slice(0, quantity);
   }
 
   @action

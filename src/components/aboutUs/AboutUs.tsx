@@ -16,6 +16,8 @@ import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import { SpeedDialContainer } from "../../style/SpeedDial";
 import { TParagraph } from "../../models/Paragraph";
+import MainLayout from "../layout/MainLayout";
+import BackgroundImg from "../../resources/images/background_main.jpg";
 
 export const HoverStyled = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -102,7 +104,11 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
   };
 
   return (
-    <>
+    <MainLayout
+      img={BackgroundImg}
+      title="Parafia p.w. św. Jana Ewangelisty w Szczecinie"
+      subtitle="Kościół Pallotynów"
+    >
       <Grid container spacing={3} style={{ position: "relative" }}>
         <Grid item>
           <Typography variant="h4">About us</Typography>
@@ -165,7 +171,7 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
         </ButtonSuccess>
         <ButtonError onClick={handleClearActionsSD}>No</ButtonError>
       </QuestionDialog>
-    </>
+    </MainLayout>
   );
 });
 

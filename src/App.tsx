@@ -15,6 +15,7 @@ import { ScrollBarStyled } from "./componentsReusable/ScrollBar";
 import { RoutingPath } from "./models/Global";
 import background from "./resources/images/background_church.jpg";
 import { mainTheme } from "./style/config";
+import Home from "./components/home/Home";
 
 const navHeight = "60px";
 
@@ -39,26 +40,9 @@ const GridColumnsStyled = styled.div`
 `;
 
 const MainStyled = styled(GridColumnsStyled)`
-  margin: 0px auto;
-  width: 50vw;
   background-color: ${mainTheme.palette.primary.main};
   color: ${mainTheme.palette.secondary.dark};
   border-radius: 5px;
-`;
-
-const SidebarStyled = styled(GridColumnsStyled)`
-  position: fixed;
-  margin-top: ${navHeight};
-  width: 23vw;
-  top: 0px;
-`;
-
-const LeftSidebarStyled = styled(SidebarStyled)`
-  left: 0px;
-`;
-
-const RightSidebarStyled = styled(SidebarStyled)`
-  right: 0px;
 `;
 
 function App() {
@@ -69,12 +53,6 @@ function App() {
         {/*-----------------------------*/}
         {/*DESKTOP VIEW*/}
         <MainContainerStyled>
-          {/* LEFT SIDEBAR*/}
-          <LeftSidebarStyled>
-            <Switch>
-              <Route path={RoutingPath.home} component={DailyMessage} />
-            </Switch>
-          </LeftSidebarStyled>
           {/* MAIN */}
           <MainStyled>
             <Switch>
@@ -86,15 +64,9 @@ function App() {
               <Route path={RoutingPath.gallery} component={Gallery} />
               <Route path={RoutingPath.stellaMaris} component={StellaMaris} />
               <Route exact path={RoutingPath.news} component={News} />
-              <Route exact path={RoutingPath.home} component={AboutUs} />
+              <Route exact path={RoutingPath.home} component={Home} />
             </Switch>
           </MainStyled>
-          {/* RIGHT SIDEBAR*/}
-          <RightSidebarStyled>
-            <Switch>
-              <Route path={RoutingPath.home} component={SideBarNews} />
-            </Switch>
-          </RightSidebarStyled>
         </MainContainerStyled>
         {/*-----------------------------*/}
       </GlobalStyle>
