@@ -33,16 +33,10 @@ const SubTitleContainer = styled.div`
 
 const MainContainer = styled.div`
   transform: translateY(-${mainHeightOnImg});
-  background: rgba(0, 0, 0, 0.67);
-  box-shadow: inset 0px 1250px 250px #6b624c;
   padding: 20px;
   max-width: 980px;
   margin: auto;
   min-height: 100vh;
-`;
-
-const FooterContainer = styled.div`
-  background-color: ${mainTheme.palette.primary.light};
 `;
 
 export interface MainLayoutProps {

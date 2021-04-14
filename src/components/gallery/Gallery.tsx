@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, GridSize, Typography } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -15,6 +15,14 @@ import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import PhotoSummary from "./PhotoSummary";
 import PhotoForm from "./PhotoForm";
+import BackgroundImg from "../../resources/images/church_cross.png";
+import MainLayout from "../layout/MainLayout";
+import { MainGridStyled } from "../../style/MainStyled";
+
+const breakpoints = {
+  md: 5 as GridSize,
+  xs: 12 as GridSize,
+};
 
 export interface GalleryProps {}
 
@@ -53,8 +61,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
   };
 
   return (
-    <>
-      <Typography variant="h6">Gallery</Typography>
+    <MainLayout img={BackgroundImg} title="Gallery">
       <SpeedDialContainer>
         <SpeedDialComponent
           actions={actionsSD}
@@ -62,17 +69,18 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
           unBlock={handleClearActionsSD}
         />
       </SpeedDialContainer>
-      <Grid container spacing={1}>
+      <Grid container justify="space-around">
         {store.getPhotos().map((photo) => (
           <React.Fragment key={photo.id}>
-            <Grid
+            <MainGridStyled
+              md={breakpoints.md}
               item
               key={photo.id}
               onClick={() => handleAction(photo)}
               style={{ position: "relative", overflow: "hidden" }}
             >
               <PhotoSummary photo={photo} edition={edition} removal={removal} />
-            </Grid>
+            </MainGridStyled>
             <PhotoDetails
               photo={photo}
               open={photo.id === selectedPhoto?.id && !removal && !edition}
@@ -106,7 +114,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
         </ButtonSuccess>
         <ButtonError onClick={handleClearActionsSD}>No</ButtonError>
       </QuestionDialog>
-    </>
+    </MainLayout>
   );
 });
 

@@ -13,25 +13,27 @@ import ServicesView from "./components/services/ServicesView";
 import StellaMaris from "./components/stellaMaris/StellaMaris";
 import { ScrollBarStyled } from "./componentsReusable/ScrollBar";
 import { RoutingPath } from "./models/Global";
-import background from "./resources/images/background_church.jpg";
 import { mainTheme } from "./style/config";
 import Home from "./components/home/Home";
+import BackgroundImg from "./resources/images/old_stettin_roofs.png";
 
 const navHeight = "60px";
 
 const GlobalStyle = styled.div`
   ${ScrollBarStyled}
-  background-image: url(${background});
-  background-position: center;
+  background-image: url(${BackgroundImg});
+  background-position: bottom;
   background-repeat: no-repeat;
-  background-size: cover;
-}
+  background-size: contain;
 `;
 
 const MainContainerStyled = styled.div`
   position: relative;
   padding-top: ${navHeight};
   min-height: calc(100vh - ${navHeight});
+  background: rgba(0,0,0,0.67);
+  box-shadow: inset 0px 1412px 250px #6b624c;
+}
 `;
 
 const GridColumnsStyled = styled.div`
@@ -40,7 +42,6 @@ const GridColumnsStyled = styled.div`
 `;
 
 const MainStyled = styled(GridColumnsStyled)`
-  background-color: ${mainTheme.palette.primary.main};
   color: ${mainTheme.palette.secondary.dark};
   border-radius: 5px;
 `;

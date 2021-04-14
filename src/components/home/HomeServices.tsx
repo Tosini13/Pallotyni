@@ -18,6 +18,9 @@ const HomeServices: React.FC<HomeServicesProps> = observer(() => {
           {service.time} - {service.title}
         </Typography>
       ))}
+      {storeServices.getTodayServices.length === 0 ? (
+        <Typography color="textPrimary">No Services today</Typography>
+      ) : null}
     </>
   );
 });

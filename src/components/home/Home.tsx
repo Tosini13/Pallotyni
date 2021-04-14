@@ -1,8 +1,8 @@
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/background_main.jpg";
-import { Grid, GridSize, Typography } from "@material-ui/core";
+import { Grid, GridSize } from "@material-ui/core";
 import styled from "styled-components";
-import { TitleTypography } from "../../style/MainStyled";
+import { TitleTypography, MainGridStyled } from "../../style/MainStyled";
 import Image from "../../resources/images/church_cross.png";
 import HomeServices from "./HomeServices";
 import HomeNews from "./HomeNews";
@@ -17,12 +17,6 @@ const ImgContainer = styled.div`
   background-color: black;
   width: fit-content;
   margin: auto;
-`;
-
-const MainGridStyled = styled(Grid)`
-  background-color: #711515;
-  padding: 20px;
-  margin: 20px 0px;
 `;
 
 const breakpoints = {

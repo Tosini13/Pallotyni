@@ -11,14 +11,22 @@ import { ServiceStoreContext, Service } from "../../stores/ServiceStore";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
-import { Typography } from "@material-ui/core";
+import { Grid, GridSize, Typography } from "@material-ui/core";
 import ServiceForm from "./forms/ServiceForm";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import SpeedDialComponent from "../SpeedDial";
 import { SpeedDialContainer } from "../../style/SpeedDial";
+import MainLayout from "../layout/MainLayout";
+import BackgroundImg from "../../resources/images/church_cross.png";
+import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
 
 const DayContainerStyled = styled.div<{ serviceSelectable?: string }>``;
+
+const breakpoints = {
+  md: 5 as GridSize,
+  xs: 12 as GridSize,
+};
 
 export const TypographySelectableStyled = styled(Typography)<{
   selectable?: string;
@@ -80,7 +88,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
   };
 
   return (
-    <>
+    <MainLayout img={BackgroundImg} title="Msze święte">
       <SpeedDialContainer>
         <SpeedDialComponent
           actions={actionsSD}
@@ -88,8 +96,9 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
           unBlock={handleClearActionsSD}
         />
       </SpeedDialContainer>
-      <div>
-        <div>
+      <Grid container justify="space-around">
+        <MainGridStyled md={breakpoints.md}>
+          <TitleTypography>Powtarzające się msze święte</TitleTypography>
           {Object.values(Day).map((day) => (
             <DayContainerStyled
               key={day}
@@ -98,6 +107,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
               <h5>{day}</h5>
               {storeServices.getServicesByDay(day).map((service) => (
                 <TypographySelectableStyled
+                  color="textPrimary"
                   key={service.id}
                   selectable={parseStyledBoolean(edition || removal)}
                   onClick={() => handleSelectService(service)}
@@ -107,23 +117,26 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
               ))}
             </DayContainerStyled>
           ))}
-        </div>
-        {singleServices ? (
-          <>
-            <p>Next week</p>
-            {singleServices.map((service) => (
-              <TypographySelectableStyled
-                key={service.id}
-                selectable={parseStyledBoolean(edition || removal)}
-                onClick={() => handleSelectService(service)}
-              >
-                {format(new Date(service.date ?? ""), DATE_FORMAT)}
-                {service.time} - {service.title}
-              </TypographySelectableStyled>
-            ))}
-          </>
-        ) : null}
-      </div>
+        </MainGridStyled>
+        <MainGridStyled md={breakpoints.md}>
+          <TitleTypography>Pojedyncze msze święte</TitleTypography>
+          {singleServices ? (
+            <>
+              {singleServices.map((service) => (
+                <TypographySelectableStyled
+                  color="textPrimary"
+                  key={service.id}
+                  selectable={parseStyledBoolean(edition || removal)}
+                  onClick={() => handleSelectService(service)}
+                >
+                  {format(new Date(service.date ?? ""), DATE_FORMAT)}{" "}
+                  {service.time} - {service.title}
+                </TypographySelectableStyled>
+              ))}
+            </>
+          ) : null}
+        </MainGridStyled>
+      </Grid>
       <ServiceForm
         open={Boolean((openForm || selectedService) && !removal)}
         selectedService={removal ? undefined : selectedService}
@@ -147,7 +160,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
         </ButtonSuccess>
         <ButtonError onClick={handleClearActionsSD}>No</ButtonError>
       </QuestionDialog>
-    </>
+    </MainLayout>
   );
 });
 
