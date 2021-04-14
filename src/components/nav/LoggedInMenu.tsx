@@ -3,14 +3,13 @@ import { Grid, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { RoutingPath } from "../../models/Global";
-import { mainTheme, styledColors } from "../../style/config";
+import { mainTheme } from "../../style/config";
 
 const GridContainerStyled = styled(Grid)`
   & > div:hover {
     & > div {
       opacity: 1;
     }
-  }
 `;
 
 const MenuTypo = `
@@ -18,11 +17,11 @@ const MenuTypo = `
   display: block;
   cursor: pointer;
   padding: 10px;
-  color: ${mainTheme.palette.secondary.main};
+  color: ${mainTheme.palette.text.primary};
   font-size: 20px;
   text-decoration: none;
   &:hover {
-    color: ${mainTheme.palette.secondary.light};
+    color: ${mainTheme.palette.secondary.main};
   }
 `;
 
@@ -37,7 +36,7 @@ const TypographyStyled = styled(Typography)`
 const GridSubMenuContainerStyled = styled(Grid)`
   transition: 0.2s all;
   position: absolute;
-  background-color: ${styledColors.nav.background};
+  background-color: ${mainTheme.palette.primary.main};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   padding: 10px;
@@ -71,7 +70,7 @@ export interface LoggedInMenuProps {}
 
 const LoggedInMenu: React.FC<LoggedInMenuProps> = () => {
   return (
-    <GridContainerStyled container wrap="nowrap">
+    <GridContainerStyled container wrap="nowrap" spacing={3}>
       <GridMenuItem>
         <LinkStyled to={RoutingPath.home}>Home</LinkStyled>
       </GridMenuItem>

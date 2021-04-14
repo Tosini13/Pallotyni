@@ -14,6 +14,7 @@ import StellaMaris from "./components/stellaMaris/StellaMaris";
 import { ScrollBarStyled } from "./componentsReusable/ScrollBar";
 import { RoutingPath } from "./models/Global";
 import background from "./resources/images/background_church.jpg";
+import { mainTheme } from "./style/config";
 
 const navHeight = "60px";
 
@@ -40,6 +41,9 @@ const GridColumnsStyled = styled.div`
 const MainStyled = styled(GridColumnsStyled)`
   margin: 0px auto;
   width: 50vw;
+  background-color: ${mainTheme.palette.primary.main};
+  color: ${mainTheme.palette.secondary.dark};
+  border-radius: 5px;
 `;
 
 const SidebarStyled = styled(GridColumnsStyled)`
