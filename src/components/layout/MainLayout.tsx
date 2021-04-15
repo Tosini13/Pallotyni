@@ -32,11 +32,12 @@ const SubTitleContainer = styled.div`
 `;
 
 const MainContainer = styled.div`
-  transform: translateY(-${mainHeightOnImg});
+  margin: auto;
+  margin-top: -${mainHeightOnImg};
   padding: 20px;
   max-width: 980px;
-  margin: auto;
   min-height: 100vh;
+  position: relative;
 `;
 
 export interface MainLayoutProps {
@@ -51,7 +52,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   subtitle,
 }) => {
-  console.log(img);
   return (
     <>
       <ImgBackground src={img}>
