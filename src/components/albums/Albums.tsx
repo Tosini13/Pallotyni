@@ -82,7 +82,9 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
   };
 
   const handleAction = (a: Album) => {
-    router.push(GetRoute.album(a.id));
+    if (!edition && !removal) {
+      router.push(GetRoute.album(a.id));
+    }
     if (edition) {
       setSelectedAlbum(a);
       setOpenForm(true);
