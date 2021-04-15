@@ -1,5 +1,18 @@
 import { Grid, Typography } from "@material-ui/core";
+import styled from "styled-components";
 import { TNews } from "../../models/News";
+import { TitleTypography } from "../../style/MainStyled";
+
+const DateTypographyStyled = styled(Typography)`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+`;
+
+const ContentTypographyStyled = styled(Typography)`
+  margin-top: 20px;
+  padding: 20px;
+`;
 
 export interface NewsSummaryProps {
   news: TNews;
@@ -8,17 +21,20 @@ export interface NewsSummaryProps {
 const NewsSummary: React.FC<NewsSummaryProps> = ({ news }) => {
   return (
     <>
-      <Grid container justify="space-between" alignItems="flex-start">
+      <Grid container justify="center">
         {news.title ? (
-          <Grid item>
-            <Typography variant="h5">{news.title}</Typography>{" "}
+          <Grid item xs={10}>
+            {/* <Typography variant="h5">{news.title}</Typography>{" "} */}
+            <TitleTypography>{news.title}</TitleTypography>
           </Grid>
         ) : null}
-        <Grid item>
-          <Typography variant="body2">{news.createdAt}</Typography>
-        </Grid>
+        <DateTypographyStyled variant="body2" color="textPrimary">
+          {news.createdAt}
+        </DateTypographyStyled>
       </Grid>
-      <Typography>{news.content}</Typography>
+      <ContentTypographyStyled color="textPrimary">
+        {news.content}
+      </ContentTypographyStyled>
     </>
   );
 };

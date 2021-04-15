@@ -18,6 +18,7 @@ const LogoStyled = styled.img`
 `;
 
 const NavContainer = styled.div`
+  position: sticky;
   width: 100vw;
   top: 0px;
   left: 0px;

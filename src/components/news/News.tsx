@@ -20,6 +20,8 @@ import {
 import { TNews } from "../../models/News";
 import NewsSummary from "./NewsSummary";
 import NewsForm from "./NewsForm";
+import MainLayout from "../layout/MainLayout";
+import BackgroundImg from "../../resources/images/church_cross.png";
 
 export interface NewsProps {}
 
@@ -57,11 +59,8 @@ const News: React.FC<NewsProps> = observer(() => {
   };
 
   return (
-    <>
+    <MainLayout img={BackgroundImg} title="Aktualności">
       <Grid container spacing={3} style={{ position: "relative" }}>
-        <Grid item>
-          <Typography variant="h4">News</Typography>
-        </Grid>
         <SpeedDialContainer>
           <SpeedDialComponent
             actions={actionsSD}
@@ -117,7 +116,7 @@ const News: React.FC<NewsProps> = observer(() => {
         </ButtonSuccess>
         <ButtonError onClick={handleClearActionsSD}>No</ButtonError>
       </QuestionDialog>
-    </>
+    </MainLayout>
   );
 });
 

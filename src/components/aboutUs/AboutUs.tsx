@@ -18,6 +18,7 @@ import { SpeedDialContainer } from "../../style/SpeedDial";
 import { TParagraph } from "../../models/Paragraph";
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/background_main.jpg";
+import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
 
 export const HoverStyled = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -48,7 +49,7 @@ export const ActionButtonStyled = styled.div`
   align-items: center;
 `;
 
-export const GridActionStyled = styled(Grid)<{ edition?: string }>`
+export const GridActionStyled = styled(MainGridStyled)<{ edition?: string }>`
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -128,9 +129,9 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
             onClick={() => handleAction(paragraph)}
           >
             {paragraph.title ? (
-              <Typography variant="h5">{paragraph.title}</Typography>
+              <TitleTypography>{paragraph.title}</TitleTypography>
             ) : null}
-            <Typography>{paragraph.content}</Typography>
+            <Typography color="textPrimary">{paragraph.content}</Typography>
             {edition ? (
               <HoverStyled>
                 <ActionButtonStyled>
