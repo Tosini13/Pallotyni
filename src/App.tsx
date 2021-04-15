@@ -16,6 +16,7 @@ import { RoutingPath } from "./models/Global";
 import { mainTheme } from "./style/config";
 import Home from "./components/home/Home";
 import BackgroundImg from "./resources/images/old_stettin_roofs.png";
+import Albums from "./components/albums/Albums";
 
 const navHeight = "60px";
 
@@ -64,7 +65,8 @@ function App() {
                 path={RoutingPath.confessions}
                 component={ConfessionsView}
               />
-              <Route path={RoutingPath.gallery} component={Gallery} />
+              <Route path={RoutingPath.gallery} component={Albums} />
+              <Route path={RoutingPath.album} component={Gallery} />
               <Route path={RoutingPath.stellaMaris} component={StellaMaris} />
               <Route exact path={RoutingPath.news} component={News} />
               <Route exact path={RoutingPath.home} component={Home} />

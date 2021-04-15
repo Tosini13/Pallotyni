@@ -10,6 +10,7 @@ import { PhotosStoreProvider } from "./stores/GalleryStore";
 import { ServiceStoreProvider } from "./stores/ServiceStore";
 import { ConfessionStoreProvider } from "./stores/ConfessionStore";
 import { ParagraphStoreProvider } from "./stores/AboutUsStore";
+import { AlbumStoreProvider } from "./stores/AlbumStore";
 
 ReactDOM.render(
   <ThemeProvider theme={mainTheme}>
@@ -17,11 +18,13 @@ ReactDOM.render(
       <NewStoreProvider>
         <ServiceStoreProvider>
           <ConfessionStoreProvider>
-            <PhotosStoreProvider>
-              <ParagraphStoreProvider>
-                <App />
-              </ParagraphStoreProvider>
-            </PhotosStoreProvider>
+            <AlbumStoreProvider>
+              <PhotosStoreProvider>
+                <ParagraphStoreProvider>
+                  <App />
+                </ParagraphStoreProvider>
+              </PhotosStoreProvider>
+            </AlbumStoreProvider>
           </ConfessionStoreProvider>
         </ServiceStoreProvider>
       </NewStoreProvider>

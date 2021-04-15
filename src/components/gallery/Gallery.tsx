@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import styled from "styled-components";
 
-import { Grid, GridSize, Typography } from "@material-ui/core";
+import { Grid, GridSize } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
