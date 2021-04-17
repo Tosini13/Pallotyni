@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 
-import { Grid, GridSize } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -12,7 +12,6 @@ import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import MainLayout from "../layout/MainLayout";
-import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
 import { Album, AlbumStoreContext } from "../../stores/AlbumStore";
 import AlbumForm from "./AlbumForm";
 import styled from "styled-components";
@@ -20,6 +19,7 @@ import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import { GALLERY_PATH } from "../../models/const";
 import { useHistory } from "react-router";
 import { GetRoute } from "../../models/Global";
+import AlbumSummary from "./AlbumSummary";
 
 const ImgContainer = styled.div`
   padding: 10px;
@@ -46,12 +46,6 @@ const ImgStyled = styled.img<{ action?: string; hovered?: string }>`
   }
   ${(props) => (props.hovered ? `filter: grayscale(1);` : ``)}
 `;
-
-const breakpoints = {
-  md: 5 as GridSize,
-  xs: 12 as GridSize,
-};
-
 export interface AlbumsProps {}
 
 const Albums: React.FC<AlbumsProps> = observer(() => {
@@ -66,7 +60,7 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
 
   useEffect(() => {
     store.fetch();
-  }, []);
+  }, [store]);
 
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
@@ -82,7 +76,7 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
   };
 
   const handleAction = (a: Album) => {
-    if (!edition && !removal) {
+    if (!edition && !removal && a.photos.length) {
       router.push(GetRoute.album(a.id));
     }
     if (edition) {
@@ -104,34 +98,36 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
         />
       </SpeedDialContainer>
       <Grid container justify="space-around">
-        {store.getAlbums().map((album) =>
-          album.photos[0] ? (
-            <React.Fragment key={album.id}>
-              <MainGridStyled
-                md={breakpoints.md}
-                item
-                key={album.id}
-                onClick={() => handleAction(album)}
-                style={{ position: "relative", overflow: "hidden" }}
-              >
-                <TitleTypography>{album.title}</TitleTypography>
-                <ImgContainer
-                  onMouseOver={() => setMouseOverPhoto(true)}
-                  onMouseLeave={() => setMouseOverPhoto(false)}
-                >
-                  <ImgStyled
-                    src={`${GALLERY_PATH}/${album.photos[0]}`}
-                    alt={album.photos[0]}
-                    action={parseStyledBoolean(edition || removal)}
-                    hovered={parseStyledBoolean(
-                      (edition || removal) && mouseOverPhoto
-                    )}
-                  />
-                </ImgContainer>
-              </MainGridStyled>
-            </React.Fragment>
-          ) : null
-        )}
+        {store.getAlbumsWithPhotos().map((album) => (
+          <AlbumSummary
+            album={album}
+            handleAction={handleAction}
+            key={album.id}
+          >
+            <ImgContainer
+              onMouseOver={() => setMouseOverPhoto(true)}
+              onMouseLeave={() => setMouseOverPhoto(false)}
+            >
+              <ImgStyled
+                src={`${GALLERY_PATH}/${album.photos[0]}`}
+                alt={album.photos[0]}
+                action={parseStyledBoolean(edition || removal)}
+                hovered={parseStyledBoolean(
+                  (edition || removal) && mouseOverPhoto
+                )}
+              />
+            </ImgContainer>
+          </AlbumSummary>
+        ))}
+      </Grid>
+      <Grid container justify="space-around">
+        {store.getAlbumsWithoutPhotos().map((album) => (
+          <AlbumSummary
+            album={album}
+            handleAction={handleAction}
+            key={album.id}
+          />
+        ))}
       </Grid>
       <AlbumForm
         open={Boolean(openForm && !removal)}

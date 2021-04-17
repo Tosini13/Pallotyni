@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import imageCompression from "browser-image-compression";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -16,12 +15,8 @@ import {
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  TCreatePhotograph,
-  TCreatePhotographAndImage,
-} from "../../models/Photograph";
+import { TCreatePhotographAndImage } from "../../models/Photograph";
 import TextFieldC from "../../componentsReusable/Forms";
-import { DATE_TIME_FORMAT } from "../../models/Global";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 
 const AddAPhotoIconStyled = styled(AddAPhotoIcon)<{ error?: string }>`

@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { format } from "date-fns";
 
 import { action, makeObservable, observable } from "mobx";
 import { Id } from "../models/Global";
@@ -48,6 +47,16 @@ export class AlbumStore {
   @action
   getAlbums() {
     return this.albums;
+  }
+
+  @action
+  getAlbumsWithPhotos() {
+    return this.albums.filter((album) => album.photos.length);
+  }
+
+  @action
+  getAlbumsWithoutPhotos() {
+    return this.albums.filter((album) => !album.photos.length);
   }
 
   @action

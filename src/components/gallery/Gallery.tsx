@@ -17,6 +17,10 @@ import PhotoForm from "./PhotoForm";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import MainLayout from "../layout/MainLayout";
 import { MainGridStyled } from "../../style/MainStyled";
+import { AlbumStoreContext } from "../../stores/AlbumStore";
+import { useParams } from "react-router";
+import { Id } from "../../models/Global";
+import { GALLERY_PATH } from "../../models/const";
 
 const breakpoints = {
   md: 5 as GridSize,
@@ -26,8 +30,13 @@ const breakpoints = {
 export interface GalleryProps {}
 
 const Gallery: React.FC<GalleryProps> = observer(() => {
+  const { id } = useParams<{
+    id: Id;
+  }>();
+  const storeAlbum = useContext(AlbumStoreContext);
   const store = useContext(PhotosStoreContext);
-
+  const album = storeAlbum.getAlbum(id);
+  console.log(album);
   const [image, setImage] = useState<any>();
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [edition, setEdition] = useState<boolean>(false);
@@ -36,7 +45,8 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
 
   useEffect(() => {
     store.fetch();
-  }, []);
+    storeAlbum.fetch();
+  }, [store, storeAlbum]);
 
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
@@ -68,6 +78,17 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
           unBlock={handleClearActionsSD}
         />
       </SpeedDialContainer>
+      <Grid container justify="space-around">
+        {album?.photos.map((photo) => (
+          <Grid item>
+            <img
+              src={`${GALLERY_PATH}/${photo}`}
+              alt={photo}
+              style={{ width: "300px" }}
+            />
+          </Grid>
+        ))}
+      </Grid>
       <Grid container justify="space-around">
         {store.getPhotos().map((photo) => (
           <React.Fragment key={photo.id}>

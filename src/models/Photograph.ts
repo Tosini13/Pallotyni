@@ -4,7 +4,7 @@ export type TPhotograph = {
   id: Id;
   createdAt: string;
   path: string;
-  description: string;
+  description?: string;
 };
 
 export type TCreatePhotographAndImage = Omit<
@@ -12,6 +12,13 @@ export type TCreatePhotographAndImage = Omit<
   "id" | "path" | "createdAt"
 > & {
   imageFile: any;
+};
+
+export type TCreateImages = Omit<
+  TPhotograph,
+  "id" | "path" | "createdAt" | "description"
+> & {
+  imageFiles: any[];
 };
 
 export type TUpdatePhotographAndImage = Omit<TPhotograph, "createdAt"> & {

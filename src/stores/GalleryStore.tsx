@@ -1,18 +1,21 @@
 import React from "react";
-import { format } from "date-fns";
 
 import { action, makeObservable, observable } from "mobx";
-import { DATE_FORMAT, DATE_TIME_FORMAT, Id } from "../models/Global";
+import { Id } from "../models/Global";
 
 import {
+  TCreateImages,
   TCreatePhotograph,
   TCreatePhotographAndImage,
   TPhotograph,
   TUpdatePhotographAndImage,
 } from "../models/Photograph";
-import { mockGallery } from "../mockData/Gallery";
 import axios from "axios";
-import { IMAGES_API_URL, PHOTOGRAPHS_API_URL } from "../models/const";
+import {
+  IMAGES_API_URL,
+  PHOTOGRAPHS_API_URL,
+  MANY_IMAGES_API_URL,
+} from "../models/const";
 
 export class Photograph {
   @observable
@@ -25,7 +28,7 @@ export class Photograph {
   path: string;
 
   @observable
-  description: string;
+  description?: string;
 
   constructor({ id, createdAt, path, description }: TPhotograph) {
     this.id = id;
@@ -58,7 +61,6 @@ export class PhotosStore {
       },
     });
     const path = imageData.data as string;
-    console.log(path);
     if (path) {
       const photograph: TCreatePhotograph = {
         description,
@@ -72,6 +74,24 @@ export class PhotosStore {
       } else {
         console.log("error photo");
       }
+    } else {
+      console.log("error image");
+    }
+  }
+
+  async createManyPhotos({ imageFiles }: TCreateImages) {
+    let formData = new FormData();
+    Object.values(imageFiles).forEach((imageFile) =>
+      formData.append(`images`, imageFile)
+    );
+    const imagesData = await axios.post(MANY_IMAGES_API_URL, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    const paths = imagesData.data as string[];
+    if (paths.length) {
+      return paths;
     } else {
       console.log("error image");
     }
