@@ -4,7 +4,7 @@ import styled from "styled-components";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
-import { Photograph } from "../../stores/GalleryStore";
+import { Photograph } from "../../stores/PhotographsStore";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import { GALLERY_PATH } from "../../models/const";
 

@@ -6,11 +6,11 @@ import reportWebVitals from "./reportWebVitals";
 import { StylesProvider, ThemeProvider } from "@material-ui/core/styles";
 import { NewStoreProvider } from "./stores/NewsStore";
 import { mainTheme } from "./style/config";
-import { PhotosStoreProvider } from "./stores/GalleryStore";
+import { PhotosStoreProvider } from "./stores/PhotographsStore";
 import { ServiceStoreProvider } from "./stores/ServiceStore";
 import { ConfessionStoreProvider } from "./stores/ConfessionStore";
 import { ParagraphStoreProvider } from "./stores/AboutUsStore";
-import { AlbumStoreProvider } from "./stores/AlbumStore";
+import { AlbumStoreProvider } from "./stores/GalleryStore";
 
 ReactDOM.render(
   <ThemeProvider theme={mainTheme}>

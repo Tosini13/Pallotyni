@@ -4,7 +4,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
-import { Photograph, PhotosStoreContext } from "../../stores/GalleryStore";
+import { Photograph, PhotosStoreContext } from "../../stores/PhotographsStore";
 import {
   Dialog,
   DialogActions,

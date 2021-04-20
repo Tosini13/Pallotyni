@@ -1,6 +1,6 @@
 import { Button, Grid, GridSize } from "@material-ui/core";
 import { useState } from "react";
-import { Album } from "../../stores/AlbumStore";
+import { Album } from "../../stores/GalleryStore";
 import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
 import PhotosForm from "../gallery/PhotosForm";
 
@@ -27,7 +27,6 @@ const AlbumSummary: React.FC<AlbumSummaryProps> = ({
         md={breakpoints.md}
         item
         key={album.id}
-        onClick={() => handleAction(album)}
         style={{
           position: "relative",
           overflow: "hidden",
@@ -35,10 +34,14 @@ const AlbumSummary: React.FC<AlbumSummaryProps> = ({
         }}
       >
         <Grid container direction="column" alignItems="center" spacing={2}>
-          <Grid item>
-            <TitleTypography>{album.title}</TitleTypography>
+          <Grid item onClick={() => handleAction(album)}>
+            <Grid container direction="column" alignItems="center" spacing={2}>
+              <Grid item>
+                <TitleTypography>{album.title}</TitleTypography>
+              </Grid>
+              <Grid item>{children}</Grid>
+            </Grid>
           </Grid>
-          <Grid item>{children}</Grid>
           <Grid item>
             <Button onClick={() => setOpenForm(true)}>Add Photos</Button>
           </Grid>

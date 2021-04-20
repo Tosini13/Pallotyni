@@ -12,7 +12,7 @@ import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import MainLayout from "../layout/MainLayout";
-import { Album, AlbumStoreContext } from "../../stores/AlbumStore";
+import { Album, AlbumStoreContext } from "../../stores/GalleryStore";
 import AlbumForm from "./AlbumForm";
 import styled from "styled-components";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
@@ -59,6 +59,8 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
   const [mouseOverPhoto, setMouseOverPhoto] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("fetch!");
+
     store.fetch();
   }, [store]);
 
@@ -108,14 +110,19 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
               onMouseOver={() => setMouseOverPhoto(true)}
               onMouseLeave={() => setMouseOverPhoto(false)}
             >
-              <ImgStyled
-                src={`${GALLERY_PATH}/${album.photos[0]}`}
-                alt={album.photos[0]}
-                action={parseStyledBoolean(edition || removal)}
-                hovered={parseStyledBoolean(
-                  (edition || removal) && mouseOverPhoto
-                )}
-              />
+              {album.coverPhoto ? (
+                // <ImgStyled
+                //   src={`${GALLERY_PATH}/${album.coverPhoto?.path}`}
+                //   alt={album.coverPhoto?.path}
+                //   action={parseStyledBoolean(edition || removal)}
+                //   hovered={parseStyledBoolean(
+                //     (edition || removal) && mouseOverPhoto
+                //   )}
+                // />
+                <p>PHOTO</p>
+              ) : (
+                <p>Loading...</p>
+              )}
             </ImgContainer>
           </AlbumSummary>
         ))}

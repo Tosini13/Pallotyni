@@ -11,8 +11,8 @@ import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TCreatePhotographAndImage } from "../../models/Photograph";
 import { DialogStyled } from "../../componentsReusable/Dialogs";
-import { PhotosStoreContext } from "../../stores/GalleryStore";
-import { Album, AlbumStoreContext } from "../../stores/AlbumStore";
+import { PhotosStoreContext } from "../../stores/PhotographsStore";
+import { Album, AlbumStoreContext } from "../../stores/GalleryStore";
 
 const TypographyButton = styled(Typography)`
   padding: 10px;
@@ -75,15 +75,21 @@ const PhotosForm: React.FC<PhotosFormProps> = ({
     if (!images) {
       setImageError(true);
     } else {
-      const paths = await photoStore.createManyPhotos({ imageFiles: images });
-      if (paths) {
-        albumStore.updateAlbum({
-          ...selectedAlbum,
-          photos: paths,
-        });
-        handleCloseForm();
+      try {
+        const paths = await photoStore.createManyPhotos({ imageFiles: images });
+        console.log("paths", paths);
+        if (paths) {
+          albumStore.addPhotos({
+            albumId: selectedAlbum.id,
+            photosPaths: paths,
+          });
+          handleCloseForm();
+          return true;
+        }
+        console.log("ERROR", paths);
+      } catch (err) {
+        console.log("ERROR", err);
       }
-      console.log("ERROR");
     }
   };
 

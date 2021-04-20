@@ -5,7 +5,7 @@ import styled from "styled-components";
 import AboutUs from "./components/aboutUs/AboutUs";
 import ConfessionsView from "./components/confessions/ConfessionsView";
 import DailyMessage from "./components/dailyMessage/DailyMessage";
-import Gallery from "./components/gallery/Gallery";
+import Photos from "./components/gallery/Photos";
 import NavBar from "./components/nav/NavBar";
 import News from "./components/news/News";
 import SideBarNews from "./components/news/sideBar/SideBarNews";
@@ -66,7 +66,7 @@ function App() {
                 component={ConfessionsView}
               />
               <Route path={RoutingPath.gallery} component={Albums} />
-              <Route path={RoutingPath.album} component={Gallery} />
+              <Route path={RoutingPath.album} component={Photos} />
               <Route path={RoutingPath.stellaMaris} component={StellaMaris} />
               <Route exact path={RoutingPath.news} component={News} />
               <Route exact path={RoutingPath.home} component={Home} />

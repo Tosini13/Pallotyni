@@ -6,7 +6,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { Photograph, PhotosStoreContext } from "../../stores/GalleryStore";
+import { Photograph, PhotosStoreContext } from "../../stores/PhotographsStore";
 import PhotoDetails from "./PhotoDetails";
 import { SpeedDialContainer } from "../../style/SpeedDial";
 import SpeedDialComponent from "../SpeedDial";
@@ -17,7 +17,7 @@ import PhotoForm from "./PhotoForm";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import MainLayout from "../layout/MainLayout";
 import { MainGridStyled } from "../../style/MainStyled";
-import { AlbumStoreContext } from "../../stores/AlbumStore";
+import { AlbumStoreContext } from "../../stores/GalleryStore";
 import { useParams } from "react-router";
 import { Id } from "../../models/Global";
 import { GALLERY_PATH } from "../../models/const";
@@ -30,12 +30,12 @@ const breakpoints = {
 export interface GalleryProps {}
 
 const Gallery: React.FC<GalleryProps> = observer(() => {
-  const { id } = useParams<{
+  const { id: albumId } = useParams<{
     id: Id;
   }>();
   const storeAlbum = useContext(AlbumStoreContext);
-  const store = useContext(PhotosStoreContext);
-  const album = storeAlbum.getAlbum(id);
+  const storePhotos = useContext(PhotosStoreContext);
+  const album = storeAlbum.getAlbum(albumId);
   console.log(album);
   const [image, setImage] = useState<any>();
   const [openForm, setOpenForm] = useState<boolean>(false);
@@ -44,9 +44,12 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photograph | undefined>();
 
   useEffect(() => {
-    store.fetch();
+    storePhotos.fetch(albumId);
+  }, [storePhotos, albumId]);
+
+  useEffect(() => {
     storeAlbum.fetch();
-  }, [store, storeAlbum]);
+  }, [storeAlbum]);
 
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
@@ -69,6 +72,16 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
     setSelectedPhoto(p);
   };
 
+  console.log(
+    "album?.photos",
+    album?.photos.map((photo) => photo)
+  );
+
+  console.log(
+    "storePhotos?.photos",
+    storePhotos?.photos.map((photo) => photo)
+  );
+
   return (
     <MainLayout img={BackgroundImg} title="Gallery">
       <SpeedDialContainer>
@@ -79,34 +92,14 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
         />
       </SpeedDialContainer>
       <Grid container justify="space-around">
-        {album?.photos.map((photo) => (
+        {storePhotos?.photos.map((photo) => (
           <Grid item>
             <img
-              src={`${GALLERY_PATH}/${photo}`}
-              alt={photo}
+              src={`${GALLERY_PATH}/${photo.path}`}
+              alt={photo.path}
               style={{ width: "300px" }}
             />
           </Grid>
-        ))}
-      </Grid>
-      <Grid container justify="space-around">
-        {store.getPhotos().map((photo) => (
-          <React.Fragment key={photo.id}>
-            <MainGridStyled
-              md={breakpoints.md}
-              item
-              key={photo.id}
-              onClick={() => handleAction(photo)}
-              style={{ position: "relative", overflow: "hidden" }}
-            >
-              <PhotoSummary photo={photo} edition={edition} removal={removal} />
-            </MainGridStyled>
-            <PhotoDetails
-              photo={photo}
-              open={photo.id === selectedPhoto?.id && !removal && !edition}
-              handleClose={() => setSelectedPhoto(undefined)}
-            />
-          </React.Fragment>
         ))}
       </Grid>
       <PhotoForm
@@ -125,7 +118,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
         <ButtonSuccess
           onClick={() => {
             if (selectedPhoto) {
-              store.removePhoto(selectedPhoto);
+              storePhotos.removePhoto(selectedPhoto);
               handleClearActionsSD();
             }
           }}

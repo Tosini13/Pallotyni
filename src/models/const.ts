@@ -5,6 +5,7 @@ export const SERVICES_API_URL = `${API_URL}/services`;
 export const CONFESSIONS_API_URL = `${API_URL}/confessions`;
 export const NEWS_API_URL = `${API_URL}/news`;
 export const ALBUM_API_URL = `${API_URL}/albums`;
+export const ADD_MANY_PHOTOS_TO_ALBUM_API_URL = `${API_URL}/albumsAddManyPhotos`;
 export const IMAGES_API_URL = `${API_URL}/images`;
 export const MANY_IMAGES_API_URL = `${API_URL}/many-images`;
 export const PHOTOGRAPHS_API_URL = `${API_URL}/photographs`;

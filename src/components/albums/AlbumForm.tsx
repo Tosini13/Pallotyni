@@ -10,7 +10,7 @@ import { ButtonSuccess, ButtonError } from "../../componentsReusable/Buttons";
 import { DialogStyled } from "../../componentsReusable/Dialogs";
 import TextFieldC from "../../componentsReusable/Forms";
 import { TAlbum, TAlbumCreate } from "../../models/Album";
-import { AlbumStoreContext } from "../../stores/AlbumStore";
+import { AlbumStoreContext } from "../../stores/GalleryStore";
 
 export interface AlbumFormProps {
   open: boolean;
@@ -43,7 +43,6 @@ const AlbumForm: React.FC<AlbumFormProps> = ({
       store.updateAlbum({
         ...data,
         id: selectedAlbum.id,
-        photos: selectedAlbum.photos,
       });
     } else {
       store.createAlbum(data);

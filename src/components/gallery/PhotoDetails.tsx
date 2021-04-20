@@ -7,7 +7,7 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-import { Photograph } from "../../stores/GalleryStore";
+import { Photograph } from "../../stores/PhotographsStore";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
 import { GALLERY_PATH } from "../../models/const";

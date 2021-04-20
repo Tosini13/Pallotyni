@@ -1,120 +1,179 @@
 import React from "react";
-import axios from "axios";
 
 import { action, makeObservable, observable } from "mobx";
 import { Id } from "../models/Global";
-import { ALBUM_API_URL } from "../models/const";
-import { TAlbum, TAlbumCreate } from "../models/Album";
 
-type TAlbumProps = Omit<TAlbum, "createdAt"> & {
-  createdAt?: string;
-};
+import {
+  TCreateImages,
+  TCreatePhotograph,
+  TCreatePhotographAndImage,
+  TPhotograph,
+  TUpdatePhotographAndImage,
+} from "../models/Photograph";
+import axios from "axios";
+import {
+  IMAGES_API_URL,
+  PHOTOGRAPHS_API_URL,
+  MANY_IMAGES_API_URL,
+} from "../models/const";
 
-export class Album {
+export class Photograph {
   @observable
   id: Id;
 
   @observable
-  title: string;
+  createdAt: string;
 
   @observable
-  description: string;
+  path: string;
 
   @observable
-  photos: string[];
+  description?: string;
 
-  constructor({ id, title, description, photos }: TAlbumProps) {
+  constructor({ id, createdAt, path, description }: TPhotograph) {
     this.id = id;
-    this.title = title;
+    this.createdAt = createdAt;
+    this.path = path;
     this.description = description;
-    this.photos = photos;
   }
 }
 
-export class AlbumStore {
-  albums: Album[] = [];
+export class PhotographsStore {
+  @observable
+  photos: Photograph[] = [];
 
   async fetch() {
-    const data = await axios.get(ALBUM_API_URL);
-    const albumsData = data.data as TAlbum[];
-    if (albumsData) {
-      this.albums = albumsData.map((item) => new Album(item));
+    const data = await axios.get(PHOTOGRAPHS_API_URL);
+    const photographs = data.data as TPhotograph[];
+    if (photographs) {
+      this.photos = photographs.map((photograph) => new Photograph(photograph));
     } else {
       console.log("error");
     }
   }
 
-  @action
-  getAlbums() {
-    return this.albums;
-  }
-
-  @action
-  getAlbumsWithPhotos() {
-    return this.albums.filter((album) => album.photos.length);
-  }
-
-  @action
-  getAlbumsWithoutPhotos() {
-    return this.albums.filter((album) => !album.photos.length);
-  }
-
-  @action
-  getLatestAlbum(quantity: number) {
-    return this.albums.slice(0, quantity);
-  }
-
-  @action
-  getAlbum(id: Id) {
-    return this.albums.find((album) => album.id === id);
-  }
-
-  async createAlbum(album: TAlbumCreate) {
-    const data = await axios.post(ALBUM_API_URL, album);
-    const albumData = data.data as TAlbum;
-    if (albumData) {
-      this.albums = [new Album(albumData), ...this.albums];
+  async createPhoto({ description, imageFile }: TCreatePhotographAndImage) {
+    let formData = new FormData();
+    formData.append("img", imageFile);
+    const imageData = await axios.post(IMAGES_API_URL, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    const path = imageData.data as string;
+    if (path) {
+      const photograph: TCreatePhotograph = {
+        description,
+        path: path,
+      };
+      const data = await axios.post(PHOTOGRAPHS_API_URL, photograph);
+      const photographData = data.data as TPhotograph;
+      console.log(photographData);
+      if (photographData) {
+        this.photos = [new Photograph(photographData), ...this.photos];
+      } else {
+        console.log("error photo");
+      }
     } else {
-      console.log("error");
+      console.log("error image");
     }
   }
 
-  async updateAlbum(album: TAlbum) {
-    const data = await axios.put(`${ALBUM_API_URL}/${album.id}`, album);
-    const albumData = data.data as TAlbum;
-    if (albumData) {
-      const newAlbum = new Album(albumData);
-      this.albums = this.albums.map((a) =>
-        a.id === newAlbum.id ? newAlbum : a
+  async createManyPhotos({ imageFiles }: TCreateImages) {
+    let formData = new FormData();
+    Object.values(imageFiles).forEach((imageFile) =>
+      formData.append(`images`, imageFile)
+    );
+    const imagesData = await axios.post(MANY_IMAGES_API_URL, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    const paths = imagesData.data as string[];
+    if (paths.length) {
+      return paths;
+    } else {
+      console.log("error image");
+    }
+  }
+
+  @action
+  async updatePhoto({
+    id,
+    description,
+    path,
+    imageFile,
+  }: TUpdatePhotographAndImage) {
+    console.log(id, description, path, imageFile);
+    let formData = new FormData();
+    formData.append("img", imageFile);
+    const imageData = await axios.put(`${IMAGES_API_URL}/${path}`, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    const newPath = imageData.data as string;
+    console.log(newPath);
+    if (newPath) {
+      const photograph: TCreatePhotograph = {
+        description,
+        path: newPath,
+      };
+      const data = await axios.put(`${PHOTOGRAPHS_API_URL}/${id}`, photograph);
+      const photographData = data.data as TPhotograph;
+      console.log(photographData);
+      if (photographData) {
+        const photo = new Photograph(photographData);
+        this.photos = this.photos.map((p) => (p.id === photo.id ? photo : p));
+      } else {
+        console.log("error photo");
+      }
+    } else {
+      console.log("error image");
+    }
+    // TODO: delete old image file
+  }
+
+  async removePhoto(photograph: Photograph) {
+    const imageData = await axios.delete(
+      `${IMAGES_API_URL}/${photograph.path}`
+    );
+    const path = imageData.data as string;
+    console.log(path);
+    if (path) {
+      const data = await axios.delete(
+        `${PHOTOGRAPHS_API_URL}/${photograph.id}`
       );
+      const photographData = data.data as TPhotograph;
+      console.log(photographData);
+      if (photographData) {
+        this.photos = this.photos.filter((p) => p.id !== photographData.id);
+      } else {
+        console.log("error photo");
+      }
     } else {
-      console.log("error");
+      console.log("error image");
     }
   }
 
-  async deleteAlbum(album: Album) {
-    const data = await axios.delete(`${ALBUM_API_URL}/${album.id}`);
-    const albumData = data.data as TAlbum;
-    if (albumData) {
-      this.albums = this.albums.filter((n) => n.id !== albumData.id);
-    } else {
-      console.log("error");
-    }
+  @action
+  getPhotos() {
+    return this.photos as Photograph[];
   }
 
   constructor() {
     makeObservable(this, {
-      albums: observable,
+      photos: observable,
       fetch: action,
-      createAlbum: action,
-      updateAlbum: action,
-      deleteAlbum: action,
+      createPhoto: action,
+      updatePhoto: action,
+      removePhoto: action,
     });
     this.fetch();
   }
 }
 
-export const albumStore = new AlbumStore();
+export const albumStore = new PhotographsStore();
 export const AlbumStoreContext = React.createContext(albumStore);
 export const AlbumStoreProvider: React.FC<{}> = ({ children }) => {
   return (
