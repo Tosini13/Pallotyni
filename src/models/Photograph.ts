@@ -11,6 +11,7 @@ export type TCreatePhotographAndImage = Omit<
   TPhotograph,
   "id" | "path" | "createdAt"
 > & {
+  albumId: Id;
   imageFile: any;
 };
 
@@ -22,7 +23,7 @@ export type TCreateImages = Omit<
 };
 
 export type TUpdatePhotographAndImage = Omit<TPhotograph, "createdAt"> & {
-  imageFile: any;
+  imageFile?: any;
 };
 
 export type TCreatePhotograph = Omit<TPhotograph, "id" | "createdAt">;

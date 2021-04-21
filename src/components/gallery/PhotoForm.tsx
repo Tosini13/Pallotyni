@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { TCreatePhotographAndImage } from "../../models/Photograph";
 import TextFieldC from "../../componentsReusable/Forms";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
+import { GALLERY_PATH } from "../../models/const";
 
 const AddAPhotoIconStyled = styled(AddAPhotoIcon)<{ error?: string }>`
   transition: all 0.2s;
@@ -79,6 +80,7 @@ type TPhotographForm = Omit<
 >;
 
 export interface PhotoFormProps {
+  albumId: string;
   image: any;
   setImage: (image: any) => void;
   open: boolean;
@@ -87,6 +89,7 @@ export interface PhotoFormProps {
 }
 
 const PhotoForm: React.FC<PhotoFormProps> = ({
+  albumId,
   image,
   setImage,
   open,
@@ -117,9 +120,21 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   };
 
   const onSubmit = (data: TPhotographForm) => {
-    if (!image) {
+    console.log(data);
+    console.log(image);
+    console.log(selectedPhotograph);
+
+    if (!image && !imgUrl) {
       setImageError(true);
-    } else if (selectedPhotograph) {
+    } else if (selectedPhotograph && image) {
+      photoStore.updatePhoto({
+        id: selectedPhotograph.id,
+        path: selectedPhotograph.path,
+        description: data.description,
+        imageFile: image,
+      });
+      handleCloseForm();
+    } else if (selectedPhotograph && !image) {
       photoStore.updatePhoto({
         id: selectedPhotograph.id,
         path: selectedPhotograph.path,
@@ -129,6 +144,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
       handleCloseForm();
     } else {
       photoStore.createPhoto({
+        albumId,
         description: data.description,
         imageFile: image,
       });
@@ -139,14 +155,6 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   const onRemoveImage = () => {
     setImage(null);
     setImageUrl(undefined);
-  };
-
-  const getUrl = () => {
-    if (image) {
-      return URL.createObjectURL(image);
-    } else {
-      return undefined;
-    }
   };
 
   const clearForm = () => {
@@ -164,6 +172,13 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   };
 
   useEffect(() => {
+    const getUrl = () => {
+      if (image) {
+        return URL.createObjectURL(image);
+      } else {
+        return undefined;
+      }
+    };
     if (image) {
       setImageUrl(getUrl());
     }
@@ -171,7 +186,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
 
   useEffect(() => {
     if (selectedPhotograph) {
-      setImageUrl(selectedPhotograph?.path);
+      setImageUrl(`${GALLERY_PATH}/${selectedPhotograph?.path}`);
       reset({
         description: selectedPhotograph.description,
       });

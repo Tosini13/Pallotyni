@@ -20,7 +20,6 @@ import { MainGridStyled } from "../../style/MainStyled";
 import { AlbumStoreContext } from "../../stores/GalleryStore";
 import { useParams } from "react-router";
 import { Id } from "../../models/Global";
-import { GALLERY_PATH } from "../../models/const";
 
 const breakpoints = {
   md: 5 as GridSize,
@@ -35,8 +34,6 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
   }>();
   const storeAlbum = useContext(AlbumStoreContext);
   const storePhotos = useContext(PhotosStoreContext);
-  const album = storeAlbum.getAlbum(albumId);
-  console.log(album);
   const [image, setImage] = useState<any>();
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [edition, setEdition] = useState<boolean>(false);
@@ -72,16 +69,6 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
     setSelectedPhoto(p);
   };
 
-  console.log(
-    "album?.photos",
-    album?.photos.map((photo) => photo)
-  );
-
-  console.log(
-    "storePhotos?.photos",
-    storePhotos?.photos.map((photo) => photo)
-  );
-
   return (
     <MainLayout img={BackgroundImg} title="Gallery">
       <SpeedDialContainer>
@@ -93,16 +80,33 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
       </SpeedDialContainer>
       <Grid container justify="space-around">
         {storePhotos?.photos.map((photo) => (
-          <Grid item>
-            <img
-              src={`${GALLERY_PATH}/${photo.path}`}
-              alt={photo.path}
-              style={{ width: "300px" }}
+          <React.Fragment key={photo.id}>
+            {/* <Grid item>
+              <img
+                src={`${GALLERY_PATH}/${photo.path}`}
+                alt={photo.path}
+                style={{ width: "300px" }}
+              />
+            </Grid> */}
+            <MainGridStyled
+              md={breakpoints.md}
+              item
+              key={photo.id}
+              onClick={() => handleAction(photo)}
+              style={{ position: "relative", overflow: "hidden" }}
+            >
+              <PhotoSummary photo={photo} edition={edition} removal={removal} />
+            </MainGridStyled>
+            <PhotoDetails
+              photo={photo}
+              open={photo.id === selectedPhoto?.id && !removal && !edition}
+              handleClose={() => setSelectedPhoto(undefined)}
             />
-          </Grid>
+          </React.Fragment>
         ))}
       </Grid>
       <PhotoForm
+        albumId={albumId}
         image={image}
         setImage={setImage}
         open={Boolean(openForm && !removal)}
@@ -118,7 +122,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
         <ButtonSuccess
           onClick={() => {
             if (selectedPhoto) {
-              storePhotos.removePhoto(selectedPhoto);
+              storePhotos.removePhoto({ photograph: selectedPhoto, albumId });
               handleClearActionsSD();
             }
           }}

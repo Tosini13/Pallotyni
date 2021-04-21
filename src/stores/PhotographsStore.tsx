@@ -15,7 +15,13 @@ import {
   IMAGES_API_URL,
   PHOTOGRAPHS_API_URL,
   MANY_IMAGES_API_URL,
+  getAlbumPhotographsUrl,
 } from "../models/const";
+
+export type TRemovePhoto = {
+  photograph: Photograph;
+  albumId: Id;
+};
 
 export class Photograph {
   @observable
@@ -55,7 +61,11 @@ export class PhotosStore {
     }
   }
 
-  async createPhoto({ description, imageFile }: TCreatePhotographAndImage) {
+  async createPhoto({
+    description,
+    imageFile,
+    albumId,
+  }: TCreatePhotographAndImage) {
     let formData = new FormData();
     formData.append("img", imageFile);
     const imageData = await axios.post(IMAGES_API_URL, formData, {
@@ -69,9 +79,11 @@ export class PhotosStore {
         description,
         path: path,
       };
-      const data = await axios.post(PHOTOGRAPHS_API_URL, photograph);
+      const data = await axios.post(
+        `${PHOTOGRAPHS_API_URL}/${albumId}`,
+        photograph
+      );
       const photographData = data.data as TPhotograph;
-      console.log(photographData);
       if (photographData) {
         this.photos = [new Photograph(photographData), ...this.photos];
       } else {
@@ -108,37 +120,33 @@ export class PhotosStore {
     path,
     imageFile,
   }: TUpdatePhotographAndImage) {
-    console.log(id, description, path, imageFile);
-    let formData = new FormData();
-    formData.append("img", imageFile);
-    const imageData = await axios.put(`${IMAGES_API_URL}/${path}`, formData, {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    });
-    const newPath = imageData.data as string;
-    console.log(newPath);
-    if (newPath) {
-      const photograph: TCreatePhotograph = {
-        description,
-        path: newPath,
-      };
-      const data = await axios.put(`${PHOTOGRAPHS_API_URL}/${id}`, photograph);
-      const photographData = data.data as TPhotograph;
-      console.log(photographData);
-      if (photographData) {
-        const photo = new Photograph(photographData);
-        this.photos = this.photos.map((p) => (p.id === photo.id ? photo : p));
-      } else {
-        console.log("error photo");
-      }
+    let updatedPath = path as string;
+    if (imageFile) {
+      let formData = new FormData();
+      formData.append("img", imageFile);
+      const imageData = await axios.put(`${IMAGES_API_URL}/${path}`, formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      updatedPath = imageData.data as string;
+    }
+    const photograph: TCreatePhotograph = {
+      description,
+      path: updatedPath,
+    };
+    const data = await axios.put(`${PHOTOGRAPHS_API_URL}/${id}`, photograph);
+    const photographData = data.data as TPhotograph;
+    if (photographData) {
+      const photo = new Photograph(photographData);
+      this.photos = this.photos.map((p) => (p.id === photo.id ? photo : p));
     } else {
-      console.log("error image");
+      console.log("error photo");
     }
     // TODO: delete old image file
   }
 
-  async removePhoto(photograph: Photograph) {
+  async removePhoto({ photograph, albumId }: TRemovePhoto) {
     const imageData = await axios.delete(
       `${IMAGES_API_URL}/${photograph.path}`
     );
@@ -146,7 +154,7 @@ export class PhotosStore {
     console.log(path);
     if (path) {
       const data = await axios.delete(
-        `${PHOTOGRAPHS_API_URL}/${photograph.id}`
+        getAlbumPhotographsUrl({ photographId: photograph.id, albumId })
       );
       const photographData = data.data as TPhotograph;
       console.log(photographData);

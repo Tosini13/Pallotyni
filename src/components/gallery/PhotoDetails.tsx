@@ -1,12 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { Dialog, DialogContent, Typography } from "@material-ui/core";
 import { Photograph } from "../../stores/PhotographsStore";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
@@ -35,6 +29,7 @@ const PhotoDetails: React.FC<PhotoDetailsProps> = ({
       <div style={{ position: "relative" }}>
         <img
           src={`${GALLERY_PATH}/${photo.path}`}
+          alt={photo.path}
           style={{ maxHeight: "400px", maxWidth: "360px" }}
         />
         <DialogContent>
