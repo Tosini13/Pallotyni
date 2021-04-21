@@ -111,17 +111,23 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
               onMouseLeave={() => setMouseOverPhoto(false)}
             >
               {album.coverPhoto ? (
-                // <ImgStyled
-                //   src={`${GALLERY_PATH}/${album.coverPhoto?.path}`}
-                //   alt={album.coverPhoto?.path}
-                //   action={parseStyledBoolean(edition || removal)}
-                //   hovered={parseStyledBoolean(
-                //     (edition || removal) && mouseOverPhoto
-                //   )}
-                // />
-                <p>PHOTO</p>
+                <ImgStyled
+                  src={`${GALLERY_PATH}/${album.coverPhoto?.path}`}
+                  alt={album.coverPhoto?.path}
+                  action={parseStyledBoolean(edition || removal)}
+                  hovered={parseStyledBoolean(
+                    (edition || removal) && mouseOverPhoto
+                  )}
+                />
               ) : (
-                <p>Loading...</p>
+                <p
+                  style={{
+                    height: "150px",
+                    width: "150px",
+                  }}
+                >
+                  Loading...
+                </p>
               )}
             </ImgContainer>
           </AlbumSummary>
