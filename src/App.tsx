@@ -5,7 +5,7 @@ import styled from "styled-components";
 import AboutUs from "./components/aboutUs/AboutUs";
 import ConfessionsView from "./components/confessions/ConfessionsView";
 import DailyMessage from "./components/dailyMessage/DailyMessage";
-import Gallery from "./components/gallery/Gallery";
+import Photos from "./components/gallery/Photos";
 import NavBar from "./components/nav/NavBar";
 import News from "./components/news/News";
 import SideBarNews from "./components/news/sideBar/SideBarNews";
@@ -16,6 +16,7 @@ import { RoutingPath } from "./models/Global";
 import { mainTheme } from "./style/config";
 import Home from "./components/home/Home";
 import BackgroundImg from "./resources/images/old_stettin_roofs.png";
+import Albums from "./components/albums/Albums";
 
 const navHeight = "60px";
 
@@ -39,7 +40,6 @@ min-height: calc(100vh - ${navHeight});
 `;
 
 const GridColumnsStyled = styled.div`
-  padding: 1.5px;
   box-sizing: border-box;
 `;
 
@@ -64,7 +64,8 @@ function App() {
                 path={RoutingPath.confessions}
                 component={ConfessionsView}
               />
-              <Route path={RoutingPath.gallery} component={Gallery} />
+              <Route path={RoutingPath.gallery} component={Albums} />
+              <Route path={RoutingPath.album} component={Photos} />
               <Route path={RoutingPath.stellaMaris} component={StellaMaris} />
               <Route exact path={RoutingPath.news} component={News} />
               <Route exact path={RoutingPath.home} component={Home} />

@@ -9,6 +9,7 @@ import styled from "styled-components";
 export const DialogStyled = styled(Dialog)`
   .MuiDialog-paper {
     width: 99vw;
+    background-color: gray;
   }
 `;
 export interface QuestionDialogProps {

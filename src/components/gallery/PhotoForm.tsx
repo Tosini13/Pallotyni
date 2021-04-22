@@ -1,11 +1,10 @@
-import { format } from "date-fns";
 import imageCompression from "browser-image-compression";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import ClearIcon from "@material-ui/icons/Clear";
 
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
-import { Photograph, PhotosStoreContext } from "../../stores/GalleryStore";
+import { Photograph, PhotosStoreContext } from "../../stores/PhotographsStore";
 import {
   Dialog,
   DialogActions,
@@ -16,13 +15,10 @@ import {
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  TCreatePhotograph,
-  TCreatePhotographAndImage,
-} from "../../models/Photograph";
+import { TCreatePhotographAndImage } from "../../models/Photograph";
 import TextFieldC from "../../componentsReusable/Forms";
-import { DATE_TIME_FORMAT } from "../../models/Global";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
+import { GALLERY_PATH } from "../../models/const";
 
 const AddAPhotoIconStyled = styled(AddAPhotoIcon)<{ error?: string }>`
   transition: all 0.2s;
@@ -84,6 +80,7 @@ type TPhotographForm = Omit<
 >;
 
 export interface PhotoFormProps {
+  albumId: string;
   image: any;
   setImage: (image: any) => void;
   open: boolean;
@@ -92,6 +89,7 @@ export interface PhotoFormProps {
 }
 
 const PhotoForm: React.FC<PhotoFormProps> = ({
+  albumId,
   image,
   setImage,
   open,
@@ -122,9 +120,21 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   };
 
   const onSubmit = (data: TPhotographForm) => {
-    if (!image) {
+    console.log(data);
+    console.log(image);
+    console.log(selectedPhotograph);
+
+    if (!image && !imgUrl) {
       setImageError(true);
-    } else if (selectedPhotograph) {
+    } else if (selectedPhotograph && image) {
+      photoStore.updatePhoto({
+        id: selectedPhotograph.id,
+        path: selectedPhotograph.path,
+        description: data.description,
+        imageFile: image,
+      });
+      handleCloseForm();
+    } else if (selectedPhotograph && !image) {
       photoStore.updatePhoto({
         id: selectedPhotograph.id,
         path: selectedPhotograph.path,
@@ -134,6 +144,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
       handleCloseForm();
     } else {
       photoStore.createPhoto({
+        albumId,
         description: data.description,
         imageFile: image,
       });
@@ -144,14 +155,6 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   const onRemoveImage = () => {
     setImage(null);
     setImageUrl(undefined);
-  };
-
-  const getUrl = () => {
-    if (image) {
-      return URL.createObjectURL(image);
-    } else {
-      return undefined;
-    }
   };
 
   const clearForm = () => {
@@ -169,6 +172,13 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   };
 
   useEffect(() => {
+    const getUrl = () => {
+      if (image) {
+        return URL.createObjectURL(image);
+      } else {
+        return undefined;
+      }
+    };
     if (image) {
       setImageUrl(getUrl());
     }
@@ -176,7 +186,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
 
   useEffect(() => {
     if (selectedPhotograph) {
-      setImageUrl(selectedPhotograph?.path);
+      setImageUrl(`${GALLERY_PATH}/${selectedPhotograph?.path}`);
       reset({
         description: selectedPhotograph.description,
       });

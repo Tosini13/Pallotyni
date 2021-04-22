@@ -13,7 +13,12 @@ export enum RoutingPath {
   confessions = "/confessions",
   gallery = "/gallery",
   news = "/news",
+  album = "/albums/:id",
 }
+
+export const GetRoute = {
+  album: (id: string) => `/albums/${id}`,
+};
 
 export enum Day {
   mon = "MONDAY",
