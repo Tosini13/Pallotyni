@@ -14,10 +14,17 @@ export const PHOTOGRAPHS_API_URL = `${API_URL}/photographs`;
 export const ALBUM_PHOTOGRAPHS_API_URL = `${API_URL}/albums/:albumId/photographs/:photographId`;
 export const GALLERY_PATH = `${SERVER_URL}/gallery`;
 
-type TAlbumPhotographsUrlParams = { photographId: Id; albumId: Id };
-export const getAlbumPhotographsUrl = ({
+type TUrlAlbumPhotographParams = { photographId: Id; albumId: Id };
+export const urlAlbumPhotograph = ({
   photographId,
   albumId,
-}: TAlbumPhotographsUrlParams) => {
+}: TUrlAlbumPhotographParams) => {
   return `${API_URL}/albums/${albumId}/photographs/${photographId}`;
+};
+
+type TAlbumPhotographsUrlParams = { albumId: Id };
+export const urlAlbumPhotographs = ({
+  albumId,
+}: TAlbumPhotographsUrlParams) => {
+  return `${API_URL}/albums/${albumId}/photographs`;
 };

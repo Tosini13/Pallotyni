@@ -40,7 +40,6 @@ min-height: calc(100vh - ${navHeight});
 `;
 
 const GridColumnsStyled = styled.div`
-  padding: 1.5px;
   box-sizing: border-box;
 `;
 

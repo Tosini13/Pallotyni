@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 
-import { Grid } from "@material-ui/core";
+import { CircularProgress, Grid } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -106,11 +106,11 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
             handleAction={handleAction}
             key={album.id}
           >
-            <ImgContainer
-              onMouseOver={() => setMouseOverPhoto(true)}
-              onMouseLeave={() => setMouseOverPhoto(false)}
-            >
-              {album.coverPhoto ? (
+            {album.coverPhoto ? (
+              <ImgContainer
+                onMouseOver={() => setMouseOverPhoto(true)}
+                onMouseLeave={() => setMouseOverPhoto(false)}
+              >
                 <ImgStyled
                   src={`${GALLERY_PATH}/${album.coverPhoto?.path}`}
                   alt={album.coverPhoto?.path}
@@ -119,17 +119,10 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
                     (edition || removal) && mouseOverPhoto
                   )}
                 />
-              ) : (
-                <p
-                  style={{
-                    height: "150px",
-                    width: "150px",
-                  }}
-                >
-                  Loading...
-                </p>
-              )}
-            </ImgContainer>
+              </ImgContainer>
+            ) : (
+              <CircularProgress />
+            )}
           </AlbumSummary>
         ))}
       </Grid>

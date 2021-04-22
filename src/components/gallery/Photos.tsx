@@ -81,22 +81,15 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
       <Grid container justify="space-around">
         {storePhotos?.photos.map((photo) => (
           <React.Fragment key={photo.id}>
-            {/* <Grid item>
-              <img
-                src={`${GALLERY_PATH}/${photo.path}`}
-                alt={photo.path}
-                style={{ width: "300px" }}
-              />
-            </Grid> */}
-            <MainGridStyled
+            <Grid
               md={breakpoints.md}
               item
               key={photo.id}
               onClick={() => handleAction(photo)}
-              style={{ position: "relative", overflow: "hidden" }}
+              style={{ position: "relative" }}
             >
               <PhotoSummary photo={photo} edition={edition} removal={removal} />
-            </MainGridStyled>
+            </Grid>
             <PhotoDetails
               photo={photo}
               open={photo.id === selectedPhoto?.id && !removal && !edition}

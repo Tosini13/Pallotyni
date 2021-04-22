@@ -7,6 +7,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import { Photograph } from "../../stores/PhotographsStore";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import { GALLERY_PATH } from "../../models/const";
+import { CircularProgress } from "@material-ui/core";
 
 const ImgStyled = styled.img<{ action?: string; hovered?: string }>`
   height: 150px;
@@ -60,27 +61,28 @@ const PhotoSummary: React.FC<PhotoSummaryProps> = ({
   const [mouseOverPhoto, setMouseOverPhoto] = useState<boolean>(false);
   return (
     <>
-      <div
-        onMouseOver={() => setMouseOverPhoto(true)}
-        onMouseLeave={() => setMouseOverPhoto(false)}
-      >
+      {photo.path ? (
         <ImgStyled
           src={`${GALLERY_PATH}/${photo.path}`}
           alt={photo.path}
           action={parseStyledBoolean(edition || removal)}
           hovered={parseStyledBoolean((edition || removal) && mouseOverPhoto)}
+          onMouseOver={() => setMouseOverPhoto(true)}
+          onMouseLeave={() => setMouseOverPhoto(false)}
         />
-        {edition ? (
-          <ActionButtonStyled show={parseStyledBoolean(mouseOverPhoto)}>
-            <EditIcon />
-          </ActionButtonStyled>
-        ) : null}
-        {removal ? (
-          <ActionButtonStyled show={parseStyledBoolean(mouseOverPhoto)}>
-            <DeleteIcon />
-          </ActionButtonStyled>
-        ) : null}
-      </div>
+      ) : (
+        <CircularProgress />
+      )}
+      {edition ? (
+        <ActionButtonStyled show={parseStyledBoolean(mouseOverPhoto)}>
+          <EditIcon />
+        </ActionButtonStyled>
+      ) : null}
+      {removal ? (
+        <ActionButtonStyled show={parseStyledBoolean(mouseOverPhoto)}>
+          <DeleteIcon />
+        </ActionButtonStyled>
+      ) : null}
     </>
   );
 };

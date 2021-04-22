@@ -15,7 +15,8 @@ import {
   IMAGES_API_URL,
   PHOTOGRAPHS_API_URL,
   MANY_IMAGES_API_URL,
-  getAlbumPhotographsUrl,
+  urlAlbumPhotograph,
+  urlAlbumPhotographs,
 } from "../models/const";
 
 export type TRemovePhoto = {
@@ -50,7 +51,7 @@ export class PhotosStore {
 
   async fetch(albumId: Id) {
     console.log("albumId", albumId);
-    const data = await axios.get(`${PHOTOGRAPHS_API_URL}/${albumId}`);
+    const data = await axios.get(urlAlbumPhotographs({ albumId }));
     const photographs = data.data as TPhotograph[];
     console.log("photographs", photographs);
 
@@ -154,7 +155,7 @@ export class PhotosStore {
     console.log(path);
     if (path) {
       const data = await axios.delete(
-        getAlbumPhotographsUrl({ photographId: photograph.id, albumId })
+        urlAlbumPhotograph({ photographId: photograph.id, albumId })
       );
       const photographData = data.data as TPhotograph;
       console.log(photographData);

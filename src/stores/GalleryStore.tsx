@@ -6,7 +6,7 @@ import { Id } from "../models/Global";
 import {
   ALBUM_API_URL,
   ADD_MANY_PHOTOS_TO_ALBUM_API_URL,
-  PHOTOGRAPHS_API_URL,
+  urlAlbumPhotographs,
 } from "../models/const";
 import {
   TAlbum,
@@ -24,23 +24,14 @@ type TAddPhotosToAlbum = {
 };
 
 export class Album {
-  @observable
   id: Id;
-
-  @observable
   title: string;
-
-  @observable
   description: string;
-
-  @observable
   coverPhoto?: Photograph;
-
-  @observable
   photos: string[];
 
-  async getCoverPhoto() {
-    const data = await axios.get(PHOTOGRAPHS_API_URL);
+  async getCoverPhoto(albumId: Id) {
+    const data = await axios.get(urlAlbumPhotographs({ albumId }));
     const photograph = data.data[0] as TPhotograph;
     if (photograph) {
       this.coverPhoto = new Photograph(photograph);
@@ -54,13 +45,15 @@ export class Album {
       id: observable,
       title: observable,
       description: observable,
+      coverPhoto: observable,
+      photos: observable,
       getCoverPhoto: action,
     });
     this.id = id;
     this.title = title;
     this.description = description;
     this.photos = photos;
-    this.getCoverPhoto();
+    this.getCoverPhoto(id);
   }
 }
 
