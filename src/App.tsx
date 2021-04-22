@@ -19,6 +19,7 @@ import Albums from "./components/albums/Albums";
 
 const GlobalStyle = styled.div`
   ${ScrollBarStyled}
+  background-color: rgba(0,0,0,0.5);
 `;
 
 const MainContainerStyled = styled.div`
