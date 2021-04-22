@@ -12,6 +12,7 @@ const HomeServices: React.FC<HomeServicesProps> = observer(() => {
   useEffect(() => {
     storeServices.fetch();
   }, [storeServices]);
+  let noServices = true;
   return (
     <>
       {Object.values(Day).map((day) => {
@@ -20,6 +21,7 @@ const HomeServices: React.FC<HomeServicesProps> = observer(() => {
         if (!services.length) {
           return null;
         }
+        noServices = false;
         return (
           <Grid container direction="column">
             <Grid item>
@@ -37,7 +39,7 @@ const HomeServices: React.FC<HomeServicesProps> = observer(() => {
           </Grid>
         );
       })}
-      {storeServices.getTodayServices.length === 0 ? (
+      {noServices ? (
         <Typography color="textPrimary">No Services</Typography>
       ) : null}
     </>

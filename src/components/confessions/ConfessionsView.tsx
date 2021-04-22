@@ -18,7 +18,7 @@ import { observer } from "mobx-react";
 import SpeedDialComponent from "../SpeedDial";
 import { SpeedDialContainer } from "../../style/SpeedDial";
 import { TypographySelectableStyled } from "../services/ServicesView";
-import { Grid, GridSize } from "@material-ui/core";
+import { Grid, GridSize, Typography } from "@material-ui/core";
 import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/church_cross.png";
@@ -59,7 +59,7 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(({}) => {
   };
   useEffect(() => {
     storeConfession.fetch();
-  }, []);
+  }, [storeConfession]);
 
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
@@ -79,22 +79,33 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(({}) => {
       <Grid container justify="space-around">
         <MainGridStyled md={breakpoints.md}>
           <TitleTypography>Powtarzająca się Spowiedź</TitleTypography>
-          {Object.values(Day).map((day) => (
-            <div key={day}>
-              <h5>{day}</h5>
-              {storeConfession.getConfessionsByDay(day).map((confession) => (
-                <TypographySelectableStyled
-                  color="textPrimary"
-                  key={confession.id}
-                  selectable={parseStyledBoolean(edition || removal)}
-                  onClick={() => handleSelectConfession(confession)}
-                >
-                  {confession.fromTime} - {confession.toTime} :{" "}
-                  {confession.title}
-                </TypographySelectableStyled>
-              ))}
-            </div>
-          ))}
+
+          {Object.values(Day).map((day) => {
+            const confessions = storeConfession.getConfessionsByDay(day);
+            if (!confessions.length) {
+              return null;
+            }
+            return (
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography
+                    color="textPrimary"
+                    style={{ fontWeight: "bold" }}
+                  >
+                    {day}
+                  </Typography>
+                </Grid>
+                {confessions.map((confessions) => (
+                  <Grid item style={{ paddingLeft: "20px" }}>
+                    <Typography color="textPrimary">
+                      {confessions.fromTime} - {confessions.toTime}{" "}
+                      {confessions.priest}
+                    </Typography>
+                  </Grid>
+                ))}
+              </Grid>
+            );
+          })}
         </MainGridStyled>
         <MainGridStyled md={breakpoints.md}>
           <TitleTypography>Pojedyncza spowiedź</TitleTypography>

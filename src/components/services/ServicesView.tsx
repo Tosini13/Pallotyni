@@ -99,24 +99,28 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
       <Grid container justify="space-around">
         <MainGridStyled md={breakpoints.md}>
           <TitleTypography>Powtarzające się msze święte</TitleTypography>
-          {Object.values(Day).map((day) => (
-            <DayContainerStyled
-              key={day}
-              serviceSelectable={parseStyledBoolean(edition || removal)}
-            >
-              <h5>{day}</h5>
-              {storeServices.getServicesByDay(day).map((service) => (
-                <TypographySelectableStyled
-                  color="textPrimary"
-                  key={service.id}
-                  selectable={parseStyledBoolean(edition || removal)}
-                  onClick={() => handleSelectService(service)}
-                >
-                  {service.time} - {service.title}
-                </TypographySelectableStyled>
-              ))}
-            </DayContainerStyled>
-          ))}
+          {Object.values(Day).map((day) => {
+            const services = storeServices.getServicesByDay(day);
+            return (
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography
+                    color="textPrimary"
+                    style={{ fontWeight: "bold" }}
+                  >
+                    {day}
+                  </Typography>
+                </Grid>
+                {services.map((service) => (
+                  <Grid item style={{ paddingLeft: "20px" }}>
+                    <Typography color="textPrimary">
+                      {service.time} - {service.title}
+                    </Typography>
+                  </Grid>
+                ))}
+              </Grid>
+            );
+          })}
         </MainGridStyled>
         <MainGridStyled md={breakpoints.md}>
           <TitleTypography>Pojedyncze msze święte</TitleTypography>
