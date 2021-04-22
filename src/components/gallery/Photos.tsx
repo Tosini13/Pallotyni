@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import styled from "styled-components";
 
-import { Grid, GridSize, Typography } from "@material-ui/core";
+import { Grid, GridSize } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { Photograph, PhotosStoreContext } from "../../stores/GalleryStore";
+import { Photograph, PhotosStoreContext } from "../../stores/PhotographsStore";
 import PhotoDetails from "./PhotoDetails";
 import { SpeedDialContainer } from "../../style/SpeedDial";
 import SpeedDialComponent from "../SpeedDial";
@@ -18,6 +17,9 @@ import PhotoForm from "./PhotoForm";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import MainLayout from "../layout/MainLayout";
 import { MainGridStyled } from "../../style/MainStyled";
+import { AlbumStoreContext } from "../../stores/GalleryStore";
+import { useParams } from "react-router";
+import { Id } from "../../models/Global";
 
 const breakpoints = {
   md: 5 as GridSize,
@@ -27,8 +29,11 @@ const breakpoints = {
 export interface GalleryProps {}
 
 const Gallery: React.FC<GalleryProps> = observer(() => {
-  const store = useContext(PhotosStoreContext);
-
+  const { id: albumId } = useParams<{
+    id: Id;
+  }>();
+  const storeAlbum = useContext(AlbumStoreContext);
+  const storePhotos = useContext(PhotosStoreContext);
   const [image, setImage] = useState<any>();
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [edition, setEdition] = useState<boolean>(false);
@@ -36,8 +41,12 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photograph | undefined>();
 
   useEffect(() => {
-    store.fetch();
-  }, []);
+    storePhotos.fetch(albumId);
+  }, [storePhotos, albumId]);
+
+  useEffect(() => {
+    storeAlbum.fetch();
+  }, [storeAlbum]);
 
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
@@ -70,17 +79,17 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
         />
       </SpeedDialContainer>
       <Grid container justify="space-around">
-        {store.getPhotos().map((photo) => (
+        {storePhotos?.photos.map((photo) => (
           <React.Fragment key={photo.id}>
-            <MainGridStyled
+            <Grid
               md={breakpoints.md}
               item
               key={photo.id}
               onClick={() => handleAction(photo)}
-              style={{ position: "relative", overflow: "hidden" }}
+              style={{ position: "relative" }}
             >
               <PhotoSummary photo={photo} edition={edition} removal={removal} />
-            </MainGridStyled>
+            </Grid>
             <PhotoDetails
               photo={photo}
               open={photo.id === selectedPhoto?.id && !removal && !edition}
@@ -90,6 +99,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
         ))}
       </Grid>
       <PhotoForm
+        albumId={albumId}
         image={image}
         setImage={setImage}
         open={Boolean(openForm && !removal)}
@@ -105,7 +115,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
         <ButtonSuccess
           onClick={() => {
             if (selectedPhoto) {
-              store.removePhoto(selectedPhoto);
+              storePhotos.removePhoto({ photograph: selectedPhoto, albumId });
               handleClearActionsSD();
             }
           }}
