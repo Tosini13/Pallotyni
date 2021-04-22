@@ -62,12 +62,7 @@ const NewsForm: React.FC<NewsFormProps> = ({
         <DialogContent>
           <Grid container direction="column" spacing={2}>
             <Grid item>
-              <TextFieldC
-                inputRef={register}
-                name="title"
-                label="title"
-                color="secondary"
-              />
+              <TextFieldC inputRef={register} name="title" label="title" />
             </Grid>
             <Grid item>
               <TextFieldC

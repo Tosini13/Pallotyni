@@ -13,7 +13,7 @@ export const TitleTypography = styled(Typography)`
 `;
 
 export const MainGridStyled = styled(Grid)`
-  background-color: #711515;
+  background-color: #3b0202;
   padding: 20px;
   margin-bottom: 50px;
 `;

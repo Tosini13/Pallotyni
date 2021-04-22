@@ -5,11 +5,12 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import styled from "styled-components";
+import { mainTheme } from "../style/config";
 
 export const DialogStyled = styled(Dialog)`
   .MuiDialog-paper {
     width: 99vw;
-    background-color: gray;
+    background-color: ${mainTheme.palette.primary.main};
   }
 `;
 export interface QuestionDialogProps {

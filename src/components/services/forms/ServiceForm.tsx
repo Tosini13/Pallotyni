@@ -11,12 +11,13 @@ import {
   ButtonSuccess,
 } from "../../../componentsReusable/Buttons";
 import { DialogStyled } from "../../../componentsReusable/Dialogs";
-import TextFieldC from "../../../componentsReusable/Forms";
+import TextFieldC, { inputStyle } from "../../../componentsReusable/Forms";
 import { Service, ServiceStoreContext } from "../../../stores/ServiceStore";
 import { DATE_FORMAT, Day } from "../../../models/Global";
 import { format } from "date-fns";
 import DatePickerSwitch from "./DatePickerSwitch";
 import { TServiceCreate } from "../../../models/Service";
+import { mainTheme } from "../../../style/config";
 
 type TServiceForm = TServiceCreate;
 

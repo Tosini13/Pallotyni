@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useContext, useEffect, useState } from "react";
 
-import { Grid, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -34,7 +34,7 @@ const News: React.FC<NewsProps> = observer(() => {
 
   useEffect(() => {
     newsStore.fetch();
-  }, []);
+  }, [newsStore]);
 
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },

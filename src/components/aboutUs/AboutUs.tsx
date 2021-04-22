@@ -80,7 +80,7 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
 
   useEffect(() => {
     storeParagraph.fetch();
-  }, []);
+  }, [storeParagraph]);
 
   const actionsSD = [
     { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },

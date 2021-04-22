@@ -11,8 +11,16 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import DayPicker from "./DayPicker";
+import { inputStyle } from "../../../componentsReusable/Forms";
+import { mainTheme } from "../../../style/config";
 
-const KeyboardDatePickerStyled = styled(KeyboardDatePicker)``;
+const KeyboardDatePickerStyled = styled(KeyboardDatePicker)`
+  ${inputStyle}
+  width: fit-content;
+  .MuiPickersDay-day {
+    color: ${mainTheme.palette.text.secondary};
+  }
+`;
 
 export interface DatePickerSwitchProps {
   register: any;
@@ -72,7 +80,6 @@ const DatePickerSwitch: React.FC<DatePickerSwitchProps> = ({
               KeyboardButtonProps={{
                 "aria-label": "change date",
               }}
-              color="secondary"
             />
           </MuiPickersUtilsProvider>
         )}
