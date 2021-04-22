@@ -55,7 +55,7 @@ export interface ServicesViewProps {
   handleClearActionsSD: () => void;
 }
 
-const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
+const ServicesView: React.FC<ServicesViewProps> = observer(() => {
   const storeServices = useContext(ServiceStoreContext);
   const singleServices = storeServices.getSingleService;
 
@@ -66,7 +66,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
 
   useEffect(() => {
     storeServices.fetch();
-  }, []);
+  }, [storeServices]);
 
   const handleClearActionsSD = () => {
     setRemoval(false);

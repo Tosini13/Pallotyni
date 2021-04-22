@@ -65,6 +65,7 @@ export class AlbumStore {
     const albumsData = data.data as TAlbum[];
     if (albumsData) {
       this.albums = albumsData.map((item) => new Album(item));
+      console.log(this.albums);
     } else {
       console.log("error");
     }
