@@ -82,12 +82,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       <ImgBackground src={img} ref={topRef}>
         <ImgShadow>
           <TitleContainer>
-            <Typography variant="h2" color="textSecondary" align="center">
+            <Typography variant="h2" color="secondary" align="center">
               {title}
             </Typography>
             {subtitle ? (
               <SubTitleContainer>
-                <Typography variant="h5" color="textPrimary">
+                <Typography variant="h5" color="textSecondary">
                   {subtitle}
                 </Typography>
               </SubTitleContainer>
@@ -99,7 +99,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
               mainRef.current?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            <ArrowForwardIosIcon />
+            <ArrowForwardIosIcon fontSize="large" />
           </IconButtonStyled>
         </ImgShadow>
       </ImgBackground>
@@ -111,7 +111,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             footerRef.current?.scrollIntoView({ behavior: "smooth" })
           }
         >
-          <ArrowForwardIosIcon />
+          <ArrowForwardIosIcon fontSize="large" />
         </IconButtonStyled>
       </MainContainer>
       <div ref={footerRef}>
@@ -120,7 +120,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           color="secondary"
           onClick={() => topRef.current?.scrollIntoView({ behavior: "smooth" })}
         >
-          <ArrowForwardIosIcon />
+          <ArrowForwardIosIcon fontSize="large" />
         </ScrollUpIconButtonStyled>
       </div>
     </>

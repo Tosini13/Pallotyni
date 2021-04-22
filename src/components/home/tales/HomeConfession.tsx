@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { observer } from "mobx-react";
 import { Typography } from "@material-ui/core";
-import { ConfessionStoreContext } from "../../stores/ConfessionStore";
+import { ConfessionStoreContext } from "../../../stores/ConfessionStore";
 
 export interface HomeConfessionsProps {}
 
@@ -10,7 +10,7 @@ const HomeConfessions: React.FC<HomeConfessionsProps> = observer(() => {
 
   useEffect(() => {
     storeConfessions.fetch();
-  }, []);
+  }, [storeConfessions]);
   return (
     <>
       {storeConfessions.confessions.map((confessions) => (

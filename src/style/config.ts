@@ -28,8 +28,8 @@ export const mainTheme = createMuiTheme({
       dark: "#07168A",
     },
     text: {
-      primary: "#fff",
-      secondary: "#C9A469", // GOLD
+      primary: "#273549", // NAVY
+      secondary: "#CECECE", // GOLD
     },
   },
 });

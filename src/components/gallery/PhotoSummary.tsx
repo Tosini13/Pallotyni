@@ -8,25 +8,7 @@ import { Photograph } from "../../stores/PhotographsStore";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import { GALLERY_PATH } from "../../models/const";
 import { CircularProgress } from "@material-ui/core";
-
-const ImgStyled = styled.img<{ action?: string; hovered?: string }>`
-  height: 150px;
-  border-radius: 3px;
-  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%),
-    0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &:hover {
-    ${(props) =>
-      props.action
-        ? `filter: grayscale(1);`
-        : `
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
-    transform: translate(-3px, -3px);`}
-  }
-  ${(props) => (props.hovered ? `filter: grayscale(1);` : ``)}
-`;
+import { ImgStyled } from "../../style/MainStyled";
 
 const ActionButtonStyled = styled.div<{ show?: string }>`
   transition: all 0.3s;

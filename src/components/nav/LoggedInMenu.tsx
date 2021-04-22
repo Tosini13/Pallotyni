@@ -17,7 +17,7 @@ const MenuTypo = `
   display: block;
   cursor: pointer;
   padding: 10px;
-  color: ${mainTheme.palette.text.primary};
+  color: ${mainTheme.palette.text.secondary};
   font-size: 20px;
   text-decoration: none;
   &:hover {

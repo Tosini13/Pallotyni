@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { observer } from "mobx-react";
 import { Typography } from "@material-ui/core";
-import { ServiceStoreContext } from "../../stores/ServiceStore";
+import { ServiceStoreContext } from "../../../stores/ServiceStore";
 
 export interface HomeServicesProps {}
 
@@ -10,7 +10,7 @@ const HomeServices: React.FC<HomeServicesProps> = observer(() => {
 
   useEffect(() => {
     storeServices.fetch();
-  }, []);
+  }, [storeServices]);
   return (
     <>
       {storeServices.getTodayServices.map((service) => (
