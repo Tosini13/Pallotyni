@@ -5,13 +5,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
 import { Photograph, PhotosStoreContext } from "../../stores/PhotographsStore";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-} from "@material-ui/core";
+import { DialogActions, DialogContent, Grid } from "@material-ui/core";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,7 +13,7 @@ import { TCreatePhotographAndImage } from "../../models/Photograph";
 import TextFieldC from "../../componentsReusable/Forms";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import { GALLERY_PATH } from "../../models/const";
-import { RCDialogTitle } from "../../componentsReusable/Dialogs";
+import { DialogStyled, RCDialogTitle } from "../../componentsReusable/Dialogs";
 
 const AddAPhotoIconStyled = styled(AddAPhotoIcon)<{ error?: string }>`
   transition: all 0.2s;
@@ -30,7 +24,7 @@ const ButtonRemoveLogoStyled = styled.div<{ error?: string }>`
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background-color: ${mainTheme.palette.primary.main};
+  background-color: ${mainTheme.palette.secondary.main};
   cursor: pointer;
   position: absolute;
   right: 0;
@@ -195,7 +189,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   }, [selectedPhotograph, reset, setImageUrl]);
 
   return (
-    <Dialog open={open} onClose={handleCloseForm}>
+    <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <RCDialogTitle>
           {selectedPhotograph ? "Edit" : "Create"} Photograph
@@ -243,7 +237,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
           <ButtonError onClick={handleCloseForm}>Cancel</ButtonError>
         </DialogActions>
       </form>
-    </Dialog>
+    </DialogStyled>
   );
 };
 
