@@ -43,7 +43,9 @@ const AlbumSummary: React.FC<AlbumSummaryProps> = ({
             </Grid>
           </Grid>
           <Grid item>
-            <Button onClick={() => setOpenForm(true)}>Add Photos</Button>
+            <Button variant="outlined" onClick={() => setOpenForm(true)}>
+              Add Photos
+            </Button>
           </Grid>
         </Grid>
       </MainGridStyled>

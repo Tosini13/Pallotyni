@@ -16,13 +16,6 @@ import { GetRoute } from "../../models/Global";
 import AlbumSummary from "./AlbumSummary";
 import RCButtonsCUD from "../../componentsReusable/ButtonsCUD";
 
-const ImgContainer = styled.div`
-  padding: 10px;
-  background-color: black;
-  width: fit-content;
-  margin: auto;
-`;
-
 const ImgStyled = styled.img<{ action?: string; hovered?: string }>`
   height: 150px;
   border-radius: 3px;
@@ -99,19 +92,14 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
             key={album.id}
           >
             {album.coverPhoto ? (
-              <ImgContainer
-                onMouseOver={() => setMouseOverPhoto(true)}
-                onMouseLeave={() => setMouseOverPhoto(false)}
-              >
-                <ImgStyled
-                  src={`${GALLERY_PATH}/${album.coverPhoto?.path}`}
-                  alt={album.coverPhoto?.path}
-                  action={parseStyledBoolean(edition || removal)}
-                  hovered={parseStyledBoolean(
-                    (edition || removal) && mouseOverPhoto
-                  )}
-                />
-              </ImgContainer>
+              <ImgStyled
+                src={`${GALLERY_PATH}/${album.coverPhoto?.path}`}
+                alt={album.coverPhoto?.path}
+                action={parseStyledBoolean(edition || removal)}
+                hovered={parseStyledBoolean(
+                  (edition || removal) && mouseOverPhoto
+                )}
+              />
             ) : (
               <CircularProgress />
             )}

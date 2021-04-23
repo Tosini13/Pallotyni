@@ -2,7 +2,6 @@ import styled from "styled-components";
 import {
   DialogActions,
   DialogContent,
-  DialogTitle,
   Grid,
   Typography,
 } from "@material-ui/core";
@@ -10,13 +9,18 @@ import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TCreatePhotographAndImage } from "../../models/Photograph";
-import { DialogStyled } from "../../componentsReusable/Dialogs";
+import { DialogStyled, RCDialogTitle } from "../../componentsReusable/Dialogs";
 import { PhotosStoreContext } from "../../stores/PhotographsStore";
 import { Album, AlbumStoreContext } from "../../stores/GalleryStore";
+import { mainTheme } from "../../style/config";
 
 const TypographyButton = styled(Typography)`
   padding: 10px;
   cursor: pointer;
+  background-color: ${mainTheme.palette.secondary.main};
+  border-radius: 5px;
+  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%),
+    0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
 `;
 
 const LogoContainerStyled = styled.div`
@@ -113,13 +117,11 @@ const PhotosForm: React.FC<PhotosFormProps> = ({
   return (
     <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>
-          <Typography color="textPrimary">Add Photographs to Album</Typography>
-        </DialogTitle>
+        <RCDialogTitle>Add Photographs to Album</RCDialogTitle>
         <DialogContent>
           <Grid container direction="column" spacing={2}>
             <Grid item>
-              <Typography color="textPrimary">
+              <Typography color="textSecondary">
                 No. Images {images.length} {imageError ? "!ERRROR!" : null}
               </Typography>
             </Grid>
