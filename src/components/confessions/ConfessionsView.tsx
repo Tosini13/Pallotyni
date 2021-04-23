@@ -37,7 +37,7 @@ export interface ConfessionsViewProps {
   handleClearActionsSD: () => void;
 }
 
-const ConfessionsView: React.FC<ConfessionsViewProps> = observer(({}) => {
+const ConfessionsView: React.FC<ConfessionsViewProps> = observer(() => {
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [edition, setEdition] = useState<boolean>(false);
   const [removal, setRemoval] = useState<boolean>(false);
@@ -78,7 +78,7 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(({}) => {
       </SpeedDialContainer>
       <Grid container justify="space-around">
         <MainGridStyled md={breakpoints.md}>
-          <TitleTypography>Powtarzająca się Spowiedź</TitleTypography>
+          <TitleTypography>Spowiedź co tydzień</TitleTypography>
 
           {Object.values(Day).map((day) => {
             const confessions = storeConfession.getConfessionsByDay(day);

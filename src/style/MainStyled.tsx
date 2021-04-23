@@ -1,8 +1,9 @@
-import { Grid, Typography } from "@material-ui/core";
+import React from "react";
+import { Grid, Typography, TypographyProps } from "@material-ui/core";
 import styled from "styled-components";
 import { mainTheme } from "./config";
 
-export const TitleTypography = styled(Typography)`
+export const TitleTypographyStyled = styled(Typography)`
   margin: auto;
   width: fit-content;
   padding: 10px 20px;
@@ -11,6 +12,15 @@ export const TitleTypography = styled(Typography)`
   color: ${mainTheme.palette.text.primary};
   text-transform: uppercase;
 `;
+
+export const TitleTypography: React.FC<TypographyProps> = ({
+  children,
+  ...props
+}) => (
+  <TitleTypographyStyled variant="h5" {...props}>
+    {children}
+  </TitleTypographyStyled>
+);
 
 export const MainGridStyled = styled(Grid)`
   padding: 20px;

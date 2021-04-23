@@ -21,8 +21,6 @@ import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
 
-const DayContainerStyled = styled.div<{ serviceSelectable?: string }>``;
-
 const breakpoints = {
   md: 5 as GridSize,
   xs: 12 as GridSize,
@@ -98,7 +96,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
       </SpeedDialContainer>
       <Grid container justify="space-around">
         <MainGridStyled md={breakpoints.md}>
-          <TitleTypography>Powtarzające się msze święte</TitleTypography>
+          <TitleTypography>Msze święte co tydzień</TitleTypography>
           {Object.values(Day).map((day) => {
             const services = storeServices.getServicesByDay(day);
             return (

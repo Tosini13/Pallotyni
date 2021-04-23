@@ -1,11 +1,11 @@
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/background_main.jpg";
 import { Divider, Grid, GridSize } from "@material-ui/core";
-import { TitleTypography, MainGridStyled } from "../../style/MainStyled";
 import HomeServices from "./tales/HomeServices";
 import HomeNews from "./tales/HomeNews";
 import HomeConfessions from "./tales/HomeConfession";
 import HomeAlbum from "./tales/HomeAlbum";
+import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
 
 const breakpoints = {
   md: 5 as GridSize,
@@ -30,28 +30,28 @@ const Home: React.FC<HomeProps> = () => {
             textAlign: "center",
           }}
         >
-          <TitleTypography variant="h5">Najnowszy Album</TitleTypography>
+          <TitleTypography>Najnowszy Album</TitleTypography>
           <HomeAlbum />
         </MainGridStyled>
         <Grid item>
           <Divider orientation="vertical" />
         </Grid>
         <MainGridStyled item md={breakpoints.md}>
-          <TitleTypography variant="h5">Msze Św.</TitleTypography>
+          <TitleTypography>Msze Św.</TitleTypography>
           <HomeServices />
         </MainGridStyled>
       </Grid>
       <Divider style={{ margin: "20px 0px" }} />
       <Grid container justify="space-around">
         <MainGridStyled item md={breakpoints.md}>
-          <TitleTypography variant="h5">Najnowsze Wydarzenia</TitleTypography>
+          <TitleTypography>Najnowsze Wydarzenia</TitleTypography>
           <HomeNews />
         </MainGridStyled>
         <Grid item>
           <Divider orientation="vertical" />
         </Grid>
         <MainGridStyled item md={breakpoints.md}>
-          <TitleTypography variant="h5">Spowiedź</TitleTypography>
+          <TitleTypography>Spowiedź</TitleTypography>
           <HomeConfessions />
         </MainGridStyled>
       </Grid>
