@@ -9,21 +9,30 @@ import { SERVICES_API_URL } from "../models/const";
 import axios from "axios";
 
 export class Service {
-  // if date is undefined days are defined and otherwise
-  @observable
+  // if date is undefined days have to defined and otherwise
   id: string;
-  @observable
   title: string;
-  @observable
   time: string;
-  @observable
   days?: Day[];
-  @observable
   date?: string;
-  @observable
   priest: string;
 
+  get show() {
+    return `${this.date ? format(new Date(this.date), DATE_FORMAT) : ""} ${
+      this.time
+    } - ${this.title}, ${this.priest}`;
+  }
+
   constructor({ id, title, time, days, date, priest }: TService) {
+    makeObservable(this, {
+      id: observable,
+      title: observable,
+      time: observable,
+      days: observable,
+      date: observable,
+      priest: observable,
+      show: computed,
+    });
     this.id = id;
     this.title = title;
     this.time = time;

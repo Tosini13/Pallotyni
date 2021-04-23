@@ -101,8 +101,7 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(() => {
                       onMouseLeave={() => setHovered(undefined)}
                       onClick={() => handleSelectConfession(confession)}
                     >
-                      {confession.fromTime} - {confession.toTime}{" "}
-                      {confession.priest}
+                      {confession.show}
                     </TypographySelectableStyled>
                   </Grid>
                 ))}
@@ -117,10 +116,14 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(() => {
               color="textPrimary"
               key={confession.id}
               selectable={parseStyledBoolean(edition || removal)}
+              hovered={parseStyledBoolean(
+                (edition || removal) && hovered?.id === confession.id
+              )}
+              onMouseEnter={() => setHovered(confession)}
+              onMouseLeave={() => setHovered(undefined)}
               onClick={() => handleSelectConfession(confession)}
             >
-              {format(new Date(confession.date ?? ""), DATE_FORMAT)}{" "}
-              {confession.fromTime} - {confession.toTime}: {confession.title}
+              {confession.show}
             </TypographySelectableStyled>
           ))}
         </MainGridStyled>

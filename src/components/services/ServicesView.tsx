@@ -122,7 +122,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
                       onMouseLeave={() => setHovered(undefined)}
                       onClick={() => handleSelectService(service)}
                     >
-                      {service.time} - {service.title}
+                      {service.time} - {service.title}, {service.priest}
                     </TypographySelectableStyled>
                   </Grid>
                 ))}
@@ -139,10 +139,14 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
                   color="textPrimary"
                   key={service.id}
                   selectable={parseStyledBoolean(edition || removal)}
+                  hovered={parseStyledBoolean(
+                    (edition || removal) && hovered?.id === service.id
+                  )}
+                  onMouseEnter={() => setHovered(service)}
+                  onMouseLeave={() => setHovered(undefined)}
                   onClick={() => handleSelectService(service)}
                 >
-                  {format(new Date(service.date ?? ""), DATE_FORMAT)}{" "}
-                  {service.time} - {service.title}
+                  {service.show}
                 </TypographySelectableStyled>
               ))}
             </>
