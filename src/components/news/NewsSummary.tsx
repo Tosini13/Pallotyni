@@ -24,15 +24,19 @@ const NewsSummary: React.FC<NewsSummaryProps> = ({ news }) => {
       <Grid container justify="center">
         {news.title ? (
           <Grid item xs={10}>
-            {/* <Typography variant="h5">{news.title}</Typography>{" "} */}
-            <TitleTypography>{news.title}</TitleTypography>
+            <TitleTypography
+              variant="h6"
+              style={{ padding: "5px 50px", marginBottom: "10px" }}
+            >
+              {news.title}
+            </TitleTypography>
           </Grid>
         ) : null}
         <DateTypographyStyled variant="body2" color="textPrimary">
           {news.createdAt}
         </DateTypographyStyled>
       </Grid>
-      <ContentTypographyStyled color="textPrimary">
+      <ContentTypographyStyled color="textPrimary" align="justify">
         {news.content}
       </ContentTypographyStyled>
     </>

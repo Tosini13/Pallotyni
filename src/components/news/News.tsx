@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { Grid } from "@material-ui/core";
+import { Divider, Grid } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -51,9 +51,15 @@ const News: React.FC<NewsProps> = observer(() => {
   };
 
   const IS_ADMIN_TEMP = true; // TODO: change with real admin value;
+  const allNews = newsStore.getAllNews();
   return (
     <MainLayout img={BackgroundImg} title="Aktualności">
-      <Grid container spacing={3} style={{ position: "relative" }}>
+      <Grid
+        container
+        spacing={3}
+        justify="center"
+        style={{ position: "relative" }}
+      >
         {IS_ADMIN_TEMP ? (
           <RCButtonsCUD
             handleAdd={() => setOpenForm(true)}
@@ -62,29 +68,35 @@ const News: React.FC<NewsProps> = observer(() => {
             handleCancel={handleClearActionsSD}
           />
         ) : null}
-        {newsStore.getAllNews().map((news) => (
-          <GridActionStyled
-            item
-            key={news.id}
-            edition={parseStyledBoolean(edition || removal)}
-            onClick={() => handleAction(news)}
-          >
-            <NewsSummary news={news} />
-            {edition ? (
-              <HoverStyled>
-                <ActionButtonStyled>
-                  <EditIcon fontSize="large" />
-                </ActionButtonStyled>
-              </HoverStyled>
-            ) : null}
-            {removal ? (
-              <HoverStyled>
-                <ActionButtonStyled>
-                  <DeleteIcon fontSize="large" />
-                </ActionButtonStyled>
-              </HoverStyled>
-            ) : null}
-          </GridActionStyled>
+        {allNews.map((news, i) => (
+          <React.Fragment key={news.id}>
+            <GridActionStyled
+              item
+              edition={parseStyledBoolean(edition || removal)}
+              onClick={() => handleAction(news)}
+            >
+              <NewsSummary news={news} />
+              {edition ? (
+                <HoverStyled>
+                  <ActionButtonStyled>
+                    <EditIcon fontSize="large" />
+                  </ActionButtonStyled>
+                </HoverStyled>
+              ) : null}
+              {removal ? (
+                <HoverStyled>
+                  <ActionButtonStyled>
+                    <DeleteIcon fontSize="large" />
+                  </ActionButtonStyled>
+                </HoverStyled>
+              ) : null}
+            </GridActionStyled>
+            {allNews.length === i + 1 ? null : (
+              <Grid item xs={10}>
+                <Divider orientation="horizontal" />
+              </Grid>
+            )}
+          </React.Fragment>
         ))}
       </Grid>
       <NewsForm
@@ -96,7 +108,6 @@ const News: React.FC<NewsProps> = observer(() => {
         open={Boolean(selectedNews && removal)}
         handleClose={handleClearActionsSD}
         title="Do you want to delete?"
-        content="Do you want to delete?"
       >
         <ButtonSuccess
           onClick={() => {
