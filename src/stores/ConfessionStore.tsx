@@ -1,30 +1,28 @@
 import React, { createContext } from "react";
 import { action, computed, makeObservable, observable } from "mobx";
-import { Day } from "../models/Global";
+import { DATE_FORMAT, Day } from "../models/Global";
 import axios from "axios";
 import { CONFESSIONS_API_URL } from "../models/const";
 import { TConfession, TCreateConfession } from "../models/Confession";
-import { isSameDay, isAfter } from "date-fns";
+import { isSameDay, isAfter, format } from "date-fns";
 const add = require("date-fns/add");
 const isBefore = require("date-fns/isBefore");
 const isSameMinute = require("date-fns/isSameMinute");
 
 export class Confession {
   // if date is undefined days are defined and otherwise
-  @observable
   id: string;
-  @observable
   title: string;
-  @observable
   date?: string;
-  @observable
   days?: Day[];
-  @observable
   fromTime: string;
-  @observable
   toTime: string;
-  @observable
   priest: string;
+
+  get show() {
+    return `${this.date ? format(new Date(this.date), DATE_FORMAT) : ""}
+    ${this.fromTime} - ${this.toTime}: ${this.title}, ${this.priest}`;
+  }
 
   constructor({
     id,
@@ -35,6 +33,16 @@ export class Confession {
     toTime,
     priest,
   }: TConfession) {
+    makeObservable(this, {
+      id: observable,
+      title: observable,
+      days: observable,
+      date: observable,
+      fromTime: observable,
+      toTime: observable,
+      priest: observable,
+      show: computed,
+    });
     this.id = id;
     this.title = title;
     this.date = date;

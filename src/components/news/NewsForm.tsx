@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { ButtonSuccess, ButtonError } from "../../componentsReusable/Buttons";
-import { DialogStyled } from "../../componentsReusable/Dialogs";
+import { DialogStyled, RCDialogTitle } from "../../componentsReusable/Dialogs";
 import TextFieldC from "../../componentsReusable/Forms";
 import { TNews, TNewsCreate } from "../../models/News";
 import { NewStoreContext } from "../../stores/NewsStore";
@@ -58,16 +58,11 @@ const NewsForm: React.FC<NewsFormProps> = ({
   return (
     <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>{selectedNews ? "Edit" : "Create"} News</DialogTitle>
+        <RCDialogTitle>{selectedNews ? "Edit" : "Create"} News</RCDialogTitle>
         <DialogContent>
           <Grid container direction="column" spacing={2}>
             <Grid item>
-              <TextFieldC
-                inputRef={register}
-                name="title"
-                label="title"
-                color="secondary"
-              />
+              <TextFieldC inputRef={register} name="title" label="title" />
             </Grid>
             <Grid item>
               <TextFieldC

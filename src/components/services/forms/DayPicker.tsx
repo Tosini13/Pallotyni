@@ -1,5 +1,4 @@
 import { Grid, Paper, Typography } from "@material-ui/core";
-import { useState } from "react";
 import styled from "styled-components";
 import { parseStyledBoolean } from "../../../helpers/BooleanParser";
 import { Day } from "../../../models/Global";
@@ -37,8 +36,6 @@ export interface DayPickerProps {
 }
 
 const DayPicker: React.FC<DayPickerProps> = ({ selected, handleSelect }) => {
-  console.log(selected);
-
   return (
     <Paper style={{ overflow: "hidden", margin: "23px 0px" }}>
       <DaysContainerStyled

@@ -3,22 +3,20 @@ import { observer } from "mobx-react";
 
 import { Grid, Typography } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import { ParagraphStoreContext } from "../../stores/AboutUsStore";
 import ParagraphForm from "./ParagraphForm";
-import SpeedDialComponent from "../SpeedDial";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
-import { SpeedDialContainer } from "../../style/SpeedDial";
 import { TParagraph } from "../../models/Paragraph";
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/background_main.jpg";
 import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
+import RCButtonsCUD from "../../componentsReusable/ButtonsCUD";
 
 export const HoverStyled = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -80,13 +78,7 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
 
   useEffect(() => {
     storeParagraph.fetch();
-  }, []);
-
-  const actionsSD = [
-    { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
-    { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
-    { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
-  ];
+  }, [storeParagraph]);
 
   const handleClearActionsSD = () => {
     setRemoval(false);
@@ -104,6 +96,7 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
     }
   };
 
+  const IS_ADMIN_TEMP = true; // TODO: change with real admin value;
   return (
     <MainLayout
       img={BackgroundImg}
@@ -113,14 +106,15 @@ const AboutUs: React.FC<AboutUsProps> = observer(() => {
       <Grid container spacing={3} style={{ position: "relative" }}>
         <Grid item>
           <Typography variant="h4">About us</Typography>
-        </Grid>
-        <SpeedDialContainer>
-          <SpeedDialComponent
-            actions={actionsSD}
-            blocked={Boolean(edition || removal || openForm)}
-            unBlock={handleClearActionsSD}
+        </Grid>{" "}
+        {IS_ADMIN_TEMP ? (
+          <RCButtonsCUD
+            handleAdd={() => setOpenForm(true)}
+            handleEdit={() => setEdition(true)}
+            handleDelete={() => setRemoval(true)}
+            handleCancel={handleClearActionsSD}
           />
-        </SpeedDialContainer>
+        ) : null}
         {storeParagraph.getParagraph().map((paragraph) => (
           <GridActionStyled
             item

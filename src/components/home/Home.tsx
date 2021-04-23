@@ -1,23 +1,11 @@
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/background_main.jpg";
-import { Grid, GridSize } from "@material-ui/core";
-import styled from "styled-components";
-import { TitleTypography, MainGridStyled } from "../../style/MainStyled";
-import Image from "../../resources/images/church_cross.png";
-import HomeServices from "./HomeServices";
-import HomeNews from "./HomeNews";
-import HomeConfessions from "./HomeConfession";
-
-const Img = styled.img`
-  width: 300px;
-`;
-
-const ImgContainer = styled.div`
-  padding: 15px;
-  background-color: black;
-  width: fit-content;
-  margin: auto;
-`;
+import { Divider, Grid, GridSize } from "@material-ui/core";
+import HomeServices from "./tales/HomeServices";
+import HomeNews from "./tales/HomeNews";
+import HomeConfessions from "./tales/HomeConfession";
+import HomeAlbum from "./tales/HomeAlbum";
+import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
 
 const breakpoints = {
   md: 5 as GridSize,
@@ -34,20 +22,34 @@ const Home: React.FC<HomeProps> = () => {
       subtitle="Kościół Pallotynów"
     >
       <Grid container justify="space-around">
-        <MainGridStyled item md={breakpoints.md}>
-          <TitleTypography>Najnowsze Albumy</TitleTypography>
-          <ImgContainer>
-            <Img src={Image} alt="albums" />
-          </ImgContainer>
+        <MainGridStyled
+          item
+          md={breakpoints.md}
+          alignItems="center"
+          style={{
+            textAlign: "center",
+          }}
+        >
+          <TitleTypography>Najnowszy Album</TitleTypography>
+          <HomeAlbum />
         </MainGridStyled>
+        <Grid item>
+          <Divider orientation="vertical" />
+        </Grid>
         <MainGridStyled item md={breakpoints.md}>
-          <TitleTypography>Msze św.</TitleTypography>
+          <TitleTypography>Msze Św.</TitleTypography>
           <HomeServices />
         </MainGridStyled>
+      </Grid>
+      <Divider style={{ margin: "20px 0px" }} />
+      <Grid container justify="space-around">
         <MainGridStyled item md={breakpoints.md}>
           <TitleTypography>Najnowsze Wydarzenia</TitleTypography>
           <HomeNews />
         </MainGridStyled>
+        <Grid item>
+          <Divider orientation="vertical" />
+        </Grid>
         <MainGridStyled item md={breakpoints.md}>
           <TitleTypography>Spowiedź</TitleTypography>
           <HomeConfessions />

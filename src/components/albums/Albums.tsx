@@ -2,12 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 
 import { CircularProgress, Grid } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-
-import { SpeedDialContainer } from "../../style/SpeedDial";
-import SpeedDialComponent from "../SpeedDial";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import BackgroundImg from "../../resources/images/church_cross.png";
@@ -20,13 +14,7 @@ import { GALLERY_PATH } from "../../models/const";
 import { useHistory } from "react-router";
 import { GetRoute } from "../../models/Global";
 import AlbumSummary from "./AlbumSummary";
-
-const ImgContainer = styled.div`
-  padding: 10px;
-  background-color: black;
-  width: fit-content;
-  margin: auto;
-`;
+import RCButtonsCUD from "../../componentsReusable/ButtonsCUD";
 
 const ImgStyled = styled.img<{ action?: string; hovered?: string }>`
   height: 150px;
@@ -64,12 +52,6 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
     store.fetch();
   }, [store]);
 
-  const actionsSD = [
-    { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
-    { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
-    { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
-  ];
-
   const handleClearActionsSD = () => {
     setRemoval(false);
     setEdition(false);
@@ -90,15 +72,18 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
     }
   };
 
+  const IS_ADMIN_TEMP = true; // TODO: change with real admin value;
   return (
     <MainLayout img={BackgroundImg} title="Albums">
-      <SpeedDialContainer>
-        <SpeedDialComponent
-          actions={actionsSD}
-          blocked={Boolean(edition || removal || openForm)}
-          unBlock={handleClearActionsSD}
+      {" "}
+      {IS_ADMIN_TEMP ? (
+        <RCButtonsCUD
+          handleAdd={() => setOpenForm(true)}
+          handleEdit={() => setEdition(true)}
+          handleDelete={() => setRemoval(true)}
+          handleCancel={handleClearActionsSD}
         />
-      </SpeedDialContainer>
+      ) : null}
       <Grid container justify="space-around">
         {store.getAlbumsWithPhotos().map((album) => (
           <AlbumSummary
@@ -107,19 +92,14 @@ const Albums: React.FC<AlbumsProps> = observer(() => {
             key={album.id}
           >
             {album.coverPhoto ? (
-              <ImgContainer
-                onMouseOver={() => setMouseOverPhoto(true)}
-                onMouseLeave={() => setMouseOverPhoto(false)}
-              >
-                <ImgStyled
-                  src={`${GALLERY_PATH}/${album.coverPhoto?.path}`}
-                  alt={album.coverPhoto?.path}
-                  action={parseStyledBoolean(edition || removal)}
-                  hovered={parseStyledBoolean(
-                    (edition || removal) && mouseOverPhoto
-                  )}
-                />
-              </ImgContainer>
+              <ImgStyled
+                src={`${GALLERY_PATH}/${album.coverPhoto?.path}`}
+                alt={album.coverPhoto?.path}
+                action={parseStyledBoolean(edition || removal)}
+                hovered={parseStyledBoolean(
+                  (edition || removal) && mouseOverPhoto
+                )}
+              />
             ) : (
               <CircularProgress />
             )}

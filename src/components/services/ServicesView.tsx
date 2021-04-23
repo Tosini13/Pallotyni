@@ -2,10 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { format } from "date-fns";
 import { observer } from "mobx-react";
 
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-
 import { DATE_FORMAT, Day } from "../../models/Global";
 import { ServiceStoreContext, Service } from "../../stores/ServiceStore";
 import styled from "styled-components";
@@ -15,13 +11,10 @@ import { Grid, GridSize, Typography } from "@material-ui/core";
 import ServiceForm from "./forms/ServiceForm";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
-import SpeedDialComponent from "../SpeedDial";
-import { SpeedDialContainer } from "../../style/SpeedDial";
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
-
-const DayContainerStyled = styled.div<{ serviceSelectable?: string }>``;
+import RCButtonsCUD from "../../componentsReusable/ButtonsCUD";
 
 const breakpoints = {
   md: 5 as GridSize,
@@ -30,6 +23,7 @@ const breakpoints = {
 
 export const TypographySelectableStyled = styled(Typography)<{
   selectable?: string;
+  hovered?: string;
 }>`
   padding: 3px;
   transition: all 0.3s;
@@ -38,11 +32,15 @@ export const TypographySelectableStyled = styled(Typography)<{
     props.selectable
       ? `
         margin-bottom: 5px;
-        border-bottom: 1px solid ${mainTheme.palette.secondary.dark};
-        &:hover{
-          cursor: pointer;
-          box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-        }`
+        border-bottom: 1px solid ${mainTheme.palette.secondary.dark};`
+      : ""}
+  ${(props) =>
+    props.hovered
+      ? `
+        cursor: pointer;
+        border-bottom: 1px solid ${mainTheme.palette.primary.dark};
+        margin-left: -10px;
+      `
       : ""}
 `;
 
@@ -55,7 +53,7 @@ export interface ServicesViewProps {
   handleClearActionsSD: () => void;
 }
 
-const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
+const ServicesView: React.FC<ServicesViewProps> = observer(() => {
   const storeServices = useContext(ServiceStoreContext);
   const singleServices = storeServices.getSingleService;
 
@@ -63,10 +61,11 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
   const [edition, setEdition] = useState<boolean>(false);
   const [removal, setRemoval] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<Service | undefined>();
+  const [hovered, setHovered] = useState<Service | undefined>();
 
   useEffect(() => {
     storeServices.fetch();
-  }, []);
+  }, [storeServices]);
 
   const handleClearActionsSD = () => {
     setRemoval(false);
@@ -75,50 +74,63 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
     setSelectedService(undefined);
   };
 
-  const actionsSD = [
-    { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
-    { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
-    { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
-  ];
-
   const handleSelectService = (service: Service) => {
     if (edition || removal) {
       setSelectedService(service);
     }
   };
 
+  const IS_ADMIN_TEMP = true; // TODO: change with real admin value;
   return (
     <MainLayout img={BackgroundImg} title="Msze święte">
-      <SpeedDialContainer>
-        <SpeedDialComponent
-          actions={actionsSD}
-          blocked={Boolean(edition || removal || openForm)}
-          unBlock={handleClearActionsSD}
+      {IS_ADMIN_TEMP ? (
+        <RCButtonsCUD
+          handleAdd={() => setOpenForm(true)}
+          handleEdit={() => setEdition(true)}
+          handleDelete={() => setRemoval(true)}
+          handleCancel={handleClearActionsSD}
         />
-      </SpeedDialContainer>
+      ) : null}
       <Grid container justify="space-around">
-        <MainGridStyled md={breakpoints.md}>
-          <TitleTypography>Powtarzające się msze święte</TitleTypography>
-          {Object.values(Day).map((day) => (
-            <DayContainerStyled
-              key={day}
-              serviceSelectable={parseStyledBoolean(edition || removal)}
-            >
-              <h5>{day}</h5>
-              {storeServices.getServicesByDay(day).map((service) => (
-                <TypographySelectableStyled
-                  color="textPrimary"
-                  key={service.id}
-                  selectable={parseStyledBoolean(edition || removal)}
-                  onClick={() => handleSelectService(service)}
-                >
-                  {service.time} - {service.title}
-                </TypographySelectableStyled>
-              ))}
-            </DayContainerStyled>
-          ))}
+        <MainGridStyled item md={breakpoints.md}>
+          <TitleTypography>Msze święte co tydzień</TitleTypography>
+          {Object.values(Day).map((day) => {
+            const services = storeServices.getServicesByDay(day);
+            if (!services.length) {
+              return null;
+            }
+            return (
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography
+                    color="textPrimary"
+                    style={{ fontWeight: "bold" }}
+                  >
+                    {day}
+                  </Typography>
+                </Grid>
+                {services.map((service) => (
+                  <Grid item style={{ paddingLeft: "20px" }}>
+                    <TypographySelectableStyled
+                      color="textPrimary"
+                      key={service.id}
+                      selectable={parseStyledBoolean(edition || removal)}
+                      hovered={parseStyledBoolean(
+                        (edition || removal) && hovered?.id === service.id
+                      )}
+                      onMouseEnter={() => setHovered(service)}
+                      onMouseLeave={() => setHovered(undefined)}
+                      onClick={() => handleSelectService(service)}
+                    >
+                      {service.time} - {service.title}, {service.priest}
+                    </TypographySelectableStyled>
+                  </Grid>
+                ))}
+              </Grid>
+            );
+          })}
         </MainGridStyled>
-        <MainGridStyled md={breakpoints.md}>
+        <MainGridStyled item md={breakpoints.md}>
           <TitleTypography>Pojedyncze msze święte</TitleTypography>
           {singleServices ? (
             <>
@@ -127,10 +139,14 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
                   color="textPrimary"
                   key={service.id}
                   selectable={parseStyledBoolean(edition || removal)}
+                  hovered={parseStyledBoolean(
+                    (edition || removal) && hovered?.id === service.id
+                  )}
+                  onMouseEnter={() => setHovered(service)}
+                  onMouseLeave={() => setHovered(undefined)}
                   onClick={() => handleSelectService(service)}
                 >
-                  {format(new Date(service.date ?? ""), DATE_FORMAT)}{" "}
-                  {service.time} - {service.title}
+                  {service.show}
                 </TypographySelectableStyled>
               ))}
             </>
@@ -146,7 +162,6 @@ const ServicesView: React.FC<ServicesViewProps> = observer(({}) => {
         open={Boolean(selectedService && removal)}
         handleClose={handleClearActionsSD}
         title="Do you want to delete?"
-        content="Do you want to delete?"
       >
         <ButtonSuccess
           onClick={() => {

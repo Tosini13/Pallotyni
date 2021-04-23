@@ -2,14 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 
-import {
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-} from "@material-ui/core";
+import { DialogActions, DialogContent, Grid } from "@material-ui/core";
 
-import { DialogStyled } from "../../../componentsReusable/Dialogs";
+import {
+  DialogStyled,
+  RCDialogTitle,
+} from "../../../componentsReusable/Dialogs";
 import TextFieldC from "../../../componentsReusable/Forms";
 import { DATE_FORMAT, Day } from "../../../models/Global";
 import {
@@ -104,9 +102,9 @@ const ConfessionForm: React.FC<ConfessionFormProps> = ({
   return (
     <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>
+        <RCDialogTitle>
           {selectedConfession ? "Edit" : "Create"} Confession
-        </DialogTitle>
+        </RCDialogTitle>
         <DialogContent>
           <Grid container spacing={2} alignItems="center">
             <Grid item md={6}>
@@ -115,7 +113,6 @@ const ConfessionForm: React.FC<ConfessionFormProps> = ({
                 inputRef={register}
                 name="title"
                 label="Title"
-                color="secondary"
               />
             </Grid>
             <Grid item md={6}>
