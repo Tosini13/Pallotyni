@@ -39,6 +39,8 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(() => {
   const [selectedConfession, setSelectedConfession] = useState<
     Confession | undefined
   >();
+  const [hovered, setHovered] = useState<Confession | undefined>();
+
   const storeConfession = useContext(ConfessionStoreContext);
   const handleSelectConfession = (confession: Confession) => {
     if (edition || removal) {
@@ -92,6 +94,11 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(() => {
                       color="textPrimary"
                       key={confession.id}
                       selectable={parseStyledBoolean(edition || removal)}
+                      hovered={parseStyledBoolean(
+                        (edition || removal) && hovered?.id === confession.id
+                      )}
+                      onMouseEnter={() => setHovered(confession)}
+                      onMouseLeave={() => setHovered(undefined)}
                       onClick={() => handleSelectConfession(confession)}
                     >
                       {confession.fromTime} - {confession.toTime}{" "}

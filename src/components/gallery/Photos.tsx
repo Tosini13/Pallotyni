@@ -69,7 +69,7 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
           handleCancel={handleClearActionsSD}
         />
       ) : null}
-      <Grid container justify="space-around">
+      <Grid container>
         {storePhotos?.photos.map((photo) => (
           <React.Fragment key={photo.id}>
             <Grid

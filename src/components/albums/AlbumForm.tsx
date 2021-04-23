@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { ButtonSuccess, ButtonError } from "../../componentsReusable/Buttons";
-import { DialogStyled } from "../../componentsReusable/Dialogs";
+import { DialogStyled, RCDialogTitle } from "../../componentsReusable/Dialogs";
 import TextFieldC from "../../componentsReusable/Forms";
 import { TAlbum, TAlbumCreate } from "../../models/Album";
 import { AlbumStoreContext } from "../../stores/GalleryStore";
@@ -57,7 +57,7 @@ const AlbumForm: React.FC<AlbumFormProps> = ({
   return (
     <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>{selectedAlbum ? "Edit" : "Create"} Album</DialogTitle>
+        <RCDialogTitle>{selectedAlbum ? "Edit" : "Create"} Album</RCDialogTitle>
         <DialogContent>
           <Grid container direction="column" spacing={2}>
             <Grid item>

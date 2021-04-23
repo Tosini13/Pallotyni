@@ -23,6 +23,7 @@ const breakpoints = {
 
 export const TypographySelectableStyled = styled(Typography)<{
   selectable?: string;
+  hovered?: string;
 }>`
   padding: 3px;
   transition: all 0.3s;
@@ -31,11 +32,15 @@ export const TypographySelectableStyled = styled(Typography)<{
     props.selectable
       ? `
         margin-bottom: 5px;
-        border-bottom: 1px solid ${mainTheme.palette.secondary.dark};
-        &:hover{
-          cursor: pointer;
-          box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-        }`
+        border-bottom: 1px solid ${mainTheme.palette.secondary.dark};`
+      : ""}
+  ${(props) =>
+    props.hovered
+      ? `
+        cursor: pointer;
+        border-bottom: 1px solid ${mainTheme.palette.primary.dark};
+        margin-left: -10px;
+      `
       : ""}
 `;
 
@@ -56,6 +61,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
   const [edition, setEdition] = useState<boolean>(false);
   const [removal, setRemoval] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<Service | undefined>();
+  const [hovered, setHovered] = useState<Service | undefined>();
 
   useEffect(() => {
     storeServices.fetch();
@@ -90,6 +96,9 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
           <TitleTypography>Msze święte co tydzień</TitleTypography>
           {Object.values(Day).map((day) => {
             const services = storeServices.getServicesByDay(day);
+            if (!services.length) {
+              return null;
+            }
             return (
               <Grid container direction="column">
                 <Grid item>
@@ -102,9 +111,19 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
                 </Grid>
                 {services.map((service) => (
                   <Grid item style={{ paddingLeft: "20px" }}>
-                    <Typography color="textPrimary">
+                    <TypographySelectableStyled
+                      color="textPrimary"
+                      key={service.id}
+                      selectable={parseStyledBoolean(edition || removal)}
+                      hovered={parseStyledBoolean(
+                        (edition || removal) && hovered?.id === service.id
+                      )}
+                      onMouseEnter={() => setHovered(service)}
+                      onMouseLeave={() => setHovered(undefined)}
+                      onClick={() => handleSelectService(service)}
+                    >
                       {service.time} - {service.title}
-                    </Typography>
+                    </TypographySelectableStyled>
                   </Grid>
                 ))}
               </Grid>

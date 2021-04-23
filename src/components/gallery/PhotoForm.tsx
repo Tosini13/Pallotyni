@@ -19,6 +19,7 @@ import { TCreatePhotographAndImage } from "../../models/Photograph";
 import TextFieldC from "../../componentsReusable/Forms";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import { GALLERY_PATH } from "../../models/const";
+import { RCDialogTitle } from "../../componentsReusable/Dialogs";
 
 const AddAPhotoIconStyled = styled(AddAPhotoIcon)<{ error?: string }>`
   transition: all 0.2s;
@@ -196,9 +197,9 @@ const PhotoForm: React.FC<PhotoFormProps> = ({
   return (
     <Dialog open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>
+        <RCDialogTitle>
           {selectedPhotograph ? "Edit" : "Create"} Photograph
-        </DialogTitle>
+        </RCDialogTitle>
         <DialogContent>
           <Grid container direction="column" spacing={2}>
             <Grid item>

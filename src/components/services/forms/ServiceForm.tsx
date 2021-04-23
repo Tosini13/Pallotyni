@@ -10,7 +10,10 @@ import {
   ButtonError,
   ButtonSuccess,
 } from "../../../componentsReusable/Buttons";
-import { DialogStyled } from "../../../componentsReusable/Dialogs";
+import {
+  DialogStyled,
+  RCDialogTitle,
+} from "../../../componentsReusable/Dialogs";
 import TextFieldC from "../../../componentsReusable/Forms";
 import { Service, ServiceStoreContext } from "../../../stores/ServiceStore";
 import { DATE_FORMAT, Day } from "../../../models/Global";
@@ -98,7 +101,9 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
   return (
     <DialogStyled open={open} onClose={handleCloseForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>{selectedService ? "Edit" : "Create"} Service</DialogTitle>
+        <RCDialogTitle>
+          {selectedService ? "Edit" : "Create"} Service
+        </RCDialogTitle>
         <DialogContent>
           <Grid container spacing={2} alignItems="center">
             <Grid item md={6}>
