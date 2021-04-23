@@ -3,14 +3,11 @@ import { useContext, useEffect, useState } from "react";
 
 import { Grid } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import SpeedDialComponent from "../SpeedDial";
 import { parseStyledBoolean } from "../../helpers/BooleanParser";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
-import { SpeedDialContainer } from "../../style/SpeedDial";
 import { NewStoreContext } from "../../stores/NewsStore";
 import {
   GridActionStyled,
@@ -22,6 +19,7 @@ import NewsSummary from "./NewsSummary";
 import NewsForm from "./NewsForm";
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/church_cross.png";
+import RCButtonsCUD from "../../componentsReusable/ButtonsCUD";
 
 export interface NewsProps {}
 
@@ -35,12 +33,6 @@ const News: React.FC<NewsProps> = observer(() => {
   useEffect(() => {
     newsStore.fetch();
   }, [newsStore]);
-
-  const actionsSD = [
-    { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
-    { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
-    { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
-  ];
 
   const handleClearActionsSD = () => {
     setRemoval(false);
@@ -58,16 +50,18 @@ const News: React.FC<NewsProps> = observer(() => {
     }
   };
 
+  const IS_ADMIN_TEMP = true; // TODO: change with real admin value;
   return (
     <MainLayout img={BackgroundImg} title="Aktualności">
       <Grid container spacing={3} style={{ position: "relative" }}>
-        <SpeedDialContainer>
-          <SpeedDialComponent
-            actions={actionsSD}
-            blocked={Boolean(edition || removal || openForm)}
-            unBlock={handleClearActionsSD}
+        {IS_ADMIN_TEMP ? (
+          <RCButtonsCUD
+            handleAdd={() => setOpenForm(true)}
+            handleEdit={() => setEdition(true)}
+            handleDelete={() => setRemoval(true)}
+            handleCancel={handleClearActionsSD}
           />
-        </SpeedDialContainer>
+        ) : null}
         {newsStore.getAllNews().map((news) => (
           <GridActionStyled
             item

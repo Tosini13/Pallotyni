@@ -2,10 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { format } from "date-fns";
 import { observer } from "mobx-react";
 
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-
 import { DATE_FORMAT, Day } from "../../models/Global";
 import { ServiceStoreContext, Service } from "../../stores/ServiceStore";
 import styled from "styled-components";
@@ -15,11 +11,10 @@ import { Grid, GridSize, Typography } from "@material-ui/core";
 import ServiceForm from "./forms/ServiceForm";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
-import SpeedDialComponent from "../SpeedDial";
-import { SpeedDialContainer } from "../../style/SpeedDial";
 import MainLayout from "../layout/MainLayout";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import { MainGridStyled, TitleTypography } from "../../style/MainStyled";
+import RCButtonsCUD from "../../componentsReusable/ButtonsCUD";
 
 const breakpoints = {
   md: 5 as GridSize,
@@ -73,27 +68,23 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
     setSelectedService(undefined);
   };
 
-  const actionsSD = [
-    { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
-    { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
-    { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
-  ];
-
   const handleSelectService = (service: Service) => {
     if (edition || removal) {
       setSelectedService(service);
     }
   };
 
+  const IS_ADMIN_TEMP = true; // TODO: change with real admin value;
   return (
     <MainLayout img={BackgroundImg} title="Msze święte">
-      <SpeedDialContainer>
-        <SpeedDialComponent
-          actions={actionsSD}
-          blocked={Boolean(edition || removal || openForm)}
-          unBlock={handleClearActionsSD}
+      {IS_ADMIN_TEMP ? (
+        <RCButtonsCUD
+          handleAdd={() => setOpenForm(true)}
+          handleEdit={() => setEdition(true)}
+          handleDelete={() => setRemoval(true)}
+          handleCancel={handleClearActionsSD}
         />
-      </SpeedDialContainer>
+      ) : null}
       <Grid container justify="space-around">
         <MainGridStyled md={breakpoints.md}>
           <TitleTypography>Msze święte co tydzień</TitleTypography>
@@ -148,7 +139,6 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
         open={Boolean(selectedService && removal)}
         handleClose={handleClearActionsSD}
         title="Do you want to delete?"
-        content="Do you want to delete?"
       >
         <ButtonSuccess
           onClick={() => {

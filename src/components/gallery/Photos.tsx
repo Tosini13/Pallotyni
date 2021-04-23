@@ -2,24 +2,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 
 import { Grid, GridSize } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 import { Photograph, PhotosStoreContext } from "../../stores/PhotographsStore";
 import PhotoDetails from "./PhotoDetails";
-import { SpeedDialContainer } from "../../style/SpeedDial";
-import SpeedDialComponent from "../SpeedDial";
 import QuestionDialog from "../../componentsReusable/Dialogs";
 import { ButtonError, ButtonSuccess } from "../../componentsReusable/Buttons";
 import PhotoSummary from "./PhotoSummary";
 import PhotoForm from "./PhotoForm";
 import BackgroundImg from "../../resources/images/church_cross.png";
 import MainLayout from "../layout/MainLayout";
-import { MainGridStyled } from "../../style/MainStyled";
 import { AlbumStoreContext } from "../../stores/GalleryStore";
 import { useParams } from "react-router";
 import { Id } from "../../models/Global";
+import RCButtonsCUD from "../../componentsReusable/ButtonsCUD";
 
 const breakpoints = {
   md: 5 as GridSize,
@@ -48,12 +43,6 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
     storeAlbum.fetch();
   }, [storeAlbum]);
 
-  const actionsSD = [
-    { icon: <AddIcon onClick={() => setOpenForm(true)} />, name: "Add" },
-    { icon: <EditIcon onClick={() => setEdition(true)} />, name: "Edit" },
-    { icon: <DeleteIcon onClick={() => setRemoval(true)} />, name: "Delete" },
-  ];
-
   const handleClearActionsSD = () => {
     setRemoval(false);
     setEdition(false);
@@ -69,15 +58,17 @@ const Gallery: React.FC<GalleryProps> = observer(() => {
     setSelectedPhoto(p);
   };
 
+  const IS_ADMIN_TEMP = true; // TODO: change with real admin value;
   return (
     <MainLayout img={BackgroundImg} title="Gallery">
-      <SpeedDialContainer>
-        <SpeedDialComponent
-          actions={actionsSD}
-          blocked={Boolean(edition || removal || openForm)}
-          unBlock={handleClearActionsSD}
+      {IS_ADMIN_TEMP ? (
+        <RCButtonsCUD
+          handleAdd={() => setOpenForm(true)}
+          handleEdit={() => setEdition(true)}
+          handleDelete={() => setRemoval(true)}
+          handleCancel={handleClearActionsSD}
         />
-      </SpeedDialContainer>
+      ) : null}
       <Grid container justify="space-around">
         {storePhotos?.photos.map((photo) => (
           <React.Fragment key={photo.id}>

@@ -3,16 +3,22 @@ import { TextField, TextFieldProps } from "@material-ui/core";
 import { mainTheme } from "../style/config";
 
 export const inputStyle = `
-  color: ${mainTheme.palette.text.primary};
+  color: ${mainTheme.palette.text.secondary};
   width: 100%;
   label {
-    color: ${mainTheme.palette.text.primary};
+    color: ${mainTheme.palette.text.secondary};
   }
   .MuiInput-underline:before {
     border-color: rgba(255, 255, 255, 0.3);
   }
   .MuiIconButton-root {
-    color: ${mainTheme.palette.text.primary};
+    color: ${mainTheme.palette.text.secondary};
+  }
+  .MuiInputBase-root{
+    color: white;
+  }
+  .MuiInput-underline:hover:not(.Mui-disabled):before{
+    border-color: rgba(255, 255, 255, 0.5);
   }
 `;
 

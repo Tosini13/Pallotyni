@@ -73,6 +73,7 @@ const DatePickerSwitch: React.FC<DatePickerSwitchProps> = ({
         ) : (
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePickerStyled
+              color="secondary"
               label="Date picker dialog"
               format={DATE_FORMAT}
               value={selectedDate}
