@@ -1,6 +1,5 @@
-import { fade, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import styled from "styled-components";
-import { mainTheme } from "../../style/config";
 import { TitleTypography } from "../../style/MainStyled";
 import BackgroundImg from "../../resources/images/old_stettin_roofs.png";
 
@@ -32,10 +31,18 @@ const Footer: React.FC<FooterProps> = () => {
       <ImageCover>
         <Grid container direction="column" spacing={3} alignItems="center">
           <Grid item>
-            <TitleTypography>Footer</TitleTypography>
+            <TitleTypography color="textSecondary">Footer</TitleTypography>
           </Grid>
-          <Grid item>
-            <Typography>Lorem</Typography>
+          <Grid item lg={6} md={8}>
+            <Typography>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </Typography>
           </Grid>
         </Grid>
       </ImageCover>

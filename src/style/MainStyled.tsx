@@ -9,7 +9,6 @@ export const TitleTypographyStyled = styled(Typography)`
   padding: 10px 20px;
   margin-bottom: 30px;
   border-bottom: ${mainTheme.palette.secondary.main} solid 1px;
-  color: ${mainTheme.palette.text.primary};
   text-transform: uppercase;
 `;
 
@@ -17,7 +16,7 @@ export const TitleTypography: React.FC<TypographyProps> = ({
   children,
   ...props
 }) => (
-  <TitleTypographyStyled variant="h5" {...props}>
+  <TitleTypographyStyled variant="h5" color="textPrimary" {...props}>
     {children}
   </TitleTypographyStyled>
 );
