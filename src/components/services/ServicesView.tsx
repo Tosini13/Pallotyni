@@ -92,7 +92,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
         />
       ) : null}
       <Grid container justify="space-around">
-        <MainGridStyled md={breakpoints.md}>
+        <MainGridStyled item md={breakpoints.md}>
           <TitleTypography>Msze święte co tydzień</TitleTypography>
           {Object.values(Day).map((day) => {
             const services = storeServices.getServicesByDay(day);
@@ -130,7 +130,7 @@ const ServicesView: React.FC<ServicesViewProps> = observer(() => {
             );
           })}
         </MainGridStyled>
-        <MainGridStyled md={breakpoints.md}>
+        <MainGridStyled item md={breakpoints.md}>
           <TitleTypography>Pojedyncze msze święte</TitleTypography>
           {singleServices ? (
             <>

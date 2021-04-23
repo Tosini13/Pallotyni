@@ -70,7 +70,7 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(() => {
         />
       ) : null}
       <Grid container justify="space-around">
-        <MainGridStyled md={breakpoints.md}>
+        <MainGridStyled item md={breakpoints.md}>
           <TitleTypography>Spowiedź co tydzień</TitleTypography>
 
           {Object.values(Day).map((day) => {
@@ -109,7 +109,7 @@ const ConfessionsView: React.FC<ConfessionsViewProps> = observer(() => {
             );
           })}
         </MainGridStyled>
-        <MainGridStyled md={breakpoints.md}>
+        <MainGridStyled item md={breakpoints.md}>
           <TitleTypography>Pojedyncza spowiedź</TitleTypography>
           {storeConfession.getConfessionsNextWeek.map((confession) => (
             <TypographySelectableStyled

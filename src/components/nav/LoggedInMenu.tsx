@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { RoutingPath } from "../../models/Global";
@@ -29,7 +29,7 @@ const LinkStyled = styled(Link)`
   ${MenuTypo}
 `;
 
-const TypographyStyled = styled(Typography)`
+const AStyled = styled.a`
   ${MenuTypo}
 `;
 
@@ -75,7 +75,7 @@ const LoggedInMenu: React.FC<LoggedInMenuProps> = () => {
         <LinkStyled to={RoutingPath.home}>Home</LinkStyled>
       </GridMenuItem>
       <GridMenuItem>
-        <TypographyStyled>Service</TypographyStyled>
+        <AStyled>Service</AStyled>
         <GridSubMenuContainer>
           <GridSubMenuItem>
             <LinkStyled to={RoutingPath.service}>Service</LinkStyled>

@@ -20,7 +20,6 @@ export class Confession {
   priest: string;
 
   get show() {
-    console.log(this.date ?? "");
     return `${this.date ? format(new Date(this.date), DATE_FORMAT) : ""}
     ${this.fromTime} - ${this.toTime}: ${this.title}, ${this.priest}`;
   }
