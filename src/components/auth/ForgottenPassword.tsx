@@ -3,16 +3,11 @@ import { observer } from "mobx-react";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import TextFieldC from "../../componentsReusable/Forms";
 import { RoutingPath } from "../../models/Global";
 import { AuthStoreContext } from "../../stores/AuthStore";
 import { mainTheme } from "../../style/config";
-
-const LinkStyled = styled(Link)`
-  color: ${mainTheme.palette.text.secondary};
-`;
 
 const PaperStyled = styled(Paper)`
   position: absolute;
@@ -23,26 +18,27 @@ const PaperStyled = styled(Paper)`
   padding: 50px;
 `;
 
-type TLoginForm = {
+type TForgottenPasswordPropsForm = {
   email: string;
-  password: string;
 };
 
-export interface LoginProps {}
+export interface ForgottenPasswordProps {}
 
-const Login: React.FC<LoginProps> = observer(() => {
+const ForgottenPassword: React.FC<ForgottenPasswordProps> = observer(() => {
   const authStore = useContext(AuthStoreContext);
   const router = useHistory();
-  const { register, handleSubmit } = useForm<TLoginForm>();
+  const { register, handleSubmit } = useForm<TForgottenPasswordPropsForm>();
 
-  const [wrongCredentials, setWrongCredentials] = useState<boolean>(false);
+  const [wrongEmail, setWrongEmail] = useState<boolean>(false);
 
-  const onSubmit = async (data: TLoginForm) => {
-    await authStore.logIn({
+  const onSubmit = async (data: TForgottenPasswordPropsForm) => {
+    await authStore.resetPassword({
       email: data.email,
-      password: data.password,
       failureCallBack: () => {
-        setWrongCredentials(true);
+        setWrongEmail(true);
+      },
+      successCallBack: () => {
+        router.push(RoutingPath.login);
       },
     });
   };
@@ -56,7 +52,7 @@ const Login: React.FC<LoginProps> = observer(() => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container direction="column" spacing={5} alignItems="center">
           <Grid item>
-            <Typography color="secondary">Log In</Typography>
+            <Typography color="secondary">Reset Password</Typography>
           </Grid>
           <Grid item>
             <TextFieldC
@@ -68,33 +64,14 @@ const Login: React.FC<LoginProps> = observer(() => {
             />
           </Grid>
           <Grid item>
-            <TextFieldC
-              inputRef={register({
-                required: "Password is required",
-              })}
-              name="password"
-              type="password"
-              label="password"
-            />
+            <Button variant="outlined" color="secondary" type="submit">
+              Reset
+            </Button>
           </Grid>
           <Grid item>
-            <Grid container direction="column" alignItems="center" spacing={2}>
-              <Grid item>
-                <Button variant="outlined" color="secondary" type="submit">
-                  Login
-                </Button>
-              </Grid>
-              <Grid item>
-                <Typography color="error">
-                  {wrongCredentials ? "Wrong email or password" : ""}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <LinkStyled to={RoutingPath.resetPassword}>
-                  Reset password
-                </LinkStyled>
-              </Grid>
-            </Grid>
+            <Typography color="error">
+              {wrongEmail ? "The email doesn't exists" : ""}
+            </Typography>
           </Grid>
         </Grid>
       </form>
@@ -102,4 +79,4 @@ const Login: React.FC<LoginProps> = observer(() => {
   );
 });
 
-export default Login;
+export default ForgottenPassword;

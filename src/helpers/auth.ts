@@ -6,6 +6,23 @@ export type SignInType = {
   password: string;
 };
 
+export type TResetPassword = {
+  email: string;
+};
+
+export const resetPassword = async ({ email }: TResetPassword) => {
+  const promise = await new Promise((resolve, rejected) => {
+    const user = firebase?.auth().sendPasswordResetEmail(email);
+    console.log("user", user);
+    if (user) {
+      resolve(EUserAuth.PASSWORD_RESET_SUCCESS);
+    } else {
+      resolve(EUserAuth.PASSWORD_RESET_ERROR);
+    }
+  });
+  return promise;
+};
+
 export const checkIfLoggedIn = async () => {
   const promise = await new Promise((resolve, rejected) => {
     const user = firebase?.auth().currentUser;

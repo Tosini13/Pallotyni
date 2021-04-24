@@ -1,6 +1,13 @@
 import { action, makeObservable, observable } from "mobx";
 import React from "react";
-import { checkIfLoggedIn, signIn, signOut, SignInType } from "../helpers/auth";
+import {
+  checkIfLoggedIn,
+  signIn,
+  signOut,
+  resetPassword,
+  SignInType,
+  TResetPassword,
+} from "../helpers/auth";
 import { EUserAuth } from "../models/const";
 
 type TauthFunc = {
@@ -45,6 +52,21 @@ class Auth {
     }
     if (res === EUserAuth.LOGGED_OUT) {
       this.isLoggedIn = false;
+      if (failureCallBack) failureCallBack();
+    }
+  }
+
+  async resetPassword({
+    email,
+    successCallBack,
+    failureCallBack,
+  }: TResetPassword & TauthFunc) {
+    const res = await resetPassword({ email });
+    console.log("resetPassword", res);
+    if (res === EUserAuth.PASSWORD_RESET_SUCCESS) {
+      if (successCallBack) successCallBack();
+    }
+    if (res === EUserAuth.PASSWORD_RESET_ERROR) {
       if (failureCallBack) failureCallBack();
     }
   }

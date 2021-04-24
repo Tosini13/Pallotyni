@@ -3,14 +3,13 @@ import "firebase/firestore";
 import "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDCebA5gKPVFBna_3yi_kaDKtb1pbDCtjc",
-  authDomain: "champions-youth.firebaseapp.com",
-  databaseURL: "https://champions-youth.firebaseio.com",
-  projectId: "champions-youth",
-  storageBucket: "champions-youth.appspot.com",
-  messagingSenderId: "1030411793669",
-  appId: "1:1030411793669:web:6ac463c53c1e1183e7336c",
-  measurementId: "G-933NKS8F2D",
+  apiKey: "AIzaSyBkCvf99mbHD3_sr9GUEVjdgkJzLh5dexA",
+  authDomain: "pallotyni-8bd40.firebaseapp.com",
+  projectId: "pallotyni-8bd40",
+  storageBucket: "pallotyni-8bd40.appspot.com",
+  messagingSenderId: "111227330434",
+  appId: "1:111227330434:web:ce0017ea87ee671721399b",
+  measurementId: "G-HGTVTK85TB",
 };
 
 firebase.initializeApp(firebaseConfig);

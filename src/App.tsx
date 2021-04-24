@@ -17,6 +17,7 @@ import { mainTheme } from "./style/config";
 import Home from "./components/home/Home";
 import Albums from "./components/albums/Albums";
 import Login from "./components/auth/Login";
+import ForgottenPassword from "./components/auth/ForgottenPassword";
 
 const GlobalStyle = styled.div`
   ${ScrollBarStyled}
@@ -46,6 +47,10 @@ function App() {
         {/*DESKTOP VIEW*/}
         <MainContainerStyled>
           <Route path={RoutingPath.login} component={Login} />
+          <Route
+            path={RoutingPath.resetPassword}
+            component={ForgottenPassword}
+          />
           {/* MAIN */}
           <MainStyled>
             <Switch>
