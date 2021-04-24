@@ -16,6 +16,7 @@ import { RoutingPath } from "./models/Global";
 import { mainTheme } from "./style/config";
 import Home from "./components/home/Home";
 import Albums from "./components/albums/Albums";
+import Login from "./components/auth/Login";
 
 const GlobalStyle = styled.div`
   ${ScrollBarStyled}
@@ -44,6 +45,7 @@ function App() {
         {/*-----------------------------*/}
         {/*DESKTOP VIEW*/}
         <MainContainerStyled>
+          <Route path={RoutingPath.login} component={Login} />
           {/* MAIN */}
           <MainStyled>
             <Switch>

@@ -29,7 +29,7 @@ const LinkStyled = styled(Link)`
   ${MenuTypo}
 `;
 
-const AStyled = styled.a`
+export const AStyled = styled.a`
   ${MenuTypo}
 `;
 

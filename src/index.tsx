@@ -11,24 +11,27 @@ import { ServiceStoreProvider } from "./stores/ServiceStore";
 import { ConfessionStoreProvider } from "./stores/ConfessionStore";
 import { ParagraphStoreProvider } from "./stores/AboutUsStore";
 import { AlbumStoreProvider } from "./stores/GalleryStore";
+import { AuthStoreProvider } from "./stores/AuthStore";
 
 ReactDOM.render(
   <ThemeProvider theme={mainTheme}>
-    <StylesProvider injectFirst>
-      <NewStoreProvider>
-        <ServiceStoreProvider>
-          <ConfessionStoreProvider>
-            <AlbumStoreProvider>
-              <PhotosStoreProvider>
-                <ParagraphStoreProvider>
-                  <App />
-                </ParagraphStoreProvider>
-              </PhotosStoreProvider>
-            </AlbumStoreProvider>
-          </ConfessionStoreProvider>
-        </ServiceStoreProvider>
-      </NewStoreProvider>
-    </StylesProvider>
+    <AuthStoreProvider>
+      <StylesProvider injectFirst>
+        <NewStoreProvider>
+          <ServiceStoreProvider>
+            <ConfessionStoreProvider>
+              <AlbumStoreProvider>
+                <PhotosStoreProvider>
+                  <ParagraphStoreProvider>
+                    <App />
+                  </ParagraphStoreProvider>
+                </PhotosStoreProvider>
+              </AlbumStoreProvider>
+            </ConfessionStoreProvider>
+          </ServiceStoreProvider>
+        </NewStoreProvider>
+      </StylesProvider>
+    </AuthStoreProvider>
   </ThemeProvider>,
   document.getElementById("root")
 );

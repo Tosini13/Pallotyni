@@ -1,5 +1,6 @@
 import { Id } from "./Global";
 
+// ======================== URL ===========================
 const SERVER_URL = "http://localhost:3013";
 const API_URL = `${SERVER_URL}/api`;
 export const PARAGRAPH_API_URL = `${API_URL}/paragraphs`;
@@ -28,3 +29,10 @@ export const urlAlbumPhotographs = ({
 }: TAlbumPhotographsUrlParams) => {
   return `${API_URL}/albums/${albumId}/photographs`;
 };
+
+// ======================== AUTH ===========================
+export enum EUserAuth {
+  "LOGGED_IN" = "LOGGED_IN",
+  "LOGGED_OUT" = "LOGGED_OUT",
+  "WRONG_PASSWORD" = "WRONG_PASSWORD",
+}
