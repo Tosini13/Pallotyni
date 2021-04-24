@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 
+# envs
+.env
+cypress.env.json
+
 # testing
 /coverage
 /cypress/videos

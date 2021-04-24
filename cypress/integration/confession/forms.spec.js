@@ -1,4 +1,14 @@
 describe("Service forms", () => {
+  before(() => {
+    cy.visit("localhost:3000/login");
+    cy.get("input[name='email']").clear().type(Cypress.env("TEST_USER_EMAIL"));
+    cy.get("input[name='password']")
+      .clear()
+      .type(Cypress.env("TEST_USER_PASSWORD"));
+    cy.get("button").contains("Login").click();
+    cy.wait(5000);
+  });
+
   beforeEach(() => {
     cy.visit("localhost:3000/confessions");
   });

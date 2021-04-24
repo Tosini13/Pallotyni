@@ -47,7 +47,6 @@ const NavBar: React.FC<NavBarProps> = observer(() => {
       },
     });
   };
-
   return (
     <NavContainer>
       <Grid container alignItems="center">

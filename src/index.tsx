@@ -12,6 +12,7 @@ import { ConfessionStoreProvider } from "./stores/ConfessionStore";
 import { ParagraphStoreProvider } from "./stores/AboutUsStore";
 import { AlbumStoreProvider } from "./stores/GalleryStore";
 import { AuthStoreProvider } from "./stores/AuthStore";
+require("dotenv").config();
 
 ReactDOM.render(
   <ThemeProvider theme={mainTheme}>
