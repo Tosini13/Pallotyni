@@ -16,7 +16,7 @@ type TauthFunc = {
 };
 
 class Auth {
-  isLoggedIn: boolean;
+  isLoggedIn: boolean = false;
 
   async check() {
     const res = await checkIfLoggedIn();
@@ -78,7 +78,7 @@ class Auth {
       logIn: action,
       logOut: action,
     });
-    this.isLoggedIn = false;
+    this.check();
   }
 }
 
