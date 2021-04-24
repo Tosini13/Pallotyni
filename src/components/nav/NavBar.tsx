@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { mainTheme } from "../../style/config";
 import LoggedInMenu from "./LoggedInMenu";
 import Logo from "../../resources/logo/pallotyni_logo.png";
 import { Grid } from "@material-ui/core";
 import Language from "./Language";
+import { useHistory } from "react-router";
+import { RoutingPath } from "../../models/Global";
+import { AStyled } from "./LoggedInMenu";
+import { AuthStoreContext } from "../../stores/AuthStore";
+import { observer } from "mobx-react";
 
 const Divider = styled.div`
   height: 60px;
@@ -31,7 +36,17 @@ const NavContainer = styled.div`
 
 export interface NavBarProps {}
 
-const NavBar: React.FC<NavBarProps> = () => {
+const NavBar: React.FC<NavBarProps> = observer(() => {
+  const authStore = useContext(AuthStoreContext);
+  const router = useHistory();
+
+  const handleLogOut = async () => {
+    await authStore.logOut({
+      successCallBack: () => {
+        router.push(RoutingPath.login);
+      },
+    });
+  };
   return (
     <NavContainer>
       <Grid container alignItems="center">
@@ -45,11 +60,24 @@ const NavBar: React.FC<NavBarProps> = () => {
           <LoggedInMenu />
         </Grid>
         <Grid item style={{ flexGrow: 1 }}>
-          <Language />
+          <Grid container alignItems="center" justify="flex-end">
+            <Grid item>
+              {authStore.isLoggedIn ? (
+                <AStyled onClick={() => handleLogOut()}>Log Out</AStyled>
+              ) : (
+                <AStyled onClick={() => router.push(RoutingPath.login)}>
+                  Log In
+                </AStyled>
+              )}
+            </Grid>
+            <Grid item>
+              <Language />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </NavContainer>
   );
-};
+});
 
 export default NavBar;

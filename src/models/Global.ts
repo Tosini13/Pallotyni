@@ -14,6 +14,8 @@ export enum RoutingPath {
   gallery = "/gallery",
   news = "/news",
   album = "/albums/:id",
+  login = "/login",
+  resetPassword = "/reset-password",
 }
 
 export const GetRoute = {
